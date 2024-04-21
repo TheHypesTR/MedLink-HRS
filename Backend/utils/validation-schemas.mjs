@@ -12,7 +12,7 @@ export const UserValidation = {
         },
         matches: {
             options: /^\d{11}$/,
-            errorMessage: "'T.C. NO' Must Contain Only Number!",
+            errorMessage: "'T.C. NO' Must Contain Only Digits!",
         },
     },
     name: {

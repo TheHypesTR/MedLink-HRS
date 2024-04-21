@@ -58,7 +58,7 @@ router.post("/auth/logout", (request, response) => {
 
 //Kullanıcının şifre sıfırlama bağlantısı "E-Mail" adresine gönderilir.
 router.post("/auth/reset-password", async (request, response) => {
-    const user = await LocalUser.findOne({ TCno: request.body.TCno });
+    const user = await LocalUser.findOne({ email: request.body.email });
     if(!user) return response.sendStatus(400);
 
     try {
@@ -95,7 +95,7 @@ router.post("/auth/user/reset-password/:id/:token", checkSchema(PasswordValidati
         await LocalUser.updateOne({ _id: user._id }, { $set: { password: newPassword } });
         await Token.findOneAndDelete({ userID: user._id });
 
-        const message = `Hi ${user.email},\nYour Password has been Successfully Updated!!`;
+        const message = `Hi ${user.name},\nYour Password has been Successfully Updated!!`;
         await sendEmail(user.email, "Password-Reset Succesfully!", message);
         return response.status(200).send("Password Reset Succesfully!!");
 

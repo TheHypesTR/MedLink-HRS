@@ -21,15 +21,14 @@ router.get("/auth", (request, response) => {
 
 //Kullanıcı kaydının yapıldığı kısım.
 router.post("/auth/register", checkSchema(UserValidation), async (request, response) => {
-    const errors = validationResult(request);
-    if(!errors.isEmpty()) return response.status(400).json({ errors: errors.array() });
-
-    const data = matchedData(request);
-    data.password = HashPassword(data.password);
-    console.log(data);
-    const newUser = new LocalUser(data);
-
     try {
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) return response.status(400).json({ errors: errors.array() });
+
+        const data = matchedData(request);
+        data.password = HashPassword(data.password);
+        console.log(data);
+        const newUser = new LocalUser(data);
         const savedUser = await newUser.save();
         return response.status(201).send(`New User Created!! \n${savedUser}`);
         
@@ -58,19 +57,19 @@ router.post("/auth/logout", (request, response) => {
 
 //Kullanıcının şifre sıfırlama bağlantısı "E-Mail" adresine gönderilir.
 router.post("/auth/reset-password", async (request, response) => {
-    const user = await LocalUser.findOne({ email: request.body.email });
-    if(!user) return response.sendStatus(400);
-
     try {
+        const user = await LocalUser.findOne({ email: request.body.email });
+        if(!user) return response.sendStatus(400);
+
         const token = await new Token({
             tokenID: crypto.randomBytes(32).toString("hex"),
-            userID: user.id,
+            userID: user._id,
             userEMail: user.email,
         }).save();
 
         const message = `Hi ${user.name},\nClick to Reset your Password!!\nhttp://localhost:${config.PORT}/auth/user/reset-password/${user._id}/${token.tokenID}`;
         await sendEmail(user.email, "Password Reset", message);
-        return response.status(201).send(`Password-Reset E-Mail Sent to ${user.email} !!`)
+        return response.status(201).send(`Password-Reset E-Mail Sent to '${user.email}' !!`)
 
     } catch (err) {
         console.log(`Password Reset Failed!! ${err}`);

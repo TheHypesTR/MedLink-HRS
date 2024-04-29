@@ -4,6 +4,7 @@ import session from "express-session";
 import passport from "passport";
 import mongoose from "mongoose";
 import mongoStore from "connect-mongo";
+import cors from "cors";
 import routers from "../routers/index.mjs";
 import { logMiddleware } from "../utils/middlewares.mjs";
 import config from "../config.mjs";
@@ -12,6 +13,11 @@ const app = express();
 const PORT = config.PORT;
 
 mongoose.connect(config.mongooseConnectionString).then(() => console.log("Connected to MongoDB!!")).catch((err) => console.log(`DB-ERROR: ${err}`));
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }));
 
 app.use(express.json());
 app.use(cookieParser("Pi7utbj8EI"));
@@ -26,6 +32,7 @@ app.use(session({
         client: mongoose.connection.getClient()
     })
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logMiddleware);

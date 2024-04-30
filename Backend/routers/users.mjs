@@ -88,7 +88,6 @@ router.post("/auth/user/reset-password/:id/:token", checkSchema(PasswordValidati
         if(!user) return response.status(400).send("User Not Found!!");
 
         const token = await Token.findOne({ tokenID: request.params.token, userID: user._id });
-
         if(!token) return response.status(400).send("Token Not Found!!");
 
         await LocalUser.updateOne({ _id: user._id }, { $set: { password: newPassword } });

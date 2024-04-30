@@ -1,4 +1,4 @@
-// Kullanıcı kaydı sırasında kullanılacak şema.
+// Kullanıcı Kayıt İşlemi Sırasında Kullanılacak Doğrulama Şeması.
 export const UserValidation = {
     TCno: {
         isLength: {
@@ -44,7 +44,7 @@ export const UserValidation = {
     },
 };
 
-// Şifre sıfırlamada kullanılacak şema.
+// Kullanıcı Şifresi Sıfırlama İşlemi Sırasında Kullanılacak Doğrulama Şeması.
 export const PasswordValidation = {
     password: {
         isLength: {
@@ -64,8 +64,8 @@ export const PasswordValidation = {
     },
 };
 
-// Hastane eklerken kullanılacak şema.
-export const HospitalValidation = {
+// Hastane Ekleme İşlemi Sırasında Kullanılacak Doğrulama Şeması.
+export const HospitalAddValidation = {
     name: {
         isLength: {
             options: {
@@ -112,6 +112,46 @@ export const HospitalValidation = {
         },
         notEmpty: {
             errorMessage: "Address Must Not be Empty!",
+        },
+    },
+};
+
+// Hastane Silme İşlemi Sırasında Kullanılacak Doğrulama Şeması.
+export const HospitalDeleteValidation = {
+    name: {
+        isLength: {
+            options: {
+                min: 12,
+                max: 64,
+            },
+            errorMessage: "Hospital Name Must be at Least 12 - 64 Characters!",
+        },
+        notEmpty: {
+            errorMessage: "Hospital Name Must Not be Empty!", 
+        },
+    },
+    city: {
+        isLength: {
+            options: {
+                min: 3,
+                max: 14,
+            },
+            errorMessage: "City Name Must be at Least 3 - 14 Characters!",
+        },
+        notEmpty: {
+            errorMessage: "City Name Must Not be Empty!",
+        },
+    },
+    district: {
+        isLength: {
+            options: {
+                min: 3,
+                max: 22,
+            },
+            errorMessage: "District Name Must be at Least 3 - 22 Characters!",
+        },
+        notEmpty: {
+            errorMessage: "District Name Must Not be Empty!",
         },
     },
 };

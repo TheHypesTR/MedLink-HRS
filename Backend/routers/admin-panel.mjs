@@ -6,8 +6,9 @@ import { HospitalAddValidation, HospitalDeleteValidation } from "../utils/valida
 const router = Router();
 
 // Tüm Hastaneleri MongoDB'den Çekip Kullanıcıya Görüntüleyen API.
-// İl Filtrelemesi Yapılabilir  : "/admin/Hospital?city=Konya"
-// İl ve İlçe Filtrelemesi de Yapılabilir: "/admin/Hospital?city=Konya&district=Akşehir"
+// İl Filtrelemesi Yapılabilir         : "/admin/Hospital?city=Konya"
+// İlçe Filtrelemesi Yapılabilir       : "/admin/Hospital?district=Akşehir"
+// İl ve İlçe Filtrelemesi Yapılabilir : "/admin/Hospital?city=Konya&district=Akşehir"
  router.get("/admin/hospital", async (request, response) => {
     try {
         const cityName = request.query.city;
@@ -17,12 +18,12 @@ const router = Router();
         if(cityName) filter.city = cityName;
         if(districtName) filter.district = districtName;
 
-        let hospitals = (cityName ? await Hospital.find(filter) : await Hospital.find());
+        let hospitals = await Hospital.find(filter);
         return response.status(200).json(hospitals);
 
     } catch (err) {
-        console.log(`City LISTING ERROR \n${err}`);
-        return response.status(400).send("City LISTING ERROR!!");
+        console.log(`Hospital LISTING ERROR \n${err}`);
+        return response.status(400).send("Hospital LISTING ERROR!!");
     }
 });
 
@@ -84,7 +85,7 @@ router.delete("/admin/deleteHospital", checkSchema(HospitalDeleteValidation), as
 });
 */
 
-/* Hastane Silme Ek API'si. ID'ye Göre Belirtilen Hastaneye MongoDB'den Siler.
+/* Hastane Silme 2.Ek API'si. ID'ye Göre Belirtilen Hastaneye MongoDB'den Siler.
 router.delete("/admin/deleteHospital", async (request, response) => {
     try {
         const hospital = request.body.id;

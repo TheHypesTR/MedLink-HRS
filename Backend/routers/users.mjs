@@ -12,14 +12,14 @@ import "../strategies/local-strategy.mjs";
 
 const router = Router();
 
-//Aktif kullanıcı varsa kullanıcı bilgilerini gösterir yoksa hata verir.
+// Aktif Kullanıcı Varsa Kullanıcı Bilgilerini Gösterir Yoksa Hata Verir.
 router.get("/auth", (request, response) => {
     console.log(request.sessionID);
     console.log(request.user);
     return request.user ? response.send(request.user) : response.sendStatus(401);
 });
 
-//Kullanıcı kaydının yapıldığı kısım.
+// Local Kullanıcı Kaydının Yapılır.
 router.post("/auth/register", checkSchema(UserValidation), async (request, response) => {
     try {
         const errors = validationResult(request);
@@ -38,12 +38,12 @@ router.post("/auth/register", checkSchema(UserValidation), async (request, respo
     }
 });
 
-//Kullanıcı girişinin yapıldığı kısım.
+// Local Kullanıcı Girişinin Yapılır.
 router.post("/auth/login", passport.authenticate("local"), (request, response) => {
     return response.sendStatus(200);
 });
 
-//Aktif bir kullanıcı varsa oturumunu kapatmasını sağlar.
+// Aktif bir Kullanıcı Varsa Oturumunu Kapatmasını Sağlar.
 router.post("/auth/logout", (request, response) => {
     if(!request.user) return response.sendStatus(401);
 
@@ -55,7 +55,7 @@ router.post("/auth/logout", (request, response) => {
     });
 });
 
-//Kullanıcının şifre sıfırlama bağlantısı "E-Mail" adresine gönderilir.
+// Kullanıcının Şifresini Sıfırlayabilmesi için Token Oluşturulur ve Sıfırlama Bağlantısı Kullanıcının "E-Mail" Adresine Gönderilir.
 router.post("/auth/reset-password", async (request, response) => {
     try {
         const user = await LocalUser.findOne({ email: request.body.email });
@@ -77,7 +77,7 @@ router.post("/auth/reset-password", async (request, response) => {
     }
 });
 
-//Şifre sıfırlama bağlantısına tıklayan kullanıcı şifresini belirlenen kouşllara uygun olarak değiştirebilir.
+// Şifre Sıfırlama Bağlantısına Tıklayan Kullanıcı Şifresini Şemadaki Kurallara Uygun Olarak Değiştirebilir.
 router.post("/auth/user/reset-password/:id/:token", checkSchema(PasswordValidation), async (request, response) => {
     try {
         const errors = validationResult(request);

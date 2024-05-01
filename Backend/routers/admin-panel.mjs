@@ -175,4 +175,66 @@ router.delete("/admin/hospital/delete", async (request, response) => {
 });
 */
 
+// ID'si Belirtilen Hastanedeki Polyclinicleri Listeleyen API.
+router.get("/admin/hospital/:hospitalID/polyclinic", async (request, response) => {
+    try {
+        const hospitalID = request.params.hospitalID;
+        const hospital = await Hospital.findOne({ _id: hospitalID });
+        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+
+        return response.status(200).send(hospital.polyclinics);
+
+    } catch (err) {
+        console.log(`Polyclinic LISTING ERROR \n${err}`);
+        return response.status(400).send("Polyclinic LISTING ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastaneye Poliklinic Ekleme API'si. Aynı Polyclinic'ten Varsa Ekleme Yapmaz.
+router.post("/admin/hospital/:hospitalID/polyclinic/add", async (request, response) => {
+    try {
+        const polyclinicName = request.body.name;
+        if(!polyclinicName) return response.status(400).send("Polyclinic Name is Required!!");
+
+        const hospitalID = request.params.hospitalID;
+        const hospital = await Hospital.findOne({ _id: hospitalID });
+        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+
+        const existingPolyclinic = hospital.polyclinics.find(polyclinic => polyclinic.name === polyclinicName);
+        if (existingPolyclinic) return response.status(400).send("Polyclinic Already Exists!!");
+
+        hospital.polyclinics.push({ name: polyclinicName });
+        await hospital.save();
+
+        return response.status(200).send("Polyclinic ADDED Succesfully!!");
+    } catch (err) {
+        console.log(`Polyclinic ADDING ERROR \n${err}`);
+        return response.status(400).send("Polyclinic ADDING ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastanedeki Adı Girilen Polycliniği Silme API'si.
+router.delete("/admin/hospital/:hospitalID/polyclinic/delete", async (request, response) => {
+    try {
+        const polyclinicName = request.body.name;
+        if(!polyclinicName) return response.status(400).send("Polyclinic Name is Required!!");
+
+        const hospitalID = request.params.hospitalID;
+        const hospital = await Hospital.findOne({ _id: hospitalID });
+        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+
+        const polyclinicsLength = hospital.polyclinics.length;
+        const remainingPolyclinics = hospital.polyclinics.filter(polyclinic => polyclinic.name !== polyclinicName);
+        hospital.polyclinics = remainingPolyclinics;
+        await hospital.save();
+
+        if(polyclinicsLength === remainingPolyclinics.length) return response.status(400).send("Polyclinic Not Found!!");
+        return response.status(200).send("Polyclinic DELETED Succesfully!!");
+
+    } catch (err) {
+        console.log(`Polyclinic DELETING ERROR \n${err}`);
+        return response.status(400).send("Polyclinic DELETING ERROR!!");
+    }
+});
+
 export default router;

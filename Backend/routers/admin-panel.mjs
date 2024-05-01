@@ -175,7 +175,7 @@ router.delete("/admin/hospital/delete", async (request, response) => {
 });
 */
 
-// ID'si Belirtilen Hastanedeki Polyclinicleri Listeleyen API.
+// ID'si Belirtilen Hastanedeki Poliklinikleri Listeleyen API.
 router.get("/admin/hospital/:hospitalID/polyclinic", async (request, response) => {
     try {
         const hospitalID = request.params.hospitalID;
@@ -190,7 +190,26 @@ router.get("/admin/hospital/:hospitalID/polyclinic", async (request, response) =
     }
 });
 
-// ID'si Belirtilen Hastaneye Poliklinic Ekleme API'si. Aynı Polyclinic'ten Varsa Ekleme Yapmaz.
+// ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Listeleme API'si.
+router.get("/admin/hospital/:hospitalID/polyclinic/:polyclinicID", async (request, response) => {
+    try {
+        const hospitalID = request.params.hospitalID;
+        const hospital = await Hospital.findOne({ _id: hospitalID });
+        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+        
+        const polyclinicID = request.params.polyclinicID;
+        const polyclinic = hospital.polyclinics.find(polyclinic => polyclinic._id == polyclinicID);
+        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
+
+        return response.status(200).send(polyclinic);
+
+    } catch (err) {
+        console.log(`Polyclinic LISTING ERROR \n${err}`);
+        return response.status(400).send("Polyclinic LISTING ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastaneye Poliklinik Ekleme API'si. Aynı Polyclinic'ten Varsa Ekleme Yapmaz.
 router.post("/admin/hospital/:hospitalID/polyclinic/add", async (request, response) => {
     try {
         const polyclinicName = request.body.name;
@@ -213,7 +232,29 @@ router.post("/admin/hospital/:hospitalID/polyclinic/add", async (request, respon
     }
 });
 
-// ID'si Belirtilen Hastanedeki Adı Girilen Polycliniği Silme API'si.
+// ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Silme API'si.
+router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/delete", async (request, response) => {
+    try {
+        const hospitalID = request.params.hospitalID;
+        const hospital = await Hospital.findOne({ _id: hospitalID });
+        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+
+        const polyclinicsLength = hospital.polyclinics.length;
+        const polyclinicID = request.params.polyclinicID;
+        const remainingPolyclinics = hospital.polyclinics.filter(polyclinic => polyclinic._id != polyclinicID);
+        if(polyclinicsLength === remainingPolyclinics.length) return response.status(400).send("Polyclinic Not Found!!");
+
+        hospital.polyclinics = remainingPolyclinics;
+        await hospital.save();
+        return response.status(200).send("Polyclinic DELETED Succesfully!!");
+
+    } catch (err) {
+        console.log(`Polyclinic DELETING ERROR \n${err}`);
+        return response.status(400).send("Polyclinic DELETING ERROR!!");
+    }
+});
+
+/* ID'si Belirtilen Hastanedeki Adı Girilen Polikliniği Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/delete", async (request, response) => {
     try {
         const polyclinicName = request.body.name;
@@ -225,10 +266,10 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/delete", async (request, r
 
         const polyclinicsLength = hospital.polyclinics.length;
         const remainingPolyclinics = hospital.polyclinics.filter(polyclinic => polyclinic.name !== polyclinicName);
+        if(polyclinicsLength === remainingPolyclinics.length) return response.status(400).send("Polyclinic Not Found!!");
+
         hospital.polyclinics = remainingPolyclinics;
         await hospital.save();
-
-        if(polyclinicsLength === remainingPolyclinics.length) return response.status(400).send("Polyclinic Not Found!!");
         return response.status(200).send("Polyclinic DELETED Succesfully!!");
 
     } catch (err) {
@@ -236,5 +277,6 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/delete", async (request, r
         return response.status(400).send("Polyclinic DELETING ERROR!!");
     }
 });
+*/
 
 export default router;

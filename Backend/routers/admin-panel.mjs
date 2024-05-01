@@ -19,6 +19,8 @@ const router = Router();
         if(districtName) filter.district = districtName;
 
         let hospitals = await Hospital.find(filter);
+        if(!hospitals) return response.status(400).send("Hospital Not Found!!");
+        
         return response.status(200).json(hospitals);
 
     } catch (err) {
@@ -27,8 +29,25 @@ const router = Router();
     }
 });
 
+// ID'si Belirtilen Hastaneyi MongoDB'den Çekip Kullanıcıya Görüntüleyen API.
+router.get("/admin/hospital/:hospitalID", async (request, response) => {
+    try {
+        const hospital = request.params.hospitalID;
+        if(!hospital) return response.status(400).send("HospitalID Required!!");
+
+        const listHospital = await Hospital.findOne({ _id: hospital });
+        if(!listHospital) return response.status(400).send("Hospital Not Found!!");
+
+        return response.status(200).send(listHospital);
+    
+    } catch (err) {
+        console.log(`Hospital LISTING ERROR \n${err}`);
+        return response.status(400).send("Hospital LISTING ERROR!!");
+    }
+});
+
 // Hastane Ekleme API'si. Hastane Ekleme Sırasında Gelen Verileri Şema'dan Geçirip Karşılaştırma ve MongoDB'ye Ekleme yapıyor.
-router.post("/admin/addHospital/", checkSchema(HospitalAddValidation), async (request, response) => {
+router.post("/admin/hospital/add", checkSchema(HospitalAddValidation), async (request, response) => {
     try {
         const errors = validationResult(request);
         if(!errors.isEmpty()) return response.status(400).json({ errors: errors.array() });
@@ -48,11 +67,64 @@ router.post("/admin/addHospital/", checkSchema(HospitalAddValidation), async (re
     }
 });
 
-// Hastane Silme API'si. Hastane ID'si Adress Çubuğundan Çekilir ve MongoDB'de Karşılık Bulan Hastaneyi Siler.
-router.delete("/admin/:hospitalID/delete", async (request, response) => {
+// Hastane Bilgilerini Düzenleme API'si. Sadece Hastaneye Ait Girilen Değerleri Günceller!
+router.put("/admin/hospital/:hospitalID/edit", async (request, response) => {
     try {
         const hospital = request.params.hospitalID;
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+        if(!hospital) return response.status(400).send("HospitalID Required!!");
+
+        const cityName = request.body.city;
+        const districtName = request.body.district;
+        const hospitalName = request.body.name;
+        const hospitalAddress = request.body.address;
+        let data = {};
+
+        if(cityName) data.city = cityName;
+        if(districtName) data.district = districtName;
+        if(hospitalName) data.name = hospitalName;
+        if(hospitalAddress) data.address = hospitalAddress;
+        if(Object.keys(data).length === 0) return response.status(400).send("Editing Cannot be Made Without Entering any Data!!");
+
+        const editHospital = await Hospital.findOneAndUpdate({ _id: hospital }, { $set: data }, { new: true });
+        if(!editHospital) return response.status(400).send("Hospital Not Found!!");
+
+        return response.status(200).send("Hospital EDITED Successfully!!");
+
+    } catch (err) {
+        console.log(`Hospital EDITING ERROR \n${err}`);
+        return response.status(400).send("Hospital EDITING ERROR!!");
+    }
+});
+
+/* Hastane Bilgilerini Düzenleme API'si. Hastane Ekleme Sırasında Kullanılan Bilgilerin Tamamı Olmadan Düzenleme Yapılamaz.
+router.put("/admin/hospital/:hospitalID/edit", checkSchema(HospitalAddValidation) ,async (request, response) => {
+    try {
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) return response.status(400).json({ errors: errors.array() });
+
+        const data = matchedData(request);
+        console.log(`Hospital EDITING... \n${data}`);
+
+        const hospital = request.params.hospitalID;
+        if(!hospital) return response.status(400).send("HospitalID Required!!!!");
+
+        const editHospital = await Hospital.findByIdAndUpdate({ _id: hospital }, { $set: data }, { new: true });
+        if(!editHospital) return response.status(400).send("Hospital Not Found!!");
+
+        return response.status(200).send("Hospital EDITED Successfully!!");
+
+    } catch (err) {
+        console.log(`Hospital EDITING ERROR \n${err}`);
+        return response.status(400).send("Hospital EDITING ERROR!!");
+    }
+});
+*/
+
+// Hastane Silme API'si. Hastane ID'si Adress Çubuğundan Çekilir ve MongoDB'de Karşılık Bulan Hastaneyi Siler.
+router.delete("/admin/hospital/:hospitalID/delete", async (request, response) => {
+    try {
+        const hospital = request.params.hospitalID;
+        if(!hospital) return response.status(400).send("HospitalID Required!!");
 
         const deleteHospital = await Hospital.findOneAndDelete({ _id: hospital });
         if(!deleteHospital) return response.status(400).send("Hospital Not Found!!");
@@ -66,7 +138,7 @@ router.delete("/admin/:hospitalID/delete", async (request, response) => {
 });
 
 /* Hastane Silme Ek API'si. Hastane Bilgilerine Göre Belirtilen Hastane'yi MongoDB'den Siler. Verileri Kontrol Amaçlı Şema'dan geçirir.
-router.delete("/admin/deleteHospital", checkSchema(HospitalDeleteValidation), async (request, response) => {
+router.delete("/admin/hospital/delete", checkSchema(HospitalDeleteValidation), async (request, response) => {
     try {
         const errors = validationResult(request);
         if(!errors.isEmpty()) return response.status(400).json({ errors: errors.array() });
@@ -86,7 +158,7 @@ router.delete("/admin/deleteHospital", checkSchema(HospitalDeleteValidation), as
 */
 
 /* Hastane Silme 2.Ek API'si. ID'ye Göre Belirtilen Hastaneye MongoDB'den Siler.
-router.delete("/admin/deleteHospital", async (request, response) => {
+router.delete("/admin/hospital/delete", async (request, response) => {
     try {
         const hospital = request.body.id;
         if(!hospital) return response.sendStatus(400);

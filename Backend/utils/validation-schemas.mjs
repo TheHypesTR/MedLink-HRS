@@ -6,17 +6,24 @@ export const UserValidation = {
                 min: 11,
                 max: 11,
             },
-            errorMessage: "'T.C. NO' Must be 11 Digits!",
+            errorMessage: "'T.C. NO' Must be 11 Numbers!",
         },
         notEmpty: { 
             errorMessage: "'T.C. NO' Must Not be Empty!",
         },
         matches: {
             options: /^\d{11}$/,
-            errorMessage: "'T.C. NO' Must Contain Only Digits!",
+            errorMessage: "'T.C. NO' Must Contain Only Numbers!",
         },
     },
     name: {
+        isLength: {
+            options: {
+                min: 6,
+                max: 36,
+            },
+            errorMessage: "Name Must be at Least 6 - 36 Characters!"
+        },
         notEmpty: { 
             errorMessage: "Name Must Not be Empty!",
         },
@@ -25,6 +32,10 @@ export const UserValidation = {
         notEmpty: { 
             errorMessage: "E-Mail Must Not be Empty!",
         },
+        matches: {
+            options: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+            errorMessage: "Please Check Your 'E-Mail' Address!",
+        }
     },
     password: {
         isLength: {
@@ -70,9 +81,9 @@ export const HospitalAddValidation = {
         isLength: {
             options: {
                 min: 12,
-                max: 64,
+                max: 42,
             },
-            errorMessage: "Hospital Name Must be at Least 12 - 64 Characters!",
+            errorMessage: "Hospital Name Must be at Least 12 - 42 Characters!",
         },
         notEmpty: {
             errorMessage: "Hospital Name Must Not be Empty!", 
@@ -106,52 +117,12 @@ export const HospitalAddValidation = {
         isLength: {
             options: {
                 min: 24,
-                max: 96,
+                max: 68,
             },
-            errorMessage: "Address Must be at Least 24 - 96 Characters!",
+            errorMessage: "Address Must be at Least 24 - 68 Characters!",
         },
         notEmpty: {
             errorMessage: "Address Must Not be Empty!",
-        },
-    },
-};
-
-// Hastane Silme İşlemi Sırasında Kullanılacak Doğrulama Şeması.
-export const HospitalDeleteValidation = {
-    name: {
-        isLength: {
-            options: {
-                min: 12,
-                max: 64,
-            },
-            errorMessage: "Hospital Name Must be at Least 12 - 64 Characters!",
-        },
-        notEmpty: {
-            errorMessage: "Hospital Name Must Not be Empty!", 
-        },
-    },
-    city: {
-        isLength: {
-            options: {
-                min: 3,
-                max: 14,
-            },
-            errorMessage: "City Name Must be at Least 3 - 14 Characters!",
-        },
-        notEmpty: {
-            errorMessage: "City Name Must Not be Empty!",
-        },
-    },
-    district: {
-        isLength: {
-            options: {
-                min: 3,
-                max: 22,
-            },
-            errorMessage: "District Name Must be at Least 3 - 22 Characters!",
-        },
-        notEmpty: {
-            errorMessage: "District Name Must Not be Empty!",
         },
     },
 };

@@ -13,11 +13,16 @@ const localUserSchema = new mongoose.Schema({
     email: {
         type: mongoose.Schema.Types.String,
         required: true,
+        unique: true,
     },
     password: {
         type: mongoose.Schema.Types.String,
         required: true,
-    }
+    },
+    role: {
+        type: mongoose.Schema.Types.String,
+        default: "User",
+    },
 }, { versionKey: false, timestamps: true });
 
 export const LocalUser = mongoose.model("LocalUsers", localUserSchema);

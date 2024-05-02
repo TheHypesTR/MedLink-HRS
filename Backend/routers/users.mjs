@@ -7,27 +7,31 @@ import { Token } from "../mongoose/schemas/tokens.mjs";
 import { UserValidation, PasswordValidation } from "../utils/validation-schemas.mjs";
 import { HashPassword } from "../utils/helpers.mjs";
 import { sendEmail } from "../utils/email-sender.mjs";
+import { UserLoginCheck, UserAlreadyLogged } from "../utils/middlewares.mjs";
 import config from "../config.mjs";
 import "../strategies/local-strategy.mjs";
 
 const router = Router();
 
 // Aktif Kullanıcı Varsa Kullanıcı Bilgilerini Gösterir Yoksa Hata Verir.
-router.get("/auth", (request, response) => {
-    console.log(request.sessionID);
+router.get("/auth", UserLoginCheck, (request, response) => {
+    console.log(request.session.passport?.user);
     console.log(request.user);
     return request.user ? response.send(request.user) : response.sendStatus(401);
 });
 
 // Local Kullanıcı Kaydının Yapılır.
-router.post("/auth/register", checkSchema(UserValidation), async (request, response) => {
+router.post("/auth/register", UserAlreadyLogged, checkSchema(UserValidation), async (request, response) => {
     try {
         const errors = validationResult(request);
         if(!errors.isEmpty()) return response.status(400).json({ errors: errors.array() });
 
         const data = matchedData(request);
         data.password = HashPassword(data.password);
-        console.log(data);
+        data.email = data.email.toLowerCase();
+        const user = await LocalUser.findOne({ TCno: data.TCno });
+        if(user) return response.status(400).send("User Already Exists!!");
+
         const newUser = new LocalUser(data);
         const savedUser = await newUser.save();
         return response.status(201).send(`New User Created!! \n${savedUser}`);
@@ -39,12 +43,12 @@ router.post("/auth/register", checkSchema(UserValidation), async (request, respo
 });
 
 // Local Kullanıcı Girişinin Yapılır.
-router.post("/auth/login", passport.authenticate("local"), (request, response) => {
+router.post("/auth/login", UserAlreadyLogged, passport.authenticate("local"), (request, response) => {
     return response.sendStatus(200);
 });
 
 // Aktif bir Kullanıcı Varsa Oturumunu Kapatmasını Sağlar.
-router.post("/auth/logout", (request, response) => {
+router.post("/auth/logout", UserLoginCheck, (request, response) => {
     if(!request.user) return response.sendStatus(401);
 
     request.logOut((err) => {
@@ -58,7 +62,8 @@ router.post("/auth/logout", (request, response) => {
 // Kullanıcının Şifresini Sıfırlayabilmesi için Token Oluşturulur ve Sıfırlama Bağlantısı Kullanıcının "E-Mail" Adresine Gönderilir.
 router.post("/auth/reset-password", async (request, response) => {
     try {
-        const user = await LocalUser.findOne({ email: request.body.email });
+        const userEMail = (request.body.email).toLowerCase();
+        const user = await LocalUser.findOne({ email: userEMail });
         if(!user) return response.sendStatus(400);
 
         const token = await new Token({

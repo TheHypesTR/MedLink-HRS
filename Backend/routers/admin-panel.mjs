@@ -3,7 +3,7 @@ import { checkSchema, validationResult, matchedData } from "express-validator";
 import { LocalUser } from "../mongoose/schemas/local-users.mjs";
 import { Hospital } from "../mongoose/schemas/hospitals.mjs";
 import { HospitalAddValidation } from "../utils/validation-schemas.mjs";
-import { UserLoginCheck, UserPermCheck } from "../utils/middlewares.mjs";
+import { UserLoginCheck, UserPermCheck, HospitalFinder, PolyclinicFinder, DoctorFinder } from "../utils/middlewares.mjs";
 
 const router = Router();
 
@@ -97,9 +97,7 @@ router.delete("/admin/hospital/:hospitalID/delete", UserLoginCheck, UserPermChec
 // ID'si Belirtilen Hastaneye Poliklinik Ekleme API'si. Aynı Polyclinic'ten Varsa Ekleme Yapmaz.
 router.post("/admin/hospital/:hospitalID/polyclinic/add", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+        const hospital = await HospitalFinder(request.params.hospitalID);
 
         let data = {};
         if(request.body.name) data.name = request.body.name;
@@ -121,13 +119,8 @@ router.post("/admin/hospital/:hospitalID/polyclinic/add", UserLoginCheck, UserPe
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Düzenleme API'si.
 router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
-
-        const polyclinicID = request.params.polyclinicID;
-        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
-        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
+        const hospital = await HospitalFinder(request.params.hospitalID);
+        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
 
         let data = {};
         if(request.body.name) data.name = request.body.name;
@@ -146,13 +139,11 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/edit", UserLogi
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
-
+        const hospital = await HospitalFinder(request.params.hospitalID);
+        
         const polyclinicsLength = hospital.polyclinics.length;
         const polyclinicID = request.params.polyclinicID;
-        const remainingPolyclinics = hospital.polyclinics.filter(polyclinic => polyclinic._id != polyclinicID);
+        const remainingPolyclinics = hospital.polyclinics.filter(polyclinic => (polyclinic._id != polyclinicID));
         if(polyclinicsLength === remainingPolyclinics.length) return response.status(400).send("Polyclinic Not Found!!");
 
         hospital.polyclinics = remainingPolyclinics;
@@ -165,16 +156,11 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/delete", Use
     }
 });
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğine Doctor Ekleme API'si. Aynı Poliklinikteki Doktor İsimleri Aynı Olamaz.
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğine Doktor Ekleme API'si. Aynı Poliklinikteki Doktor İsimleri Aynı Olamaz.
 router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
-
-        const polyclinicID = request.params.polyclinicID;
-        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
-        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
+        const hospital = await HospitalFinder(request.params.hospitalID);
+        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
 
         let data = {};
         if(request.body.name) data.name = request.body.name;
@@ -193,21 +179,33 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", U
     }
 })
 
+router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const hospital = await HospitalFinder(request.params.hospitalID);
+        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
+
+        const doctorsLength = polyclinic.doctors.length;
+        const doctorID = request.params.doctorID;
+        const remainingdoctors = polyclinic.doctors.filter(doctor => (doctor._id != doctorID));
+        if(doctorsLength === remainingdoctors.length) return response.status(400).send("Doctor Not Found!!");
+
+        polyclinic.doctors = remainingdoctors;
+        await hospital.save();
+        return response.status(200).send("Doctor DELETED Successfully!!");
+
+    } catch (err) {
+        console.log(`Doctor DELETING ERROR \n${err}`);
+        return response.status(400).send("Doctor DELETING ERROR!!");
+    }
+});
+
 // --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK ---
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
 router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/setSickRep", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
-
-        const polyclinicID = request.params.polyclinicID;
-        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
-        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
-
-        const doctorID = request.params.doctorID;
-        const doctor = polyclinic.doctors.find(doctor => (doctor._id == doctorID));
-        if(!doctor) return response.status(400).send("Doctor Not Found!!");
+        const hospital = await HospitalFinder(request.params.hospitalID);
+        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
+        const doctor = await DoctorFinder(polyclinic, request.params.doctorID);
 
         let data = {};
         if(typeof request.body.sickReport === "boolean") data.sickReport = request.body.sickReport;

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { Hospital } from "../mongoose/schemas/hospitals.mjs";
+import { HospitalFinder, PolyclinicFinder, DoctorFinder } from "../utils/middlewares.mjs";
 
 const router = Router();
 
@@ -30,10 +31,7 @@ router.get("/hospital", async (request, response) => {
 // ID'si Belirtilen Hastaneyi MongoDB'den Çekip Kullanıcıya Görüntüleyen API.
 router.get("/hospital/:hospitalID", async (request, response) => {
     try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
-
+        const hospital = await HospitalFinder(request.params.hospitalID);
         return response.status(200).json(hospital);
     
     } catch (err) {
@@ -45,10 +43,7 @@ router.get("/hospital/:hospitalID", async (request, response) => {
 // ID'si Belirtilen Hastanedeki Poliklinikleri Listeleyen API.
 router.get("/hospital/:hospitalID/polyclinic", async (request, response) => {
     try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
-
+        const hospital = await HospitalFinder(request.params.hospitalID);
         return response.status(200).json(hospital.polyclinics);
 
     } catch (err) {
@@ -60,14 +55,8 @@ router.get("/hospital/:hospitalID/polyclinic", async (request, response) => {
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Listeleme API'si.
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID", async (request, response) => {
     try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
-        
-        const polyclinicID = request.params.polyclinicID;
-        const polyclinic = hospital.polyclinics.find(polyclinic => polyclinic._id == polyclinicID);
-        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
-
+        const hospital = await HospitalFinder(request.params.hospitalID);
+        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
         return response.status(200).json(polyclinic);
 
     } catch (err) {
@@ -79,14 +68,8 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID", async (request, res
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniktelk Doktorlar Listeleyen API.
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor", async (request, response) => {
     try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
-
-        const polyclinicID = request.params.polyclinicID;
-        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
-        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
-
+        const hospital = await HospitalFinder(request.params.hospitalID);
+        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
         return response.status(200).json(polyclinic.doctors);
 
     } catch (err) {
@@ -98,18 +81,9 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor", async (reque
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktoru Listeleyen API.
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID", async (request, response) => {
     try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) return response.status(400).send("Hospital Not Found!!");
-
-        const polyclinicID = request.params.polyclinicID;
-        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
-        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
-
-        const doctorID = request.params.doctorID;
-        const doctor = polyclinic.doctors.find(doctor => (doctor._id == doctorID));
-        if(!doctor) return response.status(400).send("Doctor Not Found!!");
-
+        const hospital = await HospitalFinder(request.params.hospitalID);
+        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
+        const doctor = await DoctorFinder(polyclinic, request.params.doctorID);
         return response.status(200).json(doctor);
 
     } catch (err) {

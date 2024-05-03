@@ -76,4 +76,46 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID", async (request, res
     }
 });
 
+// ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniktelk Doktorlar Listeleyen API.
+router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor", async (request, response) => {
+    try {
+        const hospitalID = request.params.hospitalID;
+        const hospital = await Hospital.findOne({ _id: hospitalID });
+        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+
+        const polyclinicID = request.params.polyclinicID;
+        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
+        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
+
+        return response.status(200).json(polyclinic.doctors);
+
+    } catch (err) {
+        console.log(`Doctor LISTING ERROR \n${err}`);
+        return response.status(400).send("Doctor LISTING ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktoru Listeleyen API.
+router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID", async (request, response) => {
+    try {
+        const hospitalID = request.params.hospitalID;
+        const hospital = await Hospital.findOne({ _id: hospitalID });
+        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+
+        const polyclinicID = request.params.polyclinicID;
+        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
+        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
+
+        const doctorID = request.params.doctorID;
+        const doctor = polyclinic.doctors.find(doctor => (doctor._id == doctorID));
+        if(!doctor) return response.status(400).send("Doctor Not Found!!");
+
+        return response.status(200).json(doctor);
+
+    } catch (err) {
+        console.log(`Doctor LISTING ERROR \n${err}`);
+        return response.status(400).send("Doctor LISTING ERROR!!");
+    }
+});
+
 export default router;

@@ -126,14 +126,14 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/edit", UserLogi
         if(!hospital) return response.status(400).send("Hospital Not Found!!");
 
         const polyclinicID = request.params.polyclinicID;
-        const editedPolyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
-        if(!editedPolyclinic) return response.status(400).send("Polyclinic Not Found!!");
+        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
+        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
 
         let data = {};
         if(request.body.name) data.name = request.body.name;
-        if(Object.keys(data).length === 0) return response.status(400).send("Editing Cannot be Made Without Entering any Data!!");
+        if(Object.keys(data).length === 0) return response.status(400).send("Polyclinic Name is Required!!");
 
-        editedPolyclinic.name = data.name;
+        polyclinic.name = data.name;
         await hospital.save();
         return response.status(200).send("Polyclinic EDITED Successfully!!");
 
@@ -162,6 +162,64 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/delete", Use
     } catch (err) {
         console.log(`Polyclinic DELETING ERROR \n${err}`);
         return response.status(400).send("Polyclinic DELETING ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğine Doctor Ekleme API'si. Aynı Poliklinikteki Doktor İsimleri Aynı Olamaz.
+router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const hospitalID = request.params.hospitalID;
+        const hospital = await Hospital.findOne({ _id: hospitalID });
+        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+
+        const polyclinicID = request.params.polyclinicID;
+        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
+        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
+
+        let data = {};
+        if(request.body.name) data.name = request.body.name;
+        if(Object.keys(data).length === 0) return response.status(400).send("Doctor Name is Required!!");
+
+        const existingDoctor = polyclinic.doctors.find(doctor => (doctor.name === data.name));
+        if(existingDoctor) return response.status(400).send("Doctor Already Exists!!");
+
+        polyclinic.doctors.push({ name: data.name });
+        await hospital.save();
+        return response.status(200).send("Doctor ADDED Successfully!!");
+
+    } catch (err) {
+        console.log(`Doctor ADDING ERROR \n${err}`);
+        return response.status(400).send("Doctor ADDING ERROR!!");
+    }
+})
+
+// --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK ---
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
+router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/setSickRep", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const hospitalID = request.params.hospitalID;
+        const hospital = await Hospital.findOne({ _id: hospitalID });
+        if(!hospital) return response.status(400).send("Hospital Not Found!!");
+
+        const polyclinicID = request.params.polyclinicID;
+        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
+        if(!polyclinic) return response.status(400).send("Polyclinic Not Found!!");
+
+        const doctorID = request.params.doctorID;
+        const doctor = polyclinic.doctors.find(doctor => (doctor._id == doctorID));
+        if(!doctor) return response.status(400).send("Doctor Not Found!!");
+
+        let data = {};
+        if(typeof request.body.sickReport === "boolean") data.sickReport = request.body.sickReport;
+        if(Object.keys(data).length === 0) return response.status(400).send("Doctor Sick Report Status (boolean) is Required!!");
+
+        doctor.sickReport = data.sickReport;
+        await hospital.save();
+        return response.status(200).send("Doctor Sick Report UPDATED Successfully!!");
+        
+    } catch (err) {
+        console.log(`Doctor Sick Report UPDATING ERROR!! \n${err}`);
+        return response.status(400).send("Doctor Sick Report UPDATING ERROR!!");
     }
 });
 

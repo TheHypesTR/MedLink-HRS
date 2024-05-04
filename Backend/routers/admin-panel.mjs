@@ -179,6 +179,7 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", U
     }
 })
 
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin IS'si Belirtilen Doktorunu Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
         const hospital = await HospitalFinder(request.params.hospitalID);
@@ -199,25 +200,48 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doct
     }
 });
 
-// --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK ---
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
-router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/setSickRep", UserLoginCheck, UserPermCheck, async (request, response) => {
+router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
         const hospital = await HospitalFinder(request.params.hospitalID);
         const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
-        const doctor = await DoctorFinder(polyclinic, request.params.doctorID);
+        const doctor = await DoctorFinder(hospital, polyclinic, request.params.doctorID);
 
-        let data = {};
-        if(typeof request.body.sickReport === "boolean") data.sickReport = request.body.sickReport;
-        if(Object.keys(data).length === 0) return response.status(400).send("Doctor Sick Report Status (boolean) is Required!!");
-
-        doctor.sickReport = data.sickReport;
+        const reportDay = request.body.reportDay;
+        const reportStartingDay = request.body.reportStartingDay;
+        if(reportDay < 1) return response.status(400).send("Invalid Report Duration!!");
+        
+        doctor.reportDay = reportDay || doctor.reportDay;
+        doctor.reportStartingDay = reportStartingDay || new Date(Date.now() + 1000 * 60 * 60 * 3);
+        doctor.reportEndingDay = new Date(doctor.reportStartingDay.getTime() + reportDay * 1000 * 60 * 60 * 24);
         await hospital.save();
-        return response.status(200).send("Doctor Sick Report UPDATED Successfully!!");
+        return response.status(200).send("Doctor Report UPDATED Successfully!!");
         
     } catch (err) {
-        console.log(`Doctor Sick Report UPDATING ERROR!! \n${err}`);
-        return response.status(400).send("Doctor Sick Report UPDATING ERROR!!");
+        console.log(`Doctor Report UPDATING ERROR!! \n${err}`);
+        return response.status(400).send("Doctor Report UPDATING ERROR!!");
+    }
+});
+
+// --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK ---
+// ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniğin ID'si Belirtilen Doktorun Mesai Saatlerini Güncelleme API'si.
+router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/setAppointmentTime", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const hospital = await HospitalFinder(request.params.hospitalID);
+        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
+        const doctor = await DoctorFinder(hospital, polyclinic, request.params.doctorID);
+
+        let data = {};
+        if(request.body.appointmentTime) data.appointmentTime = request.body.appointmentTime;
+        if(Object.keys(data).length === 0) return response.status(400).send("Doctor Appointment Time is Required!!");
+
+        doctor.appointmentTime = data.appointmentTime;
+        await hospital.save();
+        return response.status(200).send("Doctor Appointment Time UPDATED Successfully!!");
+
+    } catch (err) {
+        console.log(`Doctor Appointment Time UPDATING ERROR \n${err}`);
+        return response.status(400).send("Doctor Appointment Time UPDATING ERROR!!");
     }
 });
 

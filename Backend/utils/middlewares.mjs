@@ -54,12 +54,20 @@ export const PolyclinicFinder = async (findedHospital, polyclinicID) => {
     }
 };
 
-// HospitalFinder ile Bulunan Hastanedeki ve PolyclinicFinder ile Bulunan Poliklinikteki ID'si Verilen Doktoru Bulan Fonksiyon.
-export const DoctorFinder = async (findedPolyclinic, doctorID) => {
+// HospitalFinder ile Bulunan Hastanedeki ve PolyclinicFinder ile Bulunan Poliklinikteki ID'si Verilen Doktoru Bulan Fonksiyon. Doktorun Rapor Süresini de Denetler.
+export const DoctorFinder = async (findedHospital, findedPolyclinic, doctorID) => {
     try {
+        const hospital = findedHospital;
         const polyclinic = findedPolyclinic;
         const doctor = polyclinic.doctors.find(doctor => (doctor._id == doctorID));
         if(!doctor) throw new Error("Doctor Not Found!!");
+
+        if (doctor.reportEndingDay && new Date(Date.now() + 1000 * 60 * 60 * 3) > doctor.reportEndingDay) {
+            doctor.reportDay = 0;
+            doctor.reportStartingDay = null;
+            doctor.reportEndingDay = null;
+            await hospital.save();
+        }
         return doctor;
 
     } catch (err) {

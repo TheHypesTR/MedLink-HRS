@@ -83,7 +83,7 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID", as
     try {
         const hospital = await HospitalFinder(request.params.hospitalID);
         const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
-        const doctor = await DoctorFinder(polyclinic, request.params.doctorID);
+        const doctor = await DoctorFinder(hospital, polyclinic, request.params.doctorID);
         return response.status(200).json(doctor);
 
     } catch (err) {

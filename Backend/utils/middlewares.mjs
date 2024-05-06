@@ -1,4 +1,6 @@
 import { Hospital } from "../mongoose/schemas/hospitals.mjs";
+import { Polyclinic } from "../mongoose/schemas/polyclinics.mjs";
+import { Doctor } from "../mongoose/schemas/doctors.mjs";
 
 // API'lerin Metod'ları ve Url'larının Konsol Çıktılarını Verir.
 export const logMiddleware = ((request, response, next) => {
@@ -11,7 +13,14 @@ export const UserLoginCheck = ((request, response, next) => {
     const user = request.session.passport?.user;
     if(!user) return response.redirect("/auth/login");
     next();
-})
+});
+
+// Kullanıcı Hâli Hazırda Giriş Yapmışsa Ana Sayfaya Yönlendirme Yapar.
+export const UserAlreadyLogged = ((request, response, next) => {
+    const user = request.session.passport?.user;
+    if(user) return response.redirect("/");
+    next();
+});
 
 // Kullanıcının Yetki Seviyesini Kontrol Eder Eğer Yetki Dışındaysa Yönlendirme Yapar.
 export const UserPermCheck = ((request, response, next) => {
@@ -22,16 +31,10 @@ export const UserPermCheck = ((request, response, next) => {
     next();
 });
 
-// Kullanıcı Hâli Hazırda Giriş Yapmışsa Ana Sayfaya Yönlendirme Yapar.
-export const UserAlreadyLogged = ((request, response, next) => {
-    const user = request.session.passport?.user;
-    if(user) return response.redirect("/");
-    next();
-});
-
 // ID'si Belirtilen Hastaneyi Bulan Fonksiyon.
 export const HospitalFinder = async (hospitalID) => {
     try {
+        if(hospitalID.length !== 24) throw new Error("Invalid HospitalID!!");
         const hospital = await Hospital.findOne({ _id: hospitalID });
         if(!hospital) throw new Error("Hospital Not Found!!");
         return hospital;
@@ -42,10 +45,10 @@ export const HospitalFinder = async (hospitalID) => {
 };
 
 // HospitalFinder ile Bulunan Hastanedeki ID'si Verilen Polikliniği Bulan Fonksiyon.
-export const PolyclinicFinder = async (findedHospital, polyclinicID) => {
+export const PolyclinicFinder = async (hospitalID, polyclinicID) => {
     try {
-        const hospital = findedHospital;
-        const polyclinic = hospital.polyclinics.find(polyclinic => (polyclinic._id == polyclinicID));
+        if(hospitalID.length !== 24 || polyclinicID.length !== 24) throw new Error("Invalid Hospital-ID or Polyclinic-ID!!");
+        const polyclinic = await Polyclinic.findOne({ hospitalID: hospitalID, _id: polyclinicID });
         if (!polyclinic) throw new Error("Polyclinic Not Found!!");
         return polyclinic;
 
@@ -55,19 +58,11 @@ export const PolyclinicFinder = async (findedHospital, polyclinicID) => {
 };
 
 // HospitalFinder ile Bulunan Hastanedeki ve PolyclinicFinder ile Bulunan Poliklinikteki ID'si Verilen Doktoru Bulan Fonksiyon. Doktorun Rapor Süresini de Denetler.
-export const DoctorFinder = async (findedHospital, findedPolyclinic, doctorID) => {
+export const DoctorFinder = async (polyclinicID, doctorID) => {
     try {
-        const hospital = findedHospital;
-        const polyclinic = findedPolyclinic;
-        const doctor = polyclinic.doctors.find(doctor => (doctor._id == doctorID));
+        if(polyclinicID.length !== 24 || doctorID.length !== 24) throw new Error("Invalid Polyclinic-ID or Doctor-ID!!");
+        const doctor = await Doctor.findOne({ polyclinicID: polyclinicID, _id: doctorID });
         if(!doctor) throw new Error("Doctor Not Found!!");
-
-        if (doctor.reportEndingDay && new Date(Date.now() + 1000 * 60 * 60 * 3) > doctor.reportEndingDay) {
-            doctor.reportDay = 0;
-            doctor.reportStartingDay = null;
-            doctor.reportEndingDay = null;
-            await hospital.save();
-        }
         return doctor;
 
     } catch (err) {

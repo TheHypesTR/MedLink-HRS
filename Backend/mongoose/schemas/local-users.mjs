@@ -23,6 +23,6 @@ const localUserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         default: "User",
     },
-}, { versionKey: false, timestamps: true });
+}, { versionKey: false, timestamps: { currentTime: () => new Date(Date.now() + 1000 * 60 * 60 * 3) } });
 
 export const LocalUser = mongoose.model("LocalUsers", localUserSchema);

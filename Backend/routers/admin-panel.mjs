@@ -2,7 +2,11 @@ import { Router } from "express";
 import { checkSchema, validationResult, matchedData } from "express-validator";
 import { LocalUser } from "../mongoose/schemas/local-users.mjs";
 import { Hospital } from "../mongoose/schemas/hospitals.mjs";
-import { HospitalAddValidation } from "../utils/validation-schemas.mjs";
+import { Polyclinic } from "../mongoose/schemas/polyclinics.mjs";
+import { Doctor } from "../mongoose/schemas/doctors.mjs";
+import { Appointment } from "../mongoose/schemas/appointment.mjs";
+import { Report } from "../mongoose/schemas/reports.mjs";
+import { HospitalAddValidation, DoctorAddValidation } from "../utils/validation-schemas.mjs";
 import { UserLoginCheck, UserPermCheck, HospitalFinder, PolyclinicFinder, DoctorFinder } from "../utils/middlewares.mjs";
 
 const router = Router();
@@ -17,8 +21,7 @@ router.post("/admin/promote", UserLoginCheck, UserPermCheck, async (request, res
     try {
         const userTC = request.body.TCno;
         const user = await LocalUser.findOne({ TCno: userTC });
-        if(!user) return response.status(400).send("User Not Found!!");
-
+        if(!user) return response.status(404).send("User Not Found!!");
         if(user.role === "Admin") return response.status(400).send("This User Already Admin!!");
 
         user.role = "Admin";
@@ -26,7 +29,7 @@ router.post("/admin/promote", UserLoginCheck, UserPermCheck, async (request, res
         return response.status(200).send("User Promote Successfully!!");
 
     } catch (err) {
-        console.log(`User Promote ERROR \n${err}`);
+        console.log(`User Promote ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("User Promote ERROR!!");
     }
 });
@@ -38,16 +41,15 @@ router.post("/admin/hospital/add", UserLoginCheck, UserPermCheck, checkSchema(Ho
         if(!errors.isEmpty()) return response.status(400).json({ errors: errors.array() });
 
         const data = matchedData(request);
-        console.log(`Hospital ADDING... \n${data}`);
         const hospital = await Hospital.findOne({ name: data.name, city: data.city, district: data.district });
         if(hospital) return response.status(400).send("Hospital Already Exists!!");
 
         const newHospital = new Hospital(data);
-        const savedHospital = await newHospital.save();
-        return response.status(201).send(`Hospital ADDED Successfully!!\r\n${savedHospital}`);
+        await newHospital.save();
+        return response.status(201).send("Hospital ADDED Successfully!!");
 
     } catch (err) {
-        console.log(`Hospital ADDING ERROR \n${err}`);
+        console.log(`Hospital ADDING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Hospital ADDING ERROR!!");
     }
 });
@@ -56,25 +58,21 @@ router.post("/admin/hospital/add", UserLoginCheck, UserPermCheck, checkSchema(Ho
 router.put("/admin/hospital/:hospitalID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
         const hospitalID = request.params.hospitalID;
-        const cityName = request.body.city;
-        const districtName = request.body.district;
-        const hospitalName = request.body.name;
-        const hospitalAddress = request.body.address;
+        const hospital = await HospitalFinder(hospitalID);
+
+        const { city, district, name, address } = request.body;
         let data = {};
-
-        if(cityName) data.city = cityName;
-        if(districtName) data.district = districtName;
-        if(hospitalName) data.name = hospitalName;
-        if(hospitalAddress) data.address = hospitalAddress;
+        if(city) data.city = city;
+        if(district) data.district = district;
+        if(name) data.name = name;
+        if(address) data.address = address;
         if(Object.keys(data).length === 0) return response.status(400).send("Editing Cannot be Made Without Entering any Data!!");
-
-        const editHospital = await Hospital.findOneAndUpdate({ _id: hospitalID }, { $set: data }, { new: true });
-        if(!editHospital) return response.status(400).send("Hospital Not Found!!");
-
+        
+        await Hospital.updateOne(hospital, { $set: data }, { new: true });
         return response.status(200).send("Hospital EDITED Successfully!!");
-
+        
     } catch (err) {
-        console.log(`Hospital EDITING ERROR \n${err}`);
+        console.log(`Hospital EDITING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Hospital EDITING ERROR!!");
     }
 });
@@ -83,13 +81,12 @@ router.put("/admin/hospital/:hospitalID/edit", UserLoginCheck, UserPermCheck, as
 router.delete("/admin/hospital/:hospitalID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
         const hospitalID = request.params.hospitalID;
-        const deleteHospital = await Hospital.findOneAndDelete({ _id: hospitalID });
-        if(!deleteHospital) return response.status(400).send("Hospital Not Found!!");
-
+        const hospital = await HospitalFinder(hospitalID);
+        await Hospital.deleteOne(hospital);
         return response.status(200).send("Hospital DELETED Successfully!!");
-
+        
     } catch (err) {
-        console.log(`Hospital DELETING ERROR \n${err}`);
+        console.log(`Hospital DELETING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Hospital DELETING ERROR!!");
     }
 });
@@ -97,21 +94,23 @@ router.delete("/admin/hospital/:hospitalID/delete", UserLoginCheck, UserPermChec
 // ID'si Belirtilen Hastaneye Poliklinik Ekleme API'si. Aynı Polyclinic'ten Varsa Ekleme Yapmaz.
 router.post("/admin/hospital/:hospitalID/polyclinic/add", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
-        const hospital = await HospitalFinder(request.params.hospitalID);
-
+        const hospitalID = request.params.hospitalID;
+        await HospitalFinder(hospitalID);
+        
+        const polyclinicName = request.body.name;
         let data = {};
-        if(request.body.name) data.name = request.body.name;
-        if(Object.keys(data).length === 0) return response.status(400).send("Adding Cannot be Made Without Entering any Data!!");
+        if(polyclinicName) data.name = polyclinicName;
+        if(Object.keys(data).length === 0) return response.status(400).send("Polyclinic Name is Required!!");
+        
+        const polyclinic = await Polyclinic.findOne({ hospitalID: hospitalID, name: data.name });
+        if(polyclinic) return response.status(400).send("Polyclinic Already Exists!!");
 
-        const existingPolyclinic = hospital.polyclinics.find(polyclinic => polyclinic.name === data.name);
-        if (existingPolyclinic) return response.status(400).send("Polyclinic Already Exists!!");
-
-        hospital.polyclinics.push({ name: data.name });
-        await hospital.save();
+        const newPolyclinic = new Polyclinic({ hospitalID: hospitalID, name: data.name });
+        await newPolyclinic.save();
         return response.status(200).send("Polyclinic ADDED Succesfully!!");
-
+        
     } catch (err) {
-        console.log(`Polyclinic ADDING ERROR \n${err}`);
+        console.log(`Polyclinic ADDING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Polyclinic ADDING ERROR!!");
     }
 });
@@ -119,19 +118,19 @@ router.post("/admin/hospital/:hospitalID/polyclinic/add", UserLoginCheck, UserPe
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Düzenleme API'si.
 router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
-        const hospital = await HospitalFinder(request.params.hospitalID);
-        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
-
+        const { hospitalID, polyclinicID } = request.params;
+        const polyclinic = await PolyclinicFinder(hospitalID, polyclinicID);
+        
+        const polyclinicName = request.body.name;
         let data = {};
-        if(request.body.name) data.name = request.body.name;
+        if(polyclinicName) data.name = polyclinicName;
         if(Object.keys(data).length === 0) return response.status(400).send("Polyclinic Name is Required!!");
-
-        polyclinic.name = data.name;
-        await hospital.save();
+        
+        await Polyclinic.updateOne(polyclinic, { $set: data }, { new: true });
         return response.status(200).send("Polyclinic EDITED Successfully!!");
-
+        
     } catch (err) {
-        console.log(`Polyclinic EDITING ERROR \n${err}`);
+        console.log(`Polyclinic EDITING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Polyclinic EDITING ERROR!!");
     }
 });
@@ -139,42 +138,36 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/edit", UserLogi
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
-        const hospital = await HospitalFinder(request.params.hospitalID);
-        
-        const polyclinicsLength = hospital.polyclinics.length;
-        const polyclinicID = request.params.polyclinicID;
-        const remainingPolyclinics = hospital.polyclinics.filter(polyclinic => (polyclinic._id != polyclinicID));
-        if(polyclinicsLength === remainingPolyclinics.length) return response.status(400).send("Polyclinic Not Found!!");
-
-        hospital.polyclinics = remainingPolyclinics;
-        await hospital.save();
+        const { hospitalID, polyclinicID } = request.params;        
+        const polyclinic = await PolyclinicFinder(hospitalID, polyclinicID);
+        await Polyclinic.deleteOne(polyclinic);
         return response.status(200).send("Polyclinic DELETED Succesfully!!");
-
+        
     } catch (err) {
-        console.log(`Polyclinic DELETING ERROR \n${err}`);
+        console.log(`Polyclinic DELETING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Polyclinic DELETING ERROR!!");
     }
 });
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğine Doktor Ekleme API'si. Aynı Poliklinikteki Doktor İsimleri Aynı Olamaz.
-router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", UserLoginCheck, UserPermCheck, async (request, response) => {
+router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", UserLoginCheck, UserPermCheck, checkSchema(DoctorAddValidation), async (request, response) => {
     try {
-        const hospital = await HospitalFinder(request.params.hospitalID);
-        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
+        const { hospitalID, polyclinicID } = request.params;
+        await PolyclinicFinder(hospitalID, polyclinicID);
+        
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) return response.status(400).json({ errors: errors.array() });
 
-        let data = {};
-        if(request.body.name) data.name = request.body.name;
-        if(Object.keys(data).length === 0) return response.status(400).send("Doctor Name is Required!!");
-
-        const existingDoctor = polyclinic.doctors.find(doctor => (doctor.name === data.name));
-        if(existingDoctor) return response.status(400).send("Doctor Already Exists!!");
-
-        polyclinic.doctors.push({ name: data.name });
-        await hospital.save();
+        const data = matchedData(request);
+        const doctor = await Doctor.findOne({ polyclinicID: polyclinicID, name: data.name });
+        if(doctor) return response.status(400).send("Doctor Already Exists!!");
+        
+        const newDoctor = new Doctor({ polyclinicID: polyclinicID, name: data.name, speciality: data.speciality });
+        await newDoctor.save();
         return response.status(200).send("Doctor ADDED Successfully!!");
-
+        
     } catch (err) {
-        console.log(`Doctor ADDING ERROR \n${err}`);
+        console.log(`Doctor ADDING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Doctor ADDING ERROR!!");
     }
 })
@@ -182,24 +175,20 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", U
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin IS'si Belirtilen Doktorunu Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
-        const hospital = await HospitalFinder(request.params.hospitalID);
-        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
-
-        const doctorsLength = polyclinic.doctors.length;
-        const doctorID = request.params.doctorID;
-        const remainingdoctors = polyclinic.doctors.filter(doctor => (doctor._id != doctorID));
-        if(doctorsLength === remainingdoctors.length) return response.status(400).send("Doctor Not Found!!");
-
-        polyclinic.doctors = remainingdoctors;
-        await hospital.save();
+        const { hospitalID, polyclinicID, doctorID } = request.params;
+        await HospitalFinder(hospitalID);
+        const doctor = await DoctorFinder(polyclinicID, doctorID);
+        await Doctor.deleteOne(doctor);
         return response.status(200).send("Doctor DELETED Successfully!!");
-
+        
     } catch (err) {
-        console.log(`Doctor DELETING ERROR \n${err}`);
+        console.log(`Doctor DELETING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Doctor DELETING ERROR!!");
     }
 });
 
+/*
+// --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK ---
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
 router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
@@ -218,12 +207,11 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorI
         return response.status(200).send("Doctor Report UPDATED Successfully!!");
         
     } catch (err) {
-        console.log(`Doctor Report UPDATING ERROR!! \n${err}`);
+        console.log(`Doctor Report UPDATING ERROR!! \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Doctor Report UPDATING ERROR!!");
     }
 });
 
-// --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK ---
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniğin ID'si Belirtilen Doktorun Mesai Saatlerini Güncelleme API'si.
 router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/setAppointmentTime", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
@@ -240,9 +228,10 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorI
         return response.status(200).send("Doctor Appointment Time UPDATED Successfully!!");
 
     } catch (err) {
-        console.log(`Doctor Appointment Time UPDATING ERROR \n${err}`);
+        console.log(`Doctor Appointment Time UPDATING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Doctor Appointment Time UPDATING ERROR!!");
     }
 });
+*/
 
 export default router;

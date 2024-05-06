@@ -21,4 +21,10 @@ const AppointmentSchema = new mongoose.Schema({
     },
 }, { versionKey: false, timestamps: { currentTime: () => new Date(Date.now() + 1000 * 60 * 60 * 3) } });
 
+AppointmentSchema.pre("save", function(next) {
+    this.date.setTime(this.date.getTime() + (1000 * 60 * 60 * 3));
+    this.date.setUTCHours(0, 0, 0, 0);
+    next();
+});
+
 export const Appointment = mongoose.model("Appointments", AppointmentSchema);

@@ -13,6 +13,4 @@ const PolyclinicSchema = new mongoose.Schema({
     },
 }, { versionKey: false, timestamps: { currentTime: () => new Date(Date.now() + 1000 * 60 * 60 * 3) } });
 
-//PolyclinicSchema.index({ hospitalID: 1 });
-
 export const Polyclinic = mongoose.model("Polyclinics", PolyclinicSchema);

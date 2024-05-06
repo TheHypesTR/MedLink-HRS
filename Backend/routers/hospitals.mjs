@@ -2,7 +2,8 @@ import { Router } from "express";
 import { Hospital } from "../mongoose/schemas/hospitals.mjs";
 import { Polyclinic } from "../mongoose/schemas/polyclinics.mjs";
 import { Doctor } from "../mongoose/schemas/doctors.mjs";
-import { HospitalFinder, PolyclinicFinder, DoctorFinder } from "../utils/middlewares.mjs";
+import { Appointment } from "../mongoose/schemas/appointment.mjs";
+import { HospitalFinder, PolyclinicFinder, DoctorFinder, AppointmentFinder } from "../utils/middlewares.mjs";
 
 const router = Router();
 
@@ -90,13 +91,42 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor", async (reque
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID", async (request, response) => {
     try {
         const { hospitalID, polyclinicID, doctorID } = request.params;
-        await PolyclinicFinder(hospitalID, polyclinicID);
+        await HospitalFinder(hospitalID);
         const doctor = await DoctorFinder(polyclinicID, doctorID);
         return response.status(200).json(doctor);
         
     } catch (err) {
         console.log(`Doctor LISTING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Doctor LISTING ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Randevularını Listeleyen API.
+router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment", async (request, response) => {
+    try {
+        const { hospitalID, polyclinicID, doctorID } = request.params;
+        await HospitalFinder(hospitalID);
+        await DoctorFinder(polyclinicID, doctorID);
+        const appointment = await Appointment.find({ doctorID: doctorID });
+        return response.status(200).json(appointment);
+
+    } catch (err) {
+        console.log(`Appointment LISTING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Appointment LISTING ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun ID'si Belirtilen Randevusunu Listeleyen API.
+router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID", async (request, response) => {
+    try {
+        const { hospitalID, polyclinicID, doctorID, appointmentID } = request.params;
+        await PolyclinicFinder(hospitalID, polyclinicID);
+        const appointment = await AppointmentFinder(doctorID, appointmentID);
+        return response.status(200).json(appointment);
+
+    } catch (err) {
+        console.log(`Appointment LISTING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Appointment LISTING ERROR!!");
     }
 });
 

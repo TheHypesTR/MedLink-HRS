@@ -1,6 +1,7 @@
 import { Hospital } from "../mongoose/schemas/hospitals.mjs";
 import { Polyclinic } from "../mongoose/schemas/polyclinics.mjs";
 import { Doctor } from "../mongoose/schemas/doctors.mjs";
+import { Appointment } from "../mongoose/schemas/appointment.mjs";
 
 // API'lerin Metod'ları ve Url'larının Konsol Çıktılarını Verir.
 export const logMiddleware = ((request, response, next) => {
@@ -44,7 +45,7 @@ export const HospitalFinder = async (hospitalID) => {
     }
 };
 
-// HospitalFinder ile Bulunan Hastanedeki ID'si Verilen Polikliniği Bulan Fonksiyon.
+// Hastanede ID'si Verilen Polikliniği Bulan Fonksiyon.
 export const PolyclinicFinder = async (hospitalID, polyclinicID) => {
     try {
         if(hospitalID.length !== 24 || polyclinicID.length !== 24) throw new Error("Invalid Hospital-ID or Polyclinic-ID!!");
@@ -57,13 +58,26 @@ export const PolyclinicFinder = async (hospitalID, polyclinicID) => {
     }
 };
 
-// HospitalFinder ile Bulunan Hastanedeki ve PolyclinicFinder ile Bulunan Poliklinikteki ID'si Verilen Doktoru Bulan Fonksiyon. Doktorun Rapor Süresini de Denetler.
+// Poliklinik ID'si Verilen Doktoru Bulan Fonksiyon.
 export const DoctorFinder = async (polyclinicID, doctorID) => {
     try {
         if(polyclinicID.length !== 24 || doctorID.length !== 24) throw new Error("Invalid Polyclinic-ID or Doctor-ID!!");
         const doctor = await Doctor.findOne({ polyclinicID: polyclinicID, _id: doctorID });
         if(!doctor) throw new Error("Doctor Not Found!!");
         return doctor;
+
+    } catch (err) {
+        throw err;
+    }
+};
+
+// Doctor ID'si Verilen Randevuyu Bulan Fonksiyon.
+export const AppointmentFinder = async (doctorID, appointmentID) => {
+    try {
+        if(doctorID.length !== 24 || appointmentID.length !== 24) throw new Error("Invalid Doctor-ID or Appointment-ID!!");
+        const appointment = await Appointment.findOne({ doctorID: doctorID, _id: appointmentID });
+        if(!appointment) throw new Error("Appointment Not Found!!");
+        return appointment;
 
     } catch (err) {
         throw err;

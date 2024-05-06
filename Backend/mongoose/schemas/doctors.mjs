@@ -17,6 +17,4 @@ const DoctorSchema = new mongoose.Schema({
     },
 }, { versionKey: false, timestamps: { currentTime: () => new Date(Date.now() + 1000 * 60 * 60 * 3) } });
 
-//DoctorSchema.index({ polyclinicID: 1 });
-
 export const Doctor = mongoose.model("Doctors", DoctorSchema);

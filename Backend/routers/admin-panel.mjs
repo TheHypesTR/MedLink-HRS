@@ -7,7 +7,7 @@ import { Doctor } from "../mongoose/schemas/doctors.mjs";
 import { Appointment } from "../mongoose/schemas/appointment.mjs";
 import { Report } from "../mongoose/schemas/reports.mjs";
 import { HospitalAddValidation, DoctorAddValidation } from "../utils/validation-schemas.mjs";
-import { UserLoginCheck, UserPermCheck, HospitalFinder, PolyclinicFinder, DoctorFinder } from "../utils/middlewares.mjs";
+import { UserLoginCheck, UserPermCheck, HospitalFinder, PolyclinicFinder, DoctorFinder, AppointmentFinder } from "../utils/middlewares.mjs";
 
 const router = Router();
 
@@ -172,7 +172,7 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", U
     }
 })
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin IS'si Belirtilen Doktorunu Silme API'si.
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorunu Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
         const { hospitalID, polyclinicID, doctorID } = request.params;
@@ -184,6 +184,47 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doct
     } catch (err) {
         console.log(`Doctor DELETING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Doctor DELETING ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Verilen Doktoruna Randevu Ekleme API'si.
+router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const { hospitalID, polyclinicID, doctorID } = request.params;
+        await HospitalFinder(hospitalID);
+        await DoctorFinder(polyclinicID, doctorID);
+
+        const { date, time } = request.body;
+        let data = {};
+        if(date) data.date = date;
+        if(time) data.time = time; 
+        if(Object.keys(data).length === 0) return response.status(400).send("Date is Required!!");
+
+        const appointment = await Appointment.findOne({ doctorID: doctorID, date: data.date });
+        if(appointment) return response.status(400).send("Appointment Already Exists!!");
+
+        const newAppointment = new Appointment({ doctorID: doctorID, data });
+        await newAppointment.save();
+        return response.status(201).send("Appointment ADDED Successfully!!");
+
+    } catch (err) {
+        console.log(`Appointment ADDING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Appointment ADDING ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Randevusunu Silme API'si.
+router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const { hospitalID, polyclinicID, doctorID, appointmentID } = request.params;
+        await PolyclinicFinder(hospitalID, polyclinicID);
+        const appointment = await AppointmentFinder(doctorID, appointmentID);
+        await Appointment.deleteOne(appointment);
+        return response.status(200).send("Appointment DELETED Successfully!!");
+
+    } catch (err) {
+        console.log(`Appointment DELETING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Appointment DELETING ERROR!!");
     }
 });
 

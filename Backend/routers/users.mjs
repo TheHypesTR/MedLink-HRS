@@ -29,6 +29,13 @@ router.post("/auth/register", UserAlreadyLogged, checkSchema(UserValidation), as
         const data = matchedData(request);
         data.password = HashPassword(data.password);
         data.email = data.email.toLowerCase();
+        const tcnum = data.TCno.toString();
+        
+        let toplam = 0;
+        for (let i = 0; i < 10; i++) 
+            toplam += parseInt(tcnum[i]);
+        if (toplam % 10 !== parseInt(tcnum[10]) || parseInt(tcnum[10]) % 2 !== 0) return response.status(400).send("Invalid T.C. No!!");
+        
         const user = await LocalUser.findOne({ TCno: data.TCno });
         if(user) return response.status(400).send("User Already Exists!!");
 

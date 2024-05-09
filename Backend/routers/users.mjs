@@ -30,11 +30,10 @@ router.post("/auth/register", UserAlreadyLogged, checkSchema(UserValidation), as
         data.password = HashPassword(data.password);
         data.email = data.email.toLowerCase();
         const tcnum = data.TCno.toString();
-        
         let toplam = 0;
         for (let i = 0; i < 10; i++) 
             toplam += parseInt(tcnum[i]);
-        if (toplam % 10 !== parseInt(tcnum[10]) || parseInt(tcnum[10]) % 2 !== 0) return response.status(400).send("Invalid T.C. No!!");
+        if (toplam % 10 !== parseInt(tcnum[10]) || parseInt(tcnum[10]) % 2 !== 0) return response.status(400).send("Invalid 'T.C. NO'!!");
         
         const user = await LocalUser.findOne({ TCno: data.TCno });
         if(user) return response.status(400).send("User Already Exists!!");
@@ -44,14 +43,14 @@ router.post("/auth/register", UserAlreadyLogged, checkSchema(UserValidation), as
         return response.status(201).send(`New User Created!! \n${savedUser}`);
         
     } catch (err) {
-        console.log(err);
-        return response.sendStatus(400);
+        console.log(`User REGISTRATION ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("User REGISTRATION ERROR!!");
     }
 });
 
 // Local Kullanıcı Girişinin Yapılır.
 router.post("/auth/login", UserAlreadyLogged, passport.authenticate("local"), (request, response) => {
-    return response.sendStatus(200);
+    return response.status(200).send("User LOGIN Successfully!!");
 });
 
 // Aktif bir Kullanıcı Varsa Oturumunu Kapatmasını Sağlar.
@@ -62,7 +61,7 @@ router.post("/auth/logout", UserLoginCheck, (request, response) => {
         if (err) return response.sendStatus(400);
         
         response.clearCookie("connect.sid");
-        return response.sendStatus(200);
+        return response.status(200).send("User LOGOUT Successfully!!");
     });
 });
 
@@ -84,8 +83,8 @@ router.post("/auth/reset-password", async (request, response) => {
         return response.status(201).send(`Password-Reset E-Mail Sent to '${user.email}' !!`)
 
     } catch (err) {
-        console.log(`Password Reset Failed!! ${err}`);
-        return response.sendStatus(400);
+        console.log(`Password Reset ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Password Reset ERROR!!");
     }
 });
 
@@ -102,16 +101,16 @@ router.post("/auth/user/reset-password/:id/:token", checkSchema(PasswordValidati
         const token = await Token.findOne({ tokenID: request.params.token, userID: user._id });
         if(!token) return response.status(400).send("Token Not Found!!");
 
-        await LocalUser.updateOne({ _id: user._id }, { $set: { password: newPassword } });
+        await LocalUser.updateOne({ _id: user._id }, { $set: { password: newPassword } }, { new: true });
         await Token.findOneAndDelete({ userID: user._id });
 
         const message = `Hi ${user.name},\nYour Password has been Successfully Updated!!`;
-        await sendEmail(user.email, "Password-Reset Succesfully!", message);
-        return response.status(200).send("Password Reset Succesfully!!");
+        await sendEmail(user.email, "Password-Reset Successfully!", message);
+        return response.status(200).send("Password Reset Successfully!!");
 
     } catch (err) {
-        console.log(`Password Reset Failed!! ${err}`);
-        return response.status(400).send(err);
+        console.log(`Password Reset ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Password Reset ERROR!!");
     }
 });
 

@@ -49,7 +49,7 @@ export const UserValidation = {
             errorMessage: "'Password' Must Not be Empty!",
         },
         matches: {
-            options: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,24}$/,
+            options: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&_.-]{8,24}$/,
             errorMessage: "'Password' Must Contain at Least One Uppercase Letter, One Lowercase Letter, and One Number!",
         },
     },
@@ -69,7 +69,7 @@ export const PasswordValidation = {
             errorMessage: "'Password' Must Not be Empty!",
         },
         matches: {
-            options: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,24}$/,
+            options: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&_.-]{8,24}$/,
             errorMessage: "'Password' Must Contain at Least One Uppercase Letter, One Lowercase Letter, and One Number!",
         },
     },

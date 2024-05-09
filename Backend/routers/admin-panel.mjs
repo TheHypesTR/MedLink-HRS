@@ -66,14 +66,14 @@ router.put("/admin/hospital/:hospitalID/edit", UserLoginCheck, UserPermCheck, as
         if(district) data.district = district;
         if(name) data.name = name;
         if(address) data.address = address;
-        if(Object.keys(data).length === 0) return response.status(400).send("Editing Cannot be Made Without Entering any Data!!");
+        if(Object.keys(data).length === 0) return response.status(400).send("Updating Cannot be Made Without Entering any Data!!");
         
         await Hospital.updateOne(hospital, { $set: data }, { new: true });
         return response.status(200).send("Hospital EDITED Successfully!!");
         
     } catch (err) {
-        console.log(`Hospital EDITING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Hospital EDITING ERROR!!");
+        console.log(`Hospital UPDATING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Hospital UPDATING ERROR!!");
     }
 });
 
@@ -107,7 +107,7 @@ router.post("/admin/hospital/:hospitalID/polyclinic/add", UserLoginCheck, UserPe
 
         const newPolyclinic = new Polyclinic({ hospitalID: hospitalID, name: data.name });
         await newPolyclinic.save();
-        return response.status(200).send("Polyclinic ADDED Succesfully!!");
+        return response.status(200).send("Polyclinic ADDED Successfully!!");
         
     } catch (err) {
         console.log(`Polyclinic ADDING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
@@ -130,8 +130,8 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/edit", UserLogi
         return response.status(200).send("Polyclinic EDITED Successfully!!");
         
     } catch (err) {
-        console.log(`Polyclinic EDITING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Polyclinic EDITING ERROR!!");
+        console.log(`Polyclinic UPDATING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Polyclinic UPDATING ERROR!!");
     }
 });
 
@@ -141,7 +141,7 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/delete", Use
         const { hospitalID, polyclinicID } = request.params;        
         const polyclinic = await PolyclinicFinder(hospitalID, polyclinicID);
         await Polyclinic.deleteOne(polyclinic);
-        return response.status(200).send("Polyclinic DELETED Succesfully!!");
+        return response.status(200).send("Polyclinic DELETED Successfully!!");
         
     } catch (err) {
         console.log(`Polyclinic DELETING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
@@ -171,6 +171,28 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", U
         return response.status(400).send("Doctor ADDING ERROR!!");
     }
 })
+
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorunun Bilgilerini Düzenleme API'si.
+router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const { hospitalID, polyclinicID, doctorID } = request.params;
+        await HospitalFinder(hospitalID);
+        const doctor = await DoctorFinder(polyclinicID, doctorID);
+
+        const { name, speciality } = request.body;
+        let data = {};
+        if(name) data.name = name;
+        if(speciality) data.speciality = speciality;
+        if(Object.keys(data).length === 0) return response.status(400).send("Updating Cannot be Made Without Entering any Data!!");
+
+        await Doctor.findOneAndUpdate(doctor, { $set: data }, { new: true });
+        return response.status(200).send("Doctor EDITED Successfully!!");
+
+    } catch (err) {
+        console.log(`Doctor UPDATING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Doctor UPDATING ERROR!!");
+    }
+});
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorunu Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
@@ -213,6 +235,27 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctor
     }
 });
 
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Randevusunu Düzenleme API'si.
+router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const { hospitalID, polyclinicID, doctorID, appointmentID } = request.params;
+        await PolyclinicFinder(hospitalID, polyclinicID);
+        const appointment = await AppointmentFinder(doctorID, appointmentID);
+
+        const time = request.body.time;
+        let data = {};
+        if(time) data.time = time;
+        if(Object.keys(data).length === 0) return response.status(400).send("Appointment Time (Array) is Required!!");
+
+        await Appointment.findOneAndUpdate(appointment, { $set: data }, { new: true });
+        return response.status(200).send("Appointment UPDATED Successfully!!");
+
+    } catch (err) {
+        console.log(`Appointment UPDATING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Appointment UPDATING ERROR!!");
+    }
+});
+
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Randevusunu Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
@@ -228,51 +271,31 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doct
     }
 });
 
-/*
-// --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK --- GÜNCELLENECEK ---
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
 router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
-        const hospital = await HospitalFinder(request.params.hospitalID);
-        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
-        const doctor = await DoctorFinder(hospital, polyclinic, request.params.doctorID);
+        const { hospitalID, polyclinicID, doctorID } = request.params;
+        await HospitalFinder(hospitalID);
+        const doctor = await DoctorFinder(polyclinicID, doctorID);
 
-        const reportDay = request.body.reportDay;
-        const reportStartingDay = request.body.reportStartingDay;
-        if(reportDay < 1) return response.status(400).send("Invalid Report Duration!!");
-        
-        doctor.reportDay = reportDay || doctor.reportDay;
-        doctor.reportStartingDay = reportStartingDay || new Date(Date.now() + 1000 * 60 * 60 * 3);
-        doctor.reportEndingDay = new Date(doctor.reportStartingDay.getTime() + reportDay * 1000 * 60 * 60 * 24);
-        await hospital.save();
-        return response.status(200).send("Doctor Report UPDATED Successfully!!");
-        
-    } catch (err) {
-        console.log(`Doctor Report UPDATING ERROR!! \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Doctor Report UPDATING ERROR!!");
-    }
-});
-
-// ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniğin ID'si Belirtilen Doktorun Mesai Saatlerini Güncelleme API'si.
-router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/setAppointmentTime", UserLoginCheck, UserPermCheck, async (request, response) => {
-    try {
-        const hospital = await HospitalFinder(request.params.hospitalID);
-        const polyclinic = await PolyclinicFinder(hospital, request.params.polyclinicID);
-        const doctor = await DoctorFinder(hospital, polyclinic, request.params.doctorID);
-
+        const { type, day, startDay } = request.body;
         let data = {};
-        if(request.body.appointmentTime) data.appointmentTime = request.body.appointmentTime;
-        if(Object.keys(data).length === 0) return response.status(400).send("Doctor Appointment Time is Required!!");
-
-        doctor.appointmentTime = data.appointmentTime;
-        await hospital.save();
-        return response.status(200).send("Doctor Appointment Time UPDATED Successfully!!");
-
+        if(type) data.type = type;
+        if(day) data.day = day;
+        if(startDay) data.startDay = startDay;
+        if(Object.keys(data).length === 0) return response.status(400).send("Reports Cannot be Created Without Rntering any Data!!")
+        if(data.day < 1) return response.status(400).send("Invalid Report Duration!!");
+        
+        data.startDay = data.startDay || new Date(Date.now() + 1000 * 60 * 60 * 3);
+        data.endDay = new Date(data.startDay.getTime() + (data.day * 1000 * 60 * 60 * 24));
+        const report = new Report({ doctorID: doctor._id, ...data });
+        await report.save();
+        return response.status(201).send("Report ADDED Successfully!!");
+        
     } catch (err) {
-        console.log(`Doctor Appointment Time UPDATING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Doctor Appointment Time UPDATING ERROR!!");
+        console.log(`Report ADDING ERROR!! \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Report ADDING ERROR!!");
     }
 });
-*/
 
 export default router;

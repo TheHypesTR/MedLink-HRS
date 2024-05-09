@@ -24,4 +24,6 @@ const ReportsSchema = new mongoose.Schema({
     },
 }, { versionKey: false, timestamps: { currentTime: () => new Date(Date.now() + 1000 * 60 * 60 * 3) } });
 
+ReportsSchema.index({ endDay: 1 }, { expireAfterSeconds: 0 });
+
 export const Report = mongoose.model("Reports", ReportsSchema);

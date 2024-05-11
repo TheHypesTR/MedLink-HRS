@@ -7,7 +7,7 @@ import { Doctor } from "../mongoose/schemas/doctors.mjs";
 import { Appointment } from "../mongoose/schemas/appointment.mjs";
 import { Report } from "../mongoose/schemas/reports.mjs";
 import { HospitalAddValidation, DoctorAddValidation } from "../utils/validation-schemas.mjs";
-import { UserLoginCheck, UserPermCheck, HospitalFinder, PolyclinicFinder, DoctorFinder, AppointmentFinder } from "../utils/middlewares.mjs";
+import { UserLoginCheck, UserPermCheck, HospitalFinder, PolyclinicFinder, DoctorFinder, AppointmentFinder, ReportFinder } from "../utils/middlewares.mjs";
 
 const router = Router();
 
@@ -271,8 +271,37 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doct
     }
 });
 
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun Raporlarını Listeleme API'si.
+router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/report", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const { hospitalID, polyclinicID, doctorID } = request.params;
+        await HospitalFinder(hospitalID);
+        const doctor = await DoctorFinder(polyclinicID, doctorID);
+        const reports = await Report.find({ doctorID: doctor });
+        return response.status(200).json(reports);
+        
+    } catch (err) {
+        console.log(`Doctor's Reports Listing ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Doctor's Reports Listing ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun ID'si Belirtilen Raporunu Listeleme API'si.
+router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/report/:reportID", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const { hospitalID, polyclinicID, doctorID, reportID } = request.params;
+        await PolyclinicFinder(hospitalID, polyclinicID);
+        const report = await ReportFinder(doctorID, reportID);
+        return response.status(200).json(report);
+
+    } catch (err) {
+        console.log(`Doctor's Report Listing ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Doctor's Report Listing ERROR!!");
+    }
+})
+
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
-router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserLoginCheck, UserPermCheck, async (request, response) => {
+router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserLoginCheck, UserPermCheck, async (request, response) => {
     try {
         const { hospitalID, polyclinicID, doctorID } = request.params;
         await HospitalFinder(hospitalID);
@@ -295,6 +324,21 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorI
     } catch (err) {
         console.log(`Report ADDING ERROR!! \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
         return response.status(400).send("Report ADDING ERROR!!");
+    }
+});
+
+// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Raporunu Silme API'si.
+router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/report/:reportID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
+    try {
+        const { hospitalID, polyclinicID, doctorID, reportID } = request.params;
+        await PolyclinicFinder(hospitalID, polyclinicID);
+        const report = await ReportFinder(doctorID, reportID);
+        await Report.deleteOne(report);
+        return response.status(200).send("Report DELETED Successfully!!");
+
+    } catch (err) {
+        console.log(`Report DELETING ERROR!! \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
+        return response.status(400).send("Report DELETING ERROR!!");
     }
 });
 

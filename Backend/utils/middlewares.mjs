@@ -2,6 +2,7 @@ import { Hospital } from "../mongoose/schemas/hospitals.mjs";
 import { Polyclinic } from "../mongoose/schemas/polyclinics.mjs";
 import { Doctor } from "../mongoose/schemas/doctors.mjs";
 import { Appointment } from "../mongoose/schemas/appointment.mjs";
+import { Report } from "../mongoose/schemas/reports.mjs";
 
 // API'lerin Metod'ları ve Url'larının Konsol Çıktılarını Verir.
 export const logMiddleware = ((request, response, next) => {
@@ -78,6 +79,19 @@ export const AppointmentFinder = async (doctorID, appointmentID) => {
         const appointment = await Appointment.findOne({ doctorID: doctorID, _id: appointmentID });
         if(!appointment) throw new Error("Appointment Not Found!!");
         return appointment;
+
+    } catch (err) {
+        throw err;
+    }
+};
+
+// Doctor ID'si Verilen Raporu Bulan Fonksiyon.
+export const ReportFinder = async (doctorID, reportID) => {
+    try {
+        if(doctorID.length !== 24 || reportID.length !== 24) throw new Error("Invalid Doctor-ID or Report-ID!!");
+        const report = await Report.findOne({ doctorID: doctorID, _id: reportID });
+        if(!report) throw new Error("Report Not Found!!");
+        return report;
 
     } catch (err) {
         throw err;

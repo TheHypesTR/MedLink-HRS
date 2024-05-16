@@ -8,8 +8,13 @@ import { Appointment } from "../mongoose/schemas/appointment.mjs";
 import { Report } from "../mongoose/schemas/reports.mjs";
 import { HospitalAddValidation, DoctorAddValidation } from "../utils/validation-schemas.mjs";
 import { UserLoginCheck, UserPermCheck, HospitalFinder, PolyclinicFinder, DoctorFinder, AppointmentFinder, ReportFinder } from "../utils/middlewares.mjs";
+import turkish from "../languages/turkish.mjs";
+import english from "../languages/english.mjs";
 
 const router = Router();
+
+// Aktif Görüntüleme Dili.
+let language = turkish;
 
 // Admin Karşılama Ekranı.
 router.get("/admin", UserLoginCheck, UserPermCheck, (request, response) => {
@@ -21,16 +26,17 @@ router.post("/admin/promote", UserLoginCheck, UserPermCheck, async (request, res
     try {
         const userTC = request.body.TCno;
         const user = await LocalUser.findOne({ TCno: userTC });
-        if(!user) return response.status(404).send("User Not Found!!");
-        if(user.role === "Admin") return response.status(400).send("This User Already Admin!!");
+        if(!user) return response.status(404).json({ ERROR: language.userNotFound });
+        if(user.role === "Admin") return response.status(400).json({ ERROR: language.userAlreadyAdmin });
 
         user.role = "Admin";
         await user.save();
-        return response.status(200).send("User Promote Successfully!!");
+        return response.status(200).send(language.userPromoted);
 
     } catch (err) {
-        console.log(`User Promote ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("User Promote ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.userNotPromoted, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -38,19 +44,20 @@ router.post("/admin/promote", UserLoginCheck, UserPermCheck, async (request, res
 router.post("/admin/hospital/add", UserLoginCheck, UserPermCheck, checkSchema(HospitalAddValidation), async (request, response) => {
     try {
         const errors = validationResult(request);
-        if(!errors.isEmpty()) return response.status(400).json({ errors: errors.array() });
+        if(!errors.isEmpty()) return response.status(400).json({ ERROR: errors.array() });
 
         const data = matchedData(request);
         const hospital = await Hospital.findOne({ name: data.name, city: data.city, district: data.district });
-        if(hospital) return response.status(400).send("Hospital Already Exists!!");
+        if(hospital) return response.status(400).json({ ERROR: language.hospitalAlreadyExists });
 
         const newHospital = new Hospital(data);
         await newHospital.save();
-        return response.status(201).send("Hospital ADDED Successfully!!");
+        return response.status(201).send(language.hospitalAdded);
 
     } catch (err) {
-        console.log(`Hospital ADDING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Hospital ADDING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.hospitalNotAdding, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -66,14 +73,15 @@ router.put("/admin/hospital/:hospitalID/edit", UserLoginCheck, UserPermCheck, as
         if(district) data.district = district;
         if(name) data.name = name;
         if(address) data.address = address;
-        if(Object.keys(data).length === 0) return response.status(400).send("Updating Cannot be Made Without Entering any Data!!");
+        if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.dataNotFound });
         
         await Hospital.updateOne(hospital, { $set: data }, { new: true });
-        return response.status(200).send("Hospital EDITED Successfully!!");
+        return response.status(200).send(language.hospitalUpdated);
         
     } catch (err) {
-        console.log(`Hospital UPDATING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Hospital UPDATING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.hospitalNotUpdating, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -83,11 +91,12 @@ router.delete("/admin/hospital/:hospitalID/delete", UserLoginCheck, UserPermChec
         const hospitalID = request.params.hospitalID;
         const hospital = await HospitalFinder(hospitalID);
         await Hospital.deleteOne(hospital);
-        return response.status(200).send("Hospital DELETED Successfully!!");
+        return response.status(200).send(language.hospitalDeleted);
         
     } catch (err) {
-        console.log(`Hospital DELETING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Hospital DELETING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.hospitalNotDeleting, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -100,18 +109,19 @@ router.post("/admin/hospital/:hospitalID/polyclinic/add", UserLoginCheck, UserPe
         const polyclinicName = request.body.name;
         let data = {};
         if(polyclinicName) data.name = polyclinicName;
-        if(Object.keys(data).length === 0) return response.status(400).send("Polyclinic Name is Required!!");
+        if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.polyclinicNameReq });
         
         const polyclinic = await Polyclinic.findOne({ hospitalID: hospitalID, name: data.name });
-        if(polyclinic) return response.status(400).send("Polyclinic Already Exists!!");
+        if(polyclinic) return response.status(400).json({ ERROR: language.polyclinicAlreadyExists });
 
         const newPolyclinic = new Polyclinic({ hospitalID: hospitalID, name: data.name });
         await newPolyclinic.save();
-        return response.status(200).send("Polyclinic ADDED Successfully!!");
+        return response.status(200).send(language.polyclinicAdded);
         
     } catch (err) {
-        console.log(`Polyclinic ADDING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Polyclinic ADDING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.polyclinicNotAdding, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -124,14 +134,15 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/edit", UserLogi
         const polyclinicName = request.body.name;
         let data = {};
         if(polyclinicName) data.name = polyclinicName;
-        if(Object.keys(data).length === 0) return response.status(400).send("Polyclinic Name is Required!!");
+        if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.polyclinicNameReq });
         
         await Polyclinic.updateOne(polyclinic, { $set: data }, { new: true });
-        return response.status(200).send("Polyclinic EDITED Successfully!!");
+        return response.status(200).send(language.polyclinicUpdated);
         
     } catch (err) {
-        console.log(`Polyclinic UPDATING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Polyclinic UPDATING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.polyclinicNotUpdating, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -141,11 +152,12 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/delete", Use
         const { hospitalID, polyclinicID } = request.params;        
         const polyclinic = await PolyclinicFinder(hospitalID, polyclinicID);
         await Polyclinic.deleteOne(polyclinic);
-        return response.status(200).send("Polyclinic DELETED Successfully!!");
+        return response.status(200).send(language.polyclinicDeleted);
         
     } catch (err) {
-        console.log(`Polyclinic DELETING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Polyclinic DELETING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.polyclinicNotDeleting, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -160,15 +172,16 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", U
 
         const data = matchedData(request);
         const doctor = await Doctor.findOne({ polyclinicID: polyclinicID, name: data.name });
-        if(doctor) return response.status(400).send("Doctor Already Exists!!");
+        if(doctor) return response.status(400).json({ ERROR: language.doctorAlreadyExists });
         
         const newDoctor = new Doctor({ polyclinicID: polyclinicID, name: data.name, speciality: data.speciality });
         await newDoctor.save();
-        return response.status(200).send("Doctor ADDED Successfully!!");
+        return response.status(200).send(language.doctorAdded);
         
     } catch (err) {
-        console.log(`Doctor ADDING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Doctor ADDING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.doctorNotAdding, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 })
 
@@ -183,14 +196,15 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorI
         let data = {};
         if(name) data.name = name;
         if(speciality) data.speciality = speciality;
-        if(Object.keys(data).length === 0) return response.status(400).send("Updating Cannot be Made Without Entering any Data!!");
+        if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.dataNotFound });
 
         await Doctor.findOneAndUpdate(doctor, { $set: data }, { new: true });
-        return response.status(200).send("Doctor EDITED Successfully!!");
+        return response.status(200).send(language.doctorUpdated);
 
     } catch (err) {
-        console.log(`Doctor UPDATING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Doctor UPDATING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.doctorNotUpdating, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -201,11 +215,12 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doct
         await HospitalFinder(hospitalID);
         const doctor = await DoctorFinder(polyclinicID, doctorID);
         await Doctor.deleteOne(doctor);
-        return response.status(200).send("Doctor DELETED Successfully!!");
+        return response.status(200).send(language.doctorDeleted);
         
     } catch (err) {
-        console.log(`Doctor DELETING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Doctor DELETING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.doctorNotDeleting, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -220,18 +235,19 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctor
         let data = {};
         if(date) data.date = date;
         if(time) data.time = time; 
-        if(Object.keys(data).length === 0) return response.status(400).send("Date is Required!!");
+        if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.dateReq });
 
         const appointment = await Appointment.findOne({ doctorID: doctorID, date: data.date });
-        if(appointment) return response.status(400).send("Appointment Already Exists!!");
+        if(appointment) return response.status(400).json({ ERROR: language.appointmentAlreadyExists });
 
         const newAppointment = new Appointment({ doctorID: doctorID, data });
         await newAppointment.save();
-        return response.status(201).send("Appointment ADDED Successfully!!");
+        return response.status(201).send(language.appointmentAdded);
 
     } catch (err) {
-        console.log(`Appointment ADDING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Appointment ADDING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.appointmentNotAdding, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -245,14 +261,15 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorI
         const time = request.body.time;
         let data = {};
         if(time) data.time = time;
-        if(Object.keys(data).length === 0) return response.status(400).send("Appointment Time (Array) is Required!!");
+        if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.appointmentTimeReq });
 
         await Appointment.findOneAndUpdate(appointment, { $set: data }, { new: true });
-        return response.status(200).send("Appointment UPDATED Successfully!!");
+        return response.status(200).send(language.appointmentUpdated);
 
     } catch (err) {
-        console.log(`Appointment UPDATING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Appointment UPDATING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.appointmentNotUpdating, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -263,11 +280,12 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doct
         await PolyclinicFinder(hospitalID, polyclinicID);
         const appointment = await AppointmentFinder(doctorID, appointmentID);
         await Appointment.deleteOne(appointment);
-        return response.status(200).send("Appointment DELETED Successfully!!");
+        return response.status(200).send(language.appointmentDeleted);
 
     } catch (err) {
-        console.log(`Appointment DELETING ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Appointment DELETING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.appointmentNotDeleting, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -277,12 +295,15 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/repo
         const { hospitalID, polyclinicID, doctorID } = request.params;
         await HospitalFinder(hospitalID);
         const doctor = await DoctorFinder(polyclinicID, doctorID);
+
         const reports = await Report.find({ doctorID: doctor });
+        if(reports.length === 0) return response.status(404).json({ ERROR: language.reportNotListing });
         return response.status(200).json(reports);
         
     } catch (err) {
-        console.log(`Doctor's Reports Listing ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Doctor's Reports Listing ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.reportNotListing, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -292,13 +313,15 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/repo
         const { hospitalID, polyclinicID, doctorID, reportID } = request.params;
         await PolyclinicFinder(hospitalID, polyclinicID);
         const report = await ReportFinder(doctorID, reportID);
+        if(!report) return response.status(404).json({ ERROR: language.reportNotFound });
         return response.status(200).json(report);
 
     } catch (err) {
-        console.log(`Doctor's Report Listing ERROR \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Doctor's Report Listing ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.reportNotListing, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
-})
+});
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
 router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserLoginCheck, UserPermCheck, async (request, response) => {
@@ -312,18 +335,19 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctor
         if(type) data.type = type;
         if(day) data.day = day;
         if(startDay) data.startDay = startDay;
-        if(Object.keys(data).length === 0) return response.status(400).send("Reports Cannot be Created Without Rntering any Data!!")
-        if(data.day < 1) return response.status(400).send("Invalid Report Duration!!");
+        if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.dataNotFound });
+        if(data.day < 1) return response.status(400).json({ ERROR: language.invalidReportDuration });
         
         data.startDay = data.startDay || new Date(Date.now() + 1000 * 60 * 60 * 3);
         data.endDay = new Date(data.startDay.getTime() + (data.day * 1000 * 60 * 60 * 24));
         const report = new Report({ doctorID: doctor._id, ...data });
         await report.save();
-        return response.status(201).send("Report ADDED Successfully!!");
+        return response.status(201).send(language.reportAdded);
         
     } catch (err) {
-        console.log(`Report ADDING ERROR!! \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Report ADDING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.reportNotAdding, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 
@@ -334,11 +358,12 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doct
         await PolyclinicFinder(hospitalID, polyclinicID);
         const report = await ReportFinder(doctorID, reportID);
         await Report.deleteOne(report);
-        return response.status(200).send("Report DELETED Successfully!!");
+        return response.status(200).send(language.reportDeleted);
 
     } catch (err) {
-        console.log(`Report DELETING ERROR!! \nUserID: ${request.session.passport?.user} \nDate: ${new Date(Date.now())} \n${err}`);
-        return response.status(400).send("Report DELETING ERROR!!");
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.reportNotDeleting, ERROR);
+        return response.status(400).json({ ERROR: err.message });
     }
 });
 

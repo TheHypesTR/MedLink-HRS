@@ -7,22 +7,21 @@ import { Doctor } from "../mongoose/schemas/doctors.mjs";
 import { Appointment } from "../mongoose/schemas/appointment.mjs";
 import { Report } from "../mongoose/schemas/reports.mjs";
 import { HospitalAddValidation, DoctorAddValidation } from "../utils/validation-schemas.mjs";
-import { UserLoginCheck, UserPermCheck, HospitalFinder, PolyclinicFinder, DoctorFinder, AppointmentFinder, ReportFinder } from "../utils/middlewares.mjs";
+import { UserLoginCheck, UserPermCheck, HospitalFinder, PolyclinicFinder, DoctorFinder, AppointmentFinder, ReportFinder, loadLanguage } from "../utils/middlewares.mjs";
 import turkish from "../languages/turkish.mjs";
 import english from "../languages/english.mjs";
 
 const router = Router();
 
-// Aktif Görüntüleme Dili.
-let language = turkish;
-
 // Admin Karşılama Ekranı.
 router.get("/admin", UserLoginCheck, UserPermCheck, (request, response) => {
-    return response.status(200).send(`Welcome Back ${request.user.name} Admin!!`);
+    const language = loadLanguage(request);
+    return response.status(200).send(language.welcome.replace("${name}", request.user?.name));
 });
 
 // Kullanıcıya Admin Yetkileri Veren API.
 router.post("/admin/promote", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const userTC = request.body.TCno;
         const user = await LocalUser.findOne({ TCno: userTC });
@@ -42,6 +41,7 @@ router.post("/admin/promote", UserLoginCheck, UserPermCheck, async (request, res
 
 // Hastane Ekleme API'si. Hastane Ekleme Sırasında Gelen Verileri Şema'dan Geçirip Karşılaştırma ve MongoDB'ye Ekleme yapıyor.
 router.post("/admin/hospital/add", UserLoginCheck, UserPermCheck, checkSchema(HospitalAddValidation), async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const errors = validationResult(request);
         if(!errors.isEmpty()) return response.status(400).json({ ERROR: errors.array() });
@@ -63,6 +63,7 @@ router.post("/admin/hospital/add", UserLoginCheck, UserPermCheck, checkSchema(Ho
 
 // Hastane Bilgilerini Düzenleme API'si. Sadece Hastaneye Ait Girilen Değerleri Günceller!
 router.put("/admin/hospital/:hospitalID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const hospitalID = request.params.hospitalID;
         const hospital = await HospitalFinder(hospitalID);
@@ -87,6 +88,7 @@ router.put("/admin/hospital/:hospitalID/edit", UserLoginCheck, UserPermCheck, as
 
 // Hastane Silme API'si. Hastane ID'si Adress Çubuğundan Çekilir ve MongoDB'de Karşılık Bulan Hastaneyi Siler.
 router.delete("/admin/hospital/:hospitalID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const hospitalID = request.params.hospitalID;
         const hospital = await HospitalFinder(hospitalID);
@@ -102,6 +104,7 @@ router.delete("/admin/hospital/:hospitalID/delete", UserLoginCheck, UserPermChec
 
 // ID'si Belirtilen Hastaneye Poliklinik Ekleme API'si. Aynı Polyclinic'ten Varsa Ekleme Yapmaz.
 router.post("/admin/hospital/:hospitalID/polyclinic/add", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const hospitalID = request.params.hospitalID;
         await HospitalFinder(hospitalID);
@@ -127,6 +130,7 @@ router.post("/admin/hospital/:hospitalID/polyclinic/add", UserLoginCheck, UserPe
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Düzenleme API'si.
 router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID } = request.params;
         const polyclinic = await PolyclinicFinder(hospitalID, polyclinicID);
@@ -148,6 +152,7 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/edit", UserLogi
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID } = request.params;        
         const polyclinic = await PolyclinicFinder(hospitalID, polyclinicID);
@@ -163,6 +168,7 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/delete", Use
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğine Doktor Ekleme API'si. Aynı Poliklinikteki Doktor İsimleri Aynı Olamaz.
 router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", UserLoginCheck, UserPermCheck, checkSchema(DoctorAddValidation), async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID } = request.params;
         await PolyclinicFinder(hospitalID, polyclinicID);
@@ -187,6 +193,7 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", U
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorunun Bilgilerini Düzenleme API'si.
 router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID } = request.params;
         await HospitalFinder(hospitalID);
@@ -210,6 +217,7 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorI
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorunu Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID } = request.params;
         await HospitalFinder(hospitalID);
@@ -226,6 +234,7 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doct
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Verilen Doktoruna Randevu Ekleme API'si.
 router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID } = request.params;
         await HospitalFinder(hospitalID);
@@ -253,6 +262,7 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctor
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Randevusunu Düzenleme API'si.
 router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID, appointmentID } = request.params;
         await PolyclinicFinder(hospitalID, polyclinicID);
@@ -275,6 +285,7 @@ router.put("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorI
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Randevusunu Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID, appointmentID } = request.params;
         await PolyclinicFinder(hospitalID, polyclinicID);
@@ -291,6 +302,7 @@ router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doct
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun Raporlarını Listeleme API'si.
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/report", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID } = request.params;
         await HospitalFinder(hospitalID);
@@ -309,6 +321,7 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/repo
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun ID'si Belirtilen Raporunu Listeleme API'si.
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/report/:reportID", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID, reportID } = request.params;
         await PolyclinicFinder(hospitalID, polyclinicID);
@@ -325,6 +338,7 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/repo
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
 router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID } = request.params;
         await HospitalFinder(hospitalID);
@@ -353,6 +367,7 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctor
 
 // ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Raporunu Silme API'si.
 router.delete("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/report/:reportID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID, reportID } = request.params;
         await PolyclinicFinder(hospitalID, polyclinicID);

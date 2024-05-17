@@ -81,6 +81,7 @@ const english = {
     userNotFound: "User Not Found!!",
     dataNotFound: "Updating Cannot be Made Without Entering any Data!!",
     dateReq: "Date is Required!!",
+    welcome: "Welcome Back, ${name} Admin!!",
 
 }
 

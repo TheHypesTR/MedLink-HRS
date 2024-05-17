@@ -3,20 +3,18 @@ import { Hospital } from "../mongoose/schemas/hospitals.mjs";
 import { Polyclinic } from "../mongoose/schemas/polyclinics.mjs";
 import { Doctor } from "../mongoose/schemas/doctors.mjs";
 import { Appointment } from "../mongoose/schemas/appointment.mjs";
-import { HospitalFinder, PolyclinicFinder, DoctorFinder, AppointmentFinder } from "../utils/middlewares.mjs";
+import { HospitalFinder, PolyclinicFinder, DoctorFinder, AppointmentFinder, loadLanguage } from "../utils/middlewares.mjs";
 import turkish from "../languages/turkish.mjs";
 import english from "../languages/english.mjs";
 
 const router = Router();
-
-// Aktif Görüntüleme Dili.
-let language = turkish;
 
 // Tüm Hastaneleri MongoDB'den Çekip Kullanıcıya Görüntüleyen API.
 // İl Filtrelemesi Yapılabilir         : "/admin/Hospital?city=Konya"
 // İlçe Filtrelemesi Yapılabilir       : "/admin/Hospital?district=Akşehir"
 // İl ve İlçe Filtrelemesi Yapılabilir : "/admin/Hospital?city=Konya&district=Akşehir"
 router.get("/hospital", async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { city, district } = request.query;
         let filter = {};
@@ -37,9 +35,10 @@ router.get("/hospital", async (request, response) => {
 
 // ID'si Belirtilen Hastaneyi MongoDB'den Çekip Kullanıcıya Görüntüleyen API.
 router.get("/hospital/:hospitalID", async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const hospitalID = request.params.hospitalID;
-        const hospital = await HospitalFinder(hospitalID);
+        const hospital = await HospitalFinder(hospitalID, request);
         return response.status(200).json(hospital);
     
     } catch (err) {
@@ -51,9 +50,10 @@ router.get("/hospital/:hospitalID", async (request, response) => {
 
 // ID'si Belirtilen Hastanedeki Poliklinikleri Listeleyen API.
 router.get("/hospital/:hospitalID/polyclinic", async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const hospitalID = request.params.hospitalID;
-        await HospitalFinder(hospitalID);
+        await HospitalFinder(hospitalID, request);
 
         const polyclinics = await Polyclinic.find({ hospitalID: hospitalID });
         if(!polyclinics) return response.status(404).json({ ERROR: language.polyclinicNotListing });
@@ -68,9 +68,10 @@ router.get("/hospital/:hospitalID/polyclinic", async (request, response) => {
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Listeleyen API.
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID", async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID } = request.params;
-        const polyclinic = await PolyclinicFinder(hospitalID, polyclinicID);
+        const polyclinic = await PolyclinicFinder(hospitalID, polyclinicID, request);
         return response.status(200).json(polyclinic);
         
     } catch (err) {
@@ -82,9 +83,10 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID", async (request, res
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki Doktorları Listeleyen API.
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor", async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID } = request.params;
-        await PolyclinicFinder(hospitalID, polyclinicID);
+        await PolyclinicFinder(hospitalID, polyclinicID, request);
 
         const doctors = await Doctor.find({ polyclinicID: polyclinicID });
         if(!doctors) return response.status(404).json({ ERROR: language.doctorNotListing });
@@ -99,10 +101,11 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor", async (reque
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktoru Listeleyen API.
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID", async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID } = request.params;
-        await HospitalFinder(hospitalID);
-        const doctor = await DoctorFinder(polyclinicID, doctorID);
+        await HospitalFinder(hospitalID, request);
+        const doctor = await DoctorFinder(polyclinicID, doctorID, request);
         return response.status(200).json(doctor);
         
     } catch (err) {
@@ -114,10 +117,11 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID", as
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Randevularını Listeleyen API.
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment", async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID } = request.params;
-        await HospitalFinder(hospitalID);
-        await DoctorFinder(polyclinicID, doctorID);
+        await HospitalFinder(hospitalID, request);
+        await DoctorFinder(polyclinicID, doctorID, request);
 
         const appointments = await Appointment.find({ doctorID: doctorID });
         if(!appointments) return response.status(400).json({ ERROR: language.appointmentNotListing });
@@ -132,10 +136,11 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appo
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun ID'si Belirtilen Randevusunu Listeleyen API.
 router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID", async (request, response) => {
+    const language = loadLanguage(request);
     try {
         const { hospitalID, polyclinicID, doctorID, appointmentID } = request.params;
-        await PolyclinicFinder(hospitalID, polyclinicID);
-        const appointment = await AppointmentFinder(doctorID, appointmentID);
+        await PolyclinicFinder(hospitalID, polyclinicID, request);
+        const appointment = await AppointmentFinder(doctorID, appointmentID, request);
         return response.status(200).json(appointment);
 
     } catch (err) {

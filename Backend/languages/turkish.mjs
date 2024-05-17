@@ -81,6 +81,7 @@ const turkish = {
     userNotFound: "Kullanıcı Bulunamadı!!",
     dataNotFound: "Herhangi Bir Bilgi Girilmeden Güncelleme Yapılamaz!!",
     dateReq: "Tarih Bilgileri Boş Bırakılamaz!!",
+    welcome: "Tekrar Hoşgeldiniz, ${name} Admin!!",
 
 }
 

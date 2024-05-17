@@ -6,8 +6,6 @@ import { Report } from "../mongoose/schemas/reports.mjs";
 import turkish from "../languages/turkish.mjs";
 import english from "../languages/english.mjs";
 
-let language = turkish;
-
 // API'lerin Metod'ları ve Url'larının Konsol Çıktılarını Verir.
 export const logMiddleware = ((request, response, next) => {
     console.log(`${request.method} - ${request.url}`);
@@ -38,7 +36,8 @@ export const UserPermCheck = ((request, response, next) => {
 });
 
 // ID'si Belirtilen Hastaneyi Bulan Fonksiyon.
-export const HospitalFinder = async (hospitalID) => {
+export const HospitalFinder = async (hospitalID, request) => {
+    const language = loadLanguage(request);
     try {
         if(hospitalID.length !== 24) throw new Error(language.invalidHospitalID);
         const hospital = await Hospital.findOne({ _id: hospitalID });
@@ -51,7 +50,8 @@ export const HospitalFinder = async (hospitalID) => {
 };
 
 // Hastanede ID'si Verilen Polikliniği Bulan Fonksiyon.
-export const PolyclinicFinder = async (hospitalID, polyclinicID) => {
+export const PolyclinicFinder = async (hospitalID, polyclinicID, request) => {
+    const language = loadLanguage(request);
     try {
         if(hospitalID.length !== 24 || polyclinicID.length !== 24) throw new Error(language.invalidHospitalIDPolyclinicID);
         const polyclinic = await Polyclinic.findOne({ hospitalID: hospitalID, _id: polyclinicID });
@@ -64,7 +64,8 @@ export const PolyclinicFinder = async (hospitalID, polyclinicID) => {
 };
 
 // Poliklinik ID'si Verilen Doktoru Bulan Fonksiyon.
-export const DoctorFinder = async (polyclinicID, doctorID) => {
+export const DoctorFinder = async (polyclinicID, doctorID, request) => {
+    const language = loadLanguage(request);
     try {
         if(polyclinicID.length !== 24 || doctorID.length !== 24) throw new Error(language.invalidPolyclinicIDDoctorID);
         const doctor = await Doctor.findOne({ polyclinicID: polyclinicID, _id: doctorID });
@@ -77,7 +78,8 @@ export const DoctorFinder = async (polyclinicID, doctorID) => {
 };
 
 // Doctor ID'si Verilen Randevuyu Bulan Fonksiyon.
-export const AppointmentFinder = async (doctorID, appointmentID) => {
+export const AppointmentFinder = async (doctorID, appointmentID, request) => {
+    const language = loadLanguage(request);
     try {
         if(doctorID.length !== 24 || appointmentID.length !== 24) throw new Error(language.invalidDoctorIDAppointmentID);
         const appointment = await Appointment.findOne({ doctorID: doctorID, _id: appointmentID });
@@ -90,7 +92,8 @@ export const AppointmentFinder = async (doctorID, appointmentID) => {
 };
 
 // Doctor ID'si Verilen Raporu Bulan Fonksiyon.
-export const ReportFinder = async (doctorID, reportID) => {
+export const ReportFinder = async (doctorID, reportID, request) => {
+    const language = loadLanguage(request);
     try {
         if(doctorID.length !== 24 || reportID.length !== 24) throw new Error(language.invalidDoctorIDReportID);
         const report = await Report.findOne({ doctorID: doctorID, _id: reportID });
@@ -99,5 +102,17 @@ export const ReportFinder = async (doctorID, reportID) => {
 
     } catch (err) {
         throw err;
+    }
+};
+
+// Dil Bilgilerini Cookie'den Çeker ve Sayfalar İçin Günceller.
+export const loadLanguage = (request) => {
+    try {
+        const language = request.signedCookies.language || "turkish";
+        return language === "english" ? english : turkish;
+
+    } catch (err) {
+        console.error("Error loading language:", err);
+        return turkish;
     }
 };

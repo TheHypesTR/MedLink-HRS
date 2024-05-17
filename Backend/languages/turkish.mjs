@@ -66,6 +66,7 @@ const turkish = {
 
     // PARTITION OF INVALID ERRORS
     invalidLang: "Geçerli Bir Dil Seçiniz!!",
+    invalidTC: "Geçersiz 'T.C. NO'!!",
     invalidHospitalID: "Geçersiz Hastane-ID",
     invalidHospitalIDPolyclinicID: "Geçersiz Hastane-ID veya Poliklinik-ID!!",
     invalidPolyclinicIDDoctorID: "Geçersiz Poliklinik-ID veya Doktor-ID!!",
@@ -73,15 +74,32 @@ const turkish = {
     invalidDoctorIDReportID: "Geçersiz Doktor-ID veya Doktor İzni-ID!!",
     invalidReportDuration: "Geçersiz Rapor Süresi!!",
     
+    // PARTITION OF USER
+    userAlreadyAdmin: "Kullanıcı Halizhazırda Admin Yetkilerine Sahip!!",
+    userAlreadyExists: "Kullanıcı Halihazırda Kayıtlı!!",
+    userNotFound: "Kullanıcı Bulunamadı!!",
+    userNotPromoted: "Kullanıcı Yetkilendirme İşlemi Başarısız!!",
+    userNotRegistered: "Kullanıcı Kayıt İşlemi Başarısız Oldu!!",
+    passNotReset: "Şifre Sıfırlama İşlemi Başarısız!!",
+    
+    // PARTITION OF USER INFO
+    userPromoted: "Kullanıcıya Admin Yetkileri Verildi!!",
+    userRegistered: "Başarıyla Kayıt Olundu!!",
+    userLoggedIn: "Başarıyla Giriş Yapıldı!!",
+    userLoggedOut: "Başarıyla Çıkış Yapıldı!!",
+    
     // PARTITION OF OTHER
     filter: "Filtreleme Seçeneklerinizi Kontrol Ediniz!!",
-    userNotPromoted: "Kullanıcı Yetkilendirme İşlemi Başarısız!!",
-    userAlreadyAdmin: "Kullanıcı Halizhazırda Admin Yetkilerine Sahip!!",
-    userPromoted: "Kullanıcıya Admin Yetkileri Verildi!!",
-    userNotFound: "Kullanıcı Bulunamadı!!",
     dataNotFound: "Herhangi Bir Bilgi Girilmeden Güncelleme Yapılamaz!!",
+    tokenNotFound: "Token Bulunamadı!!",
     dateReq: "Tarih Bilgileri Boş Bırakılamaz!!",
     welcome: "Tekrar Hoşgeldiniz, ${name} Admin!!",
+    hello: "Merhaba ${user},",
+    clickResetPass: "\nŞifrenizi Sıfırlamak İçin Linke Tıklayınız!!",
+    resetPass: "Şifre Sıfırlama Talebi",
+    emailSent: "Şifre Sıfırlama Talebiniz '${email}' E-Mail Adresinize Gönderildi!!",
+    passResetSucces: "\nŞifreniz Başarıyla Güncelleştirildi!!",
+    resetPassSubject: "Şifre Sıfırlama Başarılı!!",
 
 }
 

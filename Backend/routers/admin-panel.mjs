@@ -174,7 +174,7 @@ router.post("/admin/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/add", U
         await PolyclinicFinder(hospitalID, polyclinicID);
         
         const errors = validationResult(request);
-        if(!errors.isEmpty()) return response.status(400).json({ errors: errors.array() });
+        if(!errors.isEmpty()) return response.status(400).json({ ERROR: errors.array() });
 
         const data = matchedData(request);
         const doctor = await Doctor.findOne({ polyclinicID: polyclinicID, name: data.name });

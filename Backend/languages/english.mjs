@@ -66,6 +66,7 @@ const english = {
 
     // PARTITION OF INVALID ERRORS
     invalidLang: "Invalid Language!!",
+    invalidTC: "Invalid 'T.C. NO'!!",
     invalidHospitalID: "Invalid Hospital-ID",
     invalidHospitalIDPolyclinicID: "Invalid Hospital-ID or Polyclinic-ID!!",
     invalidPolyclinicIDDoctorID: "Invalid Polyclinic-ID or Doctor-ID!!",
@@ -73,15 +74,32 @@ const english = {
     invalidDoctorIDReportID: "Invalid Doctor-ID or Report-ID!!",
     invalidReportDuration: "Invalid Report Duration!!",
 
+    // PARTITION OF USER ERRORS
+    userAlreadyAdmin: "This User Already Admin!!",
+    userAlreadyExists: "User Already Exists!!",
+    userNotFound: "User Not Found!!",
+    userNotPromoted: "User Not Promoted!!",
+    userNotRegistered: "User Not Registered!!",
+
+    // PARTITION OF USER INFO
+    userPromoted: "User Promoted Successfully!!",
+    userRegistered: "Registration Successfully!!",
+    userLoggedIn: "Login Successfully!!",
+    userLoggedOut: "Logout Successfully!!",
+    passNotReset: "Password Not Reset!!",
+
     // PARTITION OF OTHERS
     filter: "Check Hospital Filters!!",
-    userNotPromoted: "User Not Promoted!!",
-    userAlreadyAdmin: "This User Already Admin!!",
-    userPromoted: "User Promoted Successfully!!",
-    userNotFound: "User Not Found!!",
     dataNotFound: "Updating Cannot be Made Without Entering any Data!!",
+    tokenNotFound: "Token Not Found!!",
     dateReq: "Date is Required!!",
     welcome: "Welcome Back, ${name} Admin!!",
+    hello: "Hello ${user},",
+    clickResetPass: "\nClick to Reset your Password!!",
+    resetPass: "Password Reset Request",
+    emailSent: "Password Reset E-Mail Sent to '${email}' !!",
+    passResetSucces: "\nYour Password has been Successfully Updated!!",
+    resetPassSubject: "Password Reset Successfully!!",
 
 }
 

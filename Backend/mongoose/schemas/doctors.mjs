@@ -9,7 +9,6 @@ const DoctorSchema = new mongoose.Schema({
     name: {
         type: mongoose.Schema.Types.String,
         required: true,
-        unique: true,
     },
     speciality: {
         type: mongoose.Schema.Types.String,

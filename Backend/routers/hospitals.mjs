@@ -1,62 +1,19 @@
 import { Router } from "express";
-import { Hospital } from "../mongoose/schemas/hospitals.mjs";
 import { Polyclinic } from "../mongoose/schemas/polyclinics.mjs";
 import { Doctor } from "../mongoose/schemas/doctors.mjs";
 import { Appointment } from "../mongoose/schemas/appointment.mjs";
-import { HospitalFinder, PolyclinicFinder, DoctorFinder, AppointmentFinder, loadLanguage } from "../utils/middlewares.mjs";
+import { PolyclinicFinder, DoctorFinder, AppointmentFinder, loadLanguage } from "../utils/middlewares.mjs";
 import turkish from "../languages/turkish.mjs";
 import english from "../languages/english.mjs";
 
 const router = Router();
 
-// Tüm Hastaneleri MongoDB'den Çekip Kullanıcıya Görüntüleyen API.
-// İl Filtrelemesi Yapılabilir         : "/admin/Hospital?city=Konya"
-// İlçe Filtrelemesi Yapılabilir       : "/admin/Hospital?district=Akşehir"
-// İl ve İlçe Filtrelemesi Yapılabilir : "/admin/Hospital?city=Konya&district=Akşehir"
-router.get("/hospital", async (request, response) => {
-    const language = loadLanguage(request);
-    try {
-        const { city, district } = request.query;
-        let filter = {};
-        if(city) filter.city = city;
-        if(district) filter.district = district;
-
-        const hospitals = await Hospital.find(filter);
-        if(!hospitals) return response.status(400).json({ ERROR: language.hospitalNotFound });
-        if(hospitals.length === 0) return response.status(400).json({ ERROR: language.filter });
-        return response.status(200).json(hospitals);
-
-    } catch (err) {
-        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
-        console.log(language.hospitalNotListing, ERROR);
-        return response.status(400).json({ ERROR: err.message });
-    }
-});
-
-// ID'si Belirtilen Hastaneyi MongoDB'den Çekip Kullanıcıya Görüntüleyen API.
-router.get("/hospital/:hospitalID", async (request, response) => {
-    const language = loadLanguage(request);
-    try {
-        const hospitalID = request.params.hospitalID;
-        const hospital = await HospitalFinder(hospitalID, request);
-        return response.status(200).json(hospital);
-    
-    } catch (err) {
-        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
-        console.log(language.hospitalNotListing, ERROR);
-        return response.status(400).json({ ERROR: err.message });
-    }
-});
-
 // ID'si Belirtilen Hastanedeki Poliklinikleri Listeleyen API.
-router.get("/hospital/:hospitalID/polyclinic", async (request, response) => {
+router.get("/polyclinic", async (request, response) => {
     const language = loadLanguage(request);
     try {
-        const hospitalID = request.params.hospitalID;
-        await HospitalFinder(hospitalID, request);
-
-        const polyclinics = await Polyclinic.find({ hospitalID: hospitalID });
-        if(!polyclinics) return response.status(404).json({ ERROR: language.polyclinicNotListing });
+        const polyclinics = await Polyclinic.find();
+        if(!polyclinics || polyclinics.length === 0) return response.status(404).json({ ERROR: language.polyclinicNotListing });
         return response.status(200).json(polyclinics);
         
     } catch (err) {
@@ -67,11 +24,11 @@ router.get("/hospital/:hospitalID/polyclinic", async (request, response) => {
 });
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Listeleyen API.
-router.get("/hospital/:hospitalID/polyclinic/:polyclinicID", async (request, response) => {
+router.get("/polyclinic/:polyclinicID", async (request, response) => {
     const language = loadLanguage(request);
     try {
-        const { hospitalID, polyclinicID } = request.params;
-        const polyclinic = await PolyclinicFinder(hospitalID, polyclinicID, request);
+        const polyclinicID = request.params.polyclinicID
+        const polyclinic = await PolyclinicFinder(polyclinicID, request);
         return response.status(200).json(polyclinic);
         
     } catch (err) {
@@ -82,14 +39,14 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID", async (request, res
 });
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki Doktorları Listeleyen API.
-router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor", async (request, response) => {
+router.get("/polyclinic/:polyclinicID/doctor", async (request, response) => {
     const language = loadLanguage(request);
     try {
-        const { hospitalID, polyclinicID } = request.params;
-        await PolyclinicFinder(hospitalID, polyclinicID, request);
+        const polyclinicID = request.params.polyclinicID;
+        await PolyclinicFinder(polyclinicID, request);
 
         const doctors = await Doctor.find({ polyclinicID: polyclinicID });
-        if(!doctors) return response.status(404).json({ ERROR: language.doctorNotListing });
+        if(!doctors || doctors.length === 0) return response.status(404).json({ ERROR: language.doctorNotListing });
         return response.status(200).json(doctors);
         
     } catch (err) {
@@ -100,11 +57,10 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor", async (reque
 });
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktoru Listeleyen API.
-router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID", async (request, response) => {
+router.get("/polyclinic/:polyclinicID/doctor/:doctorID", async (request, response) => {
     const language = loadLanguage(request);
     try {
-        const { hospitalID, polyclinicID, doctorID } = request.params;
-        await HospitalFinder(hospitalID, request);
+        const { polyclinicID, doctorID } = request.params;
         const doctor = await DoctorFinder(polyclinicID, doctorID, request);
         return response.status(200).json(doctor);
         
@@ -116,15 +72,14 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID", as
 });
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Randevularını Listeleyen API.
-router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment", async (request, response) => {
+router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment", async (request, response) => {
     const language = loadLanguage(request);
     try {
-        const { hospitalID, polyclinicID, doctorID } = request.params;
-        await HospitalFinder(hospitalID, request);
+        const { polyclinicID, doctorID } = request.params;
         await DoctorFinder(polyclinicID, doctorID, request);
 
         const appointments = await Appointment.find({ doctorID: doctorID });
-        if(!appointments) return response.status(400).json({ ERROR: language.appointmentNotListing });
+        if(!appointments || appointments.length === 0) return response.status(400).json({ ERROR: language.appointmentNotListing });
         return response.status(200).json(appointments);
 
     } catch (err) {
@@ -135,11 +90,11 @@ router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appo
 });
 
 // ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun ID'si Belirtilen Randevusunu Listeleyen API.
-router.get("/hospital/:hospitalID/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID", async (request, response) => {
+router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID", async (request, response) => {
     const language = loadLanguage(request);
     try {
-        const { hospitalID, polyclinicID, doctorID, appointmentID } = request.params;
-        await PolyclinicFinder(hospitalID, polyclinicID, request);
+        const { polyclinicID, doctorID, appointmentID } = request.params;
+        await PolyclinicFinder(polyclinicID, request);
         const appointment = await AppointmentFinder(doctorID, appointmentID, request);
         return response.status(200).json(appointment);
 

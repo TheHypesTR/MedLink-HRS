@@ -1,4 +1,3 @@
-import { Hospital } from "../mongoose/schemas/hospitals.mjs";
 import { Polyclinic } from "../mongoose/schemas/polyclinics.mjs";
 import { Doctor } from "../mongoose/schemas/doctors.mjs";
 import { Appointment } from "../mongoose/schemas/appointment.mjs";
@@ -35,26 +34,12 @@ export const UserPermCheck = ((request, response, next) => {
     next();
 });
 
-// ID'si Belirtilen Hastaneyi Bulan Fonksiyon.
-export const HospitalFinder = async (hospitalID, request) => {
+// Polikliniği Bulan Fonksiyon.
+export const PolyclinicFinder = async (polyclinicID, request) => {
     const language = loadLanguage(request);
     try {
-        if(hospitalID.length !== 24) throw new Error(language.invalidHospitalID);
-        const hospital = await Hospital.findOne({ _id: hospitalID });
-        if(!hospital) throw new Error(language.hospitalNotFound);
-        return hospital;
-
-    } catch (err) {
-        throw err;
-    }
-};
-
-// Hastanede ID'si Verilen Polikliniği Bulan Fonksiyon.
-export const PolyclinicFinder = async (hospitalID, polyclinicID, request) => {
-    const language = loadLanguage(request);
-    try {
-        if(hospitalID.length !== 24 || polyclinicID.length !== 24) throw new Error(language.invalidHospitalIDPolyclinicID);
-        const polyclinic = await Polyclinic.findOne({ hospitalID: hospitalID, _id: polyclinicID });
+        if(polyclinicID.length !== 24) throw new Error(language.invalidPolyclinicID);
+        const polyclinic = await Polyclinic.findOne({ _id: polyclinicID });
         if (!polyclinic) throw new Error(language.polyclinicNotFound);
         return polyclinic;
 

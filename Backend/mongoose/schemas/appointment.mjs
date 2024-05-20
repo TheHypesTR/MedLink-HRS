@@ -9,7 +9,6 @@ const AppointmentSchema = new mongoose.Schema({
     date: {
         type: mongoose.Schema.Types.Date,
         required: true,
-        unique: true,
     },
     time: {
         type: mongoose.Schema.Types.Array,

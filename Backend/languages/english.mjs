@@ -1,18 +1,5 @@
 const english = {
     
-    // PARTITION OF HOSPITAL ERRORS
-    hospitalNotFound: "Hospital Not Found!!",
-    hospitalNotAdding: "Hospital Not Adding!!",
-    hospitalNotUpdating: "Hospital Not Updating!!",
-    hospitalNotDeleting: "Hospital Not Deleting!!",
-    hospitalNotListing: "Hospitals Not Listing!!",
-    hospitalAlreadyExists: "Hospital Already Exists!!",
-    
-    // PARTITION OF HOSPITAL INFO
-    hospitalAdded: "Hospital Added Successfully!!",
-    hospitalUpdated: "Hospital Edited Successfully!!",
-    hospitalDeleted: "Hospital Deleted Successfully!!",
-    
     // PARTITION OF POLYCLINIC ERRORS
     polyclinicNotFound: "Polyclinic Not Found!!",
     polyclinicNotAdding: "Polyclinic Not Adding!!",
@@ -67,8 +54,7 @@ const english = {
     // PARTITION OF INVALID ERRORS
     invalidLang: "Invalid Language!!",
     invalidTC: "Invalid 'T.C. NO'!!",
-    invalidHospitalID: "Invalid Hospital-ID",
-    invalidHospitalIDPolyclinicID: "Invalid Hospital-ID or Polyclinic-ID!!",
+    invalidPolyclinicID: "Invalid Polyclinic-ID!!",
     invalidPolyclinicIDDoctorID: "Invalid Polyclinic-ID or Doctor-ID!!",
     invalidDoctorIDAppointmentID: "Invalid Doctor-ID or Appointment-ID!!",
     invalidDoctorIDReportID: "Invalid Doctor-ID or Report-ID!!",
@@ -80,13 +66,13 @@ const english = {
     userNotFound: "User Not Found!!",
     userNotPromoted: "User Not Promoted!!",
     userNotRegistered: "User Not Registered!!",
+    passNotReset: "Password Not Reset!!",
 
     // PARTITION OF USER INFO
     userPromoted: "User Promoted Successfully!!",
     userRegistered: "Registration Successfully!!",
     userLoggedIn: "Login Successfully!!",
     userLoggedOut: "Logout Successfully!!",
-    passNotReset: "Password Not Reset!!",
 
     // PARTITION OF OTHERS
     filter: "Check Hospital Filters!!",
@@ -94,6 +80,8 @@ const english = {
     tokenNotFound: "Token Not Found!!",
     dateReq: "Date is Required!!",
     welcome: "Welcome Back, ${name} Admin!!",
+
+    // PARTITION OF MAIL
     hello: "Hello ${user},",
     clickResetPass: "\nClick to Reset your Password!!",
     resetPass: "Password Reset Request",

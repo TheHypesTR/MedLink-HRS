@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 
 const PolyclinicSchema = new mongoose.Schema({
-    hospitalID: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Hospital",
-        required: true,
-    },
     name: {
         type: mongoose.Schema.Types.String,
         required: true,

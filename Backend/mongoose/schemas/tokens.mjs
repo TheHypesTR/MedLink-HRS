@@ -6,6 +6,10 @@ const TokenSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    tokenType: {
+        type: mongoose.Schema.Types.String,
+        required: true,
+    },
     userID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "LocalUser",

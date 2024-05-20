@@ -80,6 +80,7 @@ router.post("/auth/reset-password", async (request, response) => {
 
         const token = await new Token({
             tokenID: crypto.randomBytes(32).toString("hex"),
+            tokenType: "Password Reset",
             userID: user._id,
             userEMail: user.email,
         }).save();

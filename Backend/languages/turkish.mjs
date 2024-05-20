@@ -1,17 +1,4 @@
 const turkish = {
-    
-    // PARTITION OF HOSPITAL ERRORS
-    hospitalNotFound: "Hastane Bulunamadı!!",
-    hospitalNotAdding: "Hastane Eklenemedi!!",
-    hospitalNotUpdating: "Hastane Bilgileri Güncellenemedi!!",
-    hospitalNotDeleting: "Hastane Silinemedi!!",
-    hospitalNotListing: "Hastane Bilgileri Yüklenemedi!!",
-    hospitalAlreadyExists: "Hastane Halihazırda Mevcut!!",
-    
-    // PARTITION OF HOSPITAL INFO
-    hospitalAdded: "Hastane Ekleme İşlemi Başarılı!!",
-    hospitalUpdated: "Hastane Düzenleme İşlemi Başarılı!!",
-    hospitalDeleted: "Hastane Silme İşlemi Başarılı!!",
 
     // PARTITION OF POLYCLINIC ERRORS
     polyclinicNotFound: "Poliklinik Bulunamadı!!",
@@ -67,8 +54,7 @@ const turkish = {
     // PARTITION OF INVALID ERRORS
     invalidLang: "Geçerli Bir Dil Seçiniz!!",
     invalidTC: "Geçersiz 'T.C. NO'!!",
-    invalidHospitalID: "Geçersiz Hastane-ID",
-    invalidHospitalIDPolyclinicID: "Geçersiz Hastane-ID veya Poliklinik-ID!!",
+    invalidPolyclinicID: "Geçersiz Poliklinik-ID!!",
     invalidPolyclinicIDDoctorID: "Geçersiz Poliklinik-ID veya Doktor-ID!!",
     invalidDoctorIDAppointmentID: "Geçersiz Doktor-ID veya Randevu Tarihi-ID!!",
     invalidDoctorIDReportID: "Geçersiz Doktor-ID veya Doktor İzni-ID!!",
@@ -94,6 +80,8 @@ const turkish = {
     tokenNotFound: "Token Bulunamadı!!",
     dateReq: "Tarih Bilgileri Boş Bırakılamaz!!",
     welcome: "Tekrar Hoşgeldiniz, ${name} Admin!!",
+
+    // PARTITION OF MAIL
     hello: "Merhaba ${user},",
     clickResetPass: "\nŞifrenizi Sıfırlamak İçin Linke Tıklayınız!!",
     resetPass: "Şifre Sıfırlama Talebi",

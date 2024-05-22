@@ -1,27 +1,77 @@
-import React from 'react';
 import './LoginRegister.css';
+import React from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import config from "../config.mjs";
 
 function Register() {
+    const navigate = useNavigate(); 
+    const [name, setName] = useState("");
+    const [TCno, setTCno] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     
-    
-    
+    const kayitOl = async (e) => {
+        try {
+            const formData = {
+                name: name,
+                TCno: TCno,
+                email: email,
+                password: password,
+            };
+
+            e.preventDefault();
+            let errorMessage = "";
+            if(name && TCno && email && password) {
+                await fetch(`http://localhost:${config.PORT}/auth/register`, {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    if(data.ERROR){
+                        console.log(data)
+                        if (Array.isArray(data.ERROR)) 
+                            errorMessage = data.ERROR.map(err => err.msg).join("\n");
+                        errorMessage += data.ERROR;
+                        alert(errorMessage);
+                    }
+                    if(data.STATUS) {
+                        alert("Kullanıcı Kaydı Başarılı!");
+                        navigate("/login");
+                    }
+                })
+                .catch( err => console.log(err))
+            }
+            else
+                throw new Error("Lütfen Gerekli Alanları Doldurunuz!!");
+            
+        } catch (err) {
+            console.log(err);
+        }
+    }
     
     return (
         <div className="katman1-register">
             <div className='formbox-register'>
-                <form action="">
+                <form onSubmit={kayitOl}>
                 <h1>Kayıt Ol</h1>
                 <div className='input-box'>
-                    <input type='text' placeholder='İsim - Soyisim' required/>
+                    <input type='text' placeholder='İsim - Soyisim' required value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className='input-box'>
-                    <input type='text' placeholder='TC Kimlik No' required maxLength={11}/>
+                    <input type='text' placeholder='TC Kimlik No' required maxLength={11} value={TCno} onChange={(e) => setTCno(e.target.value)} />
                 </div>
                 <div className='input-box'>
-                    <input type='email' placeholder='E-Mail' required/>
+                    <input type='email' placeholder='E-Mail' required value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className='input-box'>
-                    <input type='password' placeholder='Şifre' required/>
+                    <input type='password' placeholder='Şifre' required value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <div className='sifreunut-benihatirla'>
                         <label htmlFor=""><input type="checkbox" />Şartlar ve koşulları kabul ediyorum</label>

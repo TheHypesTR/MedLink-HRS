@@ -42,8 +42,8 @@ router.post("/auth/register", UserAlreadyLogged, checkSchema(UserValidation), as
         if(user) return response.status(400).json({ ERROR: language.userAlreadyExists });
 
         const newUser = new LocalUser(data);
-        const savedUser = await newUser.save();
-        return response.status(201).send(language.userRegistered);
+        await newUser.save();
+        return response.status(201).json({ STATUS: language.userRegistered});
         
     } catch (err) {
         const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };

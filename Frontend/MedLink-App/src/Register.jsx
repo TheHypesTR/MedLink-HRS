@@ -1,8 +1,7 @@
-import './LoginRegister.css';
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from "../config.mjs";
+import './LoginRegister.css';
 
 function Register() {
     const navigate = useNavigate(); 
@@ -10,18 +9,35 @@ function Register() {
     const [TCno, setTCno] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    
-    const kayitOl = async (e) => {
-        try {
-            const formData = {
-                name: name,
-                TCno: TCno,
-                email: email,
-                password: password,
-            };
+    const [checkboxState, setCheckboxState] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    // Kullanıcı Bilgilerinin Denetleyip Giriş Yapıp Yapmadığını Kontrol Ediyor.
+    useEffect(() => {
+        const loggedInStatus = localStorage.getItem("isLoggedIn");
+        if(loggedInStatus === "true"){
+            setIsLoggedIn(true);
+            navigate("/");
+        }
+    }, [navigate]);
+
+    // Kullanıcı'nın Bilgilerini DB'ye Kaydetmek İçin BE'den Çağırılan APİ.
+    const kayitOl = async (e) => {
+        const formData = {
+            name: name,
+            TCno: TCno,
+            email: email,
+            password: password,
+        };
+        
+        try {
             e.preventDefault();
             let errorMessage = "";
+            if(checkboxState === false){
+                alert("'Şartlar ve koşulları kabul ediyorum' Kısmını İşaretleyiniz!!");
+                return;
+            }
+                
             if(name && TCno && email && password) {
                 await fetch(`http://localhost:${config.PORT}/auth/register`, {
                     method: "POST",
@@ -33,20 +49,16 @@ function Register() {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data);
                     if(data.ERROR){
-                        console.log(data)
-                        if (Array.isArray(data.ERROR)) 
-                            errorMessage = data.ERROR.map(err => err.msg).join("\n");
+                        if (Array.isArray(data.ERROR)) errorMessage = data.ERROR.map(err => err.msg).join("\n");
                         errorMessage += data.ERROR;
                         alert(errorMessage);
                     }
                     if(data.STATUS) {
-                        alert("Kullanıcı Kaydı Başarılı!");
+                        alert(data.STATUS);
                         navigate("/login");
                     }
                 })
-                .catch( err => console.log(err))
             }
             else
                 throw new Error("Lütfen Gerekli Alanları Doldurunuz!!");
@@ -74,7 +86,7 @@ function Register() {
                     <input type='password' placeholder='Şifre' required value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <div className='sifreunut-benihatirla'>
-                        <label htmlFor=""><input type="checkbox" />Şartlar ve koşulları kabul ediyorum</label>
+                        <label htmlFor=""><input type="checkbox" value={checkboxState} onChange={(e) => setCheckboxState(e.target.checked)} />Şartlar ve koşulları kabul ediyorum</label>
                     </div>
 
                     <button type='submit'>Kayıt Ol</button>

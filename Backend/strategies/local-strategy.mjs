@@ -17,7 +17,7 @@ passport.deserializeUser(async (id, done) => {
         
     } catch (err) {
         console.log(`Passport ERROR: \n${err}`);
-        return done(err, null);
+        return done({ ERROR: err.message }, null);
     }
 });
 
@@ -32,7 +32,7 @@ export default passport.use(
             return done(null, user);
 
         } catch (err) {
-            return done(err, null);
+            return done({ ERROR: err.message }, null);
         }
     }
 ));

@@ -38,7 +38,8 @@ router.post("/auth/register", UserAlreadyLogged, checkSchema(UserValidation), as
             toplam += parseInt(tcnum[i]);
         if (toplam % 10 !== parseInt(tcnum[10]) || parseInt(tcnum[10]) % 2 !== 0) return response.status(400).json({ ERROR: language.invalidTC });
         
-        const user = await LocalUser.findOne({ TCno: data.TCno });
+        let user = await LocalUser.findOne({ TCno: data.TCno });
+        if(!user) user = await LocalUser.findOne({ email: data.email });
         if(user) return response.status(400).json({ ERROR: language.userAlreadyExists });
 
         const newUser = new LocalUser(data);
@@ -53,10 +54,20 @@ router.post("/auth/register", UserAlreadyLogged, checkSchema(UserValidation), as
 });
 
 // Local Kullanıcı Girişinin Yapılır.
-router.post("/auth/login", UserAlreadyLogged, passport.authenticate("local"), (request, response) => {
-    const language = loadLanguage(request);
-    return response.status(200).send(language.userLoggedIn);
+router.post("/auth/login", UserAlreadyLogged, (request, response, next) => {
+    passport.authenticate("local", (err, user) => {
+        if (err) return response.status(400).json({ ERROR: err.ERROR });
+        if (!user) return response.status(400).json({ ERROR: err.ERROR });
+
+        request.logIn(user, (err) => {
+            if (err) return response.status(400).json({ ERROR: err.ERROR });
+
+            const language = loadLanguage(request);
+            return response.status(200).json({ STATUS: language.userLoggedIn });
+        });
+    }) (request, response, next);
 });
+
 
 // Aktif bir Kullanıcı Varsa Oturumunu Kapatmasını Sağlar.
 router.post("/auth/logout", UserLoginCheck, (request, response) => {

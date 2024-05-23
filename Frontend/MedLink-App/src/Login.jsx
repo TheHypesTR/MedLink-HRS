@@ -18,6 +18,7 @@ function Login() {
         }
     }, [navigate]);
 
+    // Kullanıcı Bilgilerini DB'den Doğrulayan BE'den Çekilen APİ.
     const girisYap = async (e) => {
         const formData = {
             TCno: TCno,
@@ -27,7 +28,7 @@ function Login() {
         try {
             e.preventDefault();
             let errorMessage = "";
-            if(TCno && password){
+            if(TCno && password) {
                 await fetch(`http://localhost:${config.PORT}/auth/login`, {
                     method: "POST",
                     credentials: "include",
@@ -38,7 +39,7 @@ function Login() {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    if(data.ERROR){
+                    if(data.ERROR) {
                         if (Array.isArray(data.ERROR)) errorMessage = data.ERROR.map(err => err.msg).join("\n");
                         errorMessage = data.ERROR;
                         alert(errorMessage);
@@ -65,7 +66,7 @@ function Login() {
                 <form onSubmit={girisYap}>
                 <h1>Giriş Yap</h1>
                 <div className='input-box'>
-                    <input type='text' placeholder='TC Kimlik No' required value={TCno} onChange={(e) => setTCno(e.target.value)} />
+                    <input type='text' placeholder='TC Kimlik No' required maxLength={11} value={TCno} onChange={(e) => setTCno(e.target.value)} />
                 </div>
                 <div className='input-box'>
                     <input type='password' placeholder='Şifre' required value={password} onChange={(e) => setPassword(e.target.value)} />

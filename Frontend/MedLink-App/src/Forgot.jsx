@@ -7,8 +7,9 @@ function Forgot() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
 
-    const sifremiUnuttum = async () => {
+    const sifremiUnuttum = async (e) => {
         try {
+            e.preventDefault();
             if(email) {
                 await fetch(`http://localhost:${config.PORT}/auth/reset-password`, {
                     method: "POST",
@@ -22,6 +23,7 @@ function Forgot() {
                 })
                 .then((response) => response.json())
                 .then((data) => {
+                    console.log(data);
                     if(data.ERROR) 
                         alert(data.ERROR);
                     if(data.STATUS) {

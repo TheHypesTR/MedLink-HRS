@@ -50,8 +50,8 @@ function Register() {
                 .then((response) => response.json())
                 .then((data) => {
                     if(data.ERROR){
-                        if (Array.isArray(data.ERROR)) errorMessage = data.ERROR.map(err => err.msg).join("\n");
-                        errorMessage += data.ERROR;
+                        console.log(data.ERROR)
+                        Array.isArray(data.ERROR) ? errorMessage = data.ERROR.map(err => err.msg).join("\n") : errorMessage = data.ERROR;
                         alert(errorMessage);
                     }
                     if(data.STATUS) {

@@ -16,10 +16,10 @@ router.post("/setLanguage/:languageName", (request, response) => {
     if (updatedLanguage === "english" || updatedLanguage === "turkish") {
         response.cookie("language", updatedLanguage, { maxAge: 1000 * 60 * 60 * 24 * 365, signed: true });
 
-        if (updatedLanguage === "english") return response.status(200).send(`Language Settings Updated to ${updatedLanguage.toUpperCase()} Successfully!!`);
-        return response.status(200).send(`Dil Seçeneğiniz ${updatedLanguage.toUpperCase()} Olarak Güncellendi!!`);
+        if (updatedLanguage === "english") return response.status(200).json({ STATUS: `Language Settings Updated to ${updatedLanguage.toUpperCase()} Successfully!!` });
+        return response.status(200).json({ STATUS: `Dil Seçeneğiniz ${updatedLanguage.toUpperCase()} Olarak Güncellendi!!` });
     }
-    return response.status(400).send(turkish.invalidLang);
+    return response.status(400).json({ STATUS: turkish.invalidLang });
 });
 
 export default router;

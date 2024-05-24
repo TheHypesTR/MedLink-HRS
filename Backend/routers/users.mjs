@@ -7,7 +7,7 @@ import { Token } from "../mongoose/schemas/tokens.mjs";
 import { UserValidation, PasswordValidation } from "../utils/validation-schemas.mjs";
 import { HashPassword } from "../utils/helpers.mjs";
 import { sendEmail } from "../utils/email-sender.mjs";
-import { UserLoginCheck, UserAlreadyLogged, loadLanguage } from "../utils/middlewares.mjs";
+import { UserLoginCheck, UserAlreadyLogged, LoadLanguage } from "../utils/middlewares.mjs";
 import config from "../config.mjs";
 import "../strategies/local-strategy.mjs";
 import turkish from "../languages/turkish.mjs";
@@ -24,7 +24,7 @@ router.get("/auth", UserLoginCheck, (request, response) => {
 
 // Local Kullanıcı Kaydının Yapılır.
 router.post("/auth/register", UserAlreadyLogged, checkSchema(UserValidation), async (request, response) => {
-    const language = loadLanguage(request);
+    const language = LoadLanguage(request);
     try {
         const errors = validationResult(request);
         if(!errors.isEmpty()) return response.status(400).json({ ERROR: errors.array() });
@@ -62,7 +62,7 @@ router.post("/auth/login", UserAlreadyLogged, (request, response, next) => {
         request.logIn(user, (err) => {
             if (err) return response.status(400).json({ ERROR: err.ERROR });
 
-            const language = loadLanguage(request);
+            const language = LoadLanguage(request);
             return response.status(200).json({ STATUS: language.userLoggedIn });
         });
     }) (request, response, next);
@@ -71,23 +71,23 @@ router.post("/auth/login", UserAlreadyLogged, (request, response, next) => {
 
 // Aktif bir Kullanıcı Varsa Oturumunu Kapatmasını Sağlar.
 router.post("/auth/logout", UserLoginCheck, (request, response) => {
-    const language = loadLanguage(request);
+    const language = LoadLanguage(request);
     if(!request.user) return response.sendStatus(401);
 
     request.logOut((err) => {
         if (err) return response.status(400).json({ ERROR: err.message });
         response.clearCookie("connect.sid");
-        return response.status(200).send(language.userLoggedOut);
+        return response.status(200).json({ STATUS: language.userLoggedOut });
     });
 });
 
 // Kullanıcının Şifresini Sıfırlayabilmesi için Token Oluşturulur ve Sıfırlama Bağlantısı Kullanıcının "E-Mail" Adresine Gönderilir.
 router.post("/auth/reset-password", async (request, response) => {
-    const language = loadLanguage(request);
+    const language = LoadLanguage(request);
     try {
         const userEMail = (request.body.email).toLowerCase();
         const user = await LocalUser.findOne({ email: userEMail });
-        if(!user) return response.sendStatus(400);
+        if(!user) return response.status(400).json({ ERROR: language.userNotFound });
 
         const token = await new Token({
             tokenID: crypto.randomBytes(32).toString("hex"),
@@ -98,7 +98,7 @@ router.post("/auth/reset-password", async (request, response) => {
 
         const message = (language.hello.replace("${user}", user?.name) + language.clickResetPass + `\nhttp://localhost:${config.PORT}/auth/user/reset-password/${user._id}/${token.tokenID}`);
         await sendEmail(user.email, language.resetPass, message);
-        return response.status(201).send(language.emailSent.replace("${email}", user.email));
+        return response.status(201).json({ STATUS: language.emailSent.replace("${email}", user.email) });
 
     } catch (err) {
         const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
@@ -109,7 +109,7 @@ router.post("/auth/reset-password", async (request, response) => {
 
 // Şifre Sıfırlama Bağlantısına Tıklayan Kullanıcı Şifresini Şemadaki Kurallara Uygun Olarak Değiştirebilir.
 router.post("/auth/user/reset-password/:id/:token", checkSchema(PasswordValidation), async (request, response) => {
-    const language = loadLanguage(request);
+    const language = LoadLanguage(request);
     try {
         const errors = validationResult(request);
         if (!errors.isEmpty()) return response.status(400).json({ ERROR: errors.array() });
@@ -126,7 +126,7 @@ router.post("/auth/user/reset-password/:id/:token", checkSchema(PasswordValidati
 
         const message = (language.hello.replace("${user}", user?.name) + language.passResetSucces);
         await sendEmail(user.email, language.resetPassSubject, message);
-        return response.status(200).send(language.resetPassSubject);
+        return response.status(200).json({ STATUS: language.resetPassSubject });
 
     } catch (err) {
         const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };

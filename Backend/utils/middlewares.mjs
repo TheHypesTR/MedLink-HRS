@@ -36,7 +36,7 @@ export const UserPermCheck = ((request, response, next) => {
 
 // Polikliniği Bulan Fonksiyon.
 export const PolyclinicFinder = async (polyclinicID, request) => {
-    const language = loadLanguage(request);
+    const language = LoadLanguage(request);
     try {
         if(polyclinicID.length !== 24) throw new Error(language.invalidPolyclinicID);
         const polyclinic = await Polyclinic.findOne({ _id: polyclinicID });
@@ -50,7 +50,7 @@ export const PolyclinicFinder = async (polyclinicID, request) => {
 
 // Poliklinik ID'si Verilen Doktoru Bulan Fonksiyon.
 export const DoctorFinder = async (polyclinicID, doctorID, request) => {
-    const language = loadLanguage(request);
+    const language = LoadLanguage(request);
     try {
         if(polyclinicID.length !== 24 || doctorID.length !== 24) throw new Error(language.invalidPolyclinicIDDoctorID);
         const doctor = await Doctor.findOne({ polyclinicID: polyclinicID, _id: doctorID });
@@ -64,7 +64,7 @@ export const DoctorFinder = async (polyclinicID, doctorID, request) => {
 
 // Doctor ID'si Verilen Randevuyu Bulan Fonksiyon.
 export const AppointmentFinder = async (doctorID, appointmentID, request) => {
-    const language = loadLanguage(request);
+    const language = LoadLanguage(request);
     try {
         if(doctorID.length !== 24 || appointmentID.length !== 24) throw new Error(language.invalidDoctorIDAppointmentID);
         const appointment = await Appointment.findOne({ doctorID: doctorID, _id: appointmentID });
@@ -78,7 +78,7 @@ export const AppointmentFinder = async (doctorID, appointmentID, request) => {
 
 // Doctor ID'si Verilen Raporu Bulan Fonksiyon.
 export const ReportFinder = async (doctorID, reportID, request) => {
-    const language = loadLanguage(request);
+    const language = LoadLanguage(request);
     try {
         if(doctorID.length !== 24 || reportID.length !== 24) throw new Error(language.invalidDoctorIDReportID);
         const report = await Report.findOne({ doctorID: doctorID, _id: reportID });
@@ -91,7 +91,7 @@ export const ReportFinder = async (doctorID, reportID, request) => {
 };
 
 // Dil Bilgilerini Cookie'den Çeker ve Sayfalar İçin Günceller.
-export const loadLanguage = (request) => {
+export const LoadLanguage = (request) => {
     try {
         const language = request.signedCookies.language || "turkish";
         return language === "english" ? english : turkish;

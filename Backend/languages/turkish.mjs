@@ -54,9 +54,10 @@ const turkish = {
     // PARTITION OF INVALID ERRORS
     invalidLang: "Geçerli Bir Dil Seçiniz!!",
     invalidTC: "Geçersiz 'T.C. NO'!!",
+    invalidDate: "Geçersiz Tarih!!",
     invalidPolyclinicID: "Geçersiz Poliklinik-ID!!",
     invalidPolyclinicIDDoctorID: "Geçersiz Poliklinik-ID veya Doktor-ID!!",
-    invalidDoctorIDAppointmentID: "Geçersiz Doktor-ID veya Randevu Tarihi-ID!!",
+    invalidDoctorIDAppointmentDate: "Geçersiz Doktor-ID veya Randevu Tarihi!!",
     invalidDoctorIDReportID: "Geçersiz Doktor-ID veya Doktor İzni-ID!!",
     invalidReportDuration: "Geçersiz Rapor Süresi!!",
     

@@ -63,11 +63,11 @@ export const DoctorFinder = async (polyclinicID, doctorID, request) => {
 };
 
 // Doctor ID'si Verilen Randevuyu Bulan Fonksiyon.
-export const AppointmentFinder = async (doctorID, appointmentID, request) => {
+export const AppointmentFinder = async (doctorID, appointmentDate, request) => {
     const language = LoadLanguage(request);
     try {
-        if(doctorID.length !== 24 || appointmentID.length !== 24) throw new Error(language.invalidDoctorIDAppointmentID);
-        const appointment = await Appointment.findOne({ doctorID: doctorID, _id: appointmentID });
+        if(doctorID.length !== 24 || appointmentDate.length !== 10) throw new Error(language.invalidDoctorIDAppointmentDate);
+        const appointment = await Appointment.findOne({ doctorID: doctorID, date: appointmentDate });
         if(!appointment) throw new Error(language.appointmentNotFound);
         return appointment;
 

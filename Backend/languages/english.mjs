@@ -54,9 +54,10 @@ const english = {
     // PARTITION OF INVALID ERRORS
     invalidLang: "Invalid Language!!",
     invalidTC: "Invalid 'T.C. NO'!!",
+    invalidDate: "Invalid Date!!",
     invalidPolyclinicID: "Invalid Polyclinic-ID!!",
     invalidPolyclinicIDDoctorID: "Invalid Polyclinic-ID or Doctor-ID!!",
-    invalidDoctorIDAppointmentID: "Invalid Doctor-ID or Appointment-ID!!",
+    invalidDoctorIDAppointmentDate: "Invalid Doctor-ID or Appointment Date!!",
     invalidDoctorIDReportID: "Invalid Doctor-ID or Report-ID!!",
     invalidReportDuration: "Invalid Report Duration!!",
 

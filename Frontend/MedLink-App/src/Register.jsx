@@ -15,7 +15,7 @@ function Register() {
     // Kullanıcı Bilgilerinin Denetleyip Giriş Yapıp Yapmadığını Kontrol Ediyor.
     useEffect(() => {
         const loggedInStatus = localStorage.getItem("isLoggedIn");
-        if(loggedInStatus === "true"){
+        if(loggedInStatus === "true") {
             setIsLoggedIn(true);
             navigate("/");
         }
@@ -33,7 +33,7 @@ function Register() {
         try {
             e.preventDefault();
             let errorMessage = "";
-            if(checkboxState === false){
+            if(checkboxState === false) {
                 alert("'Şartlar ve koşulları kabul ediyorum' Kısmını İşaretleyiniz!!");
                 return;
             }
@@ -49,8 +49,7 @@ function Register() {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    if(data.ERROR){
-                        console.log(data.ERROR)
+                    if(data.ERROR) {
                         Array.isArray(data.ERROR) ? errorMessage = data.ERROR.map(err => err.msg).join("\n") : errorMessage = data.ERROR;
                         alert(errorMessage);
                     }
@@ -66,7 +65,7 @@ function Register() {
         } catch (err) {
             console.log(err);
         }
-    }
+    };
     
     return (
         <div className="katman1-register">

@@ -26,4 +26,6 @@ AppointmentSchema.pre("save", function(next) {
     next();
 });
 
+AppointmentSchema.index({ date: 1 }, { expireAfterSeconds: 86400 });
+
 export const Appointment = mongoose.model("Appointments", AppointmentSchema);

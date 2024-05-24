@@ -7,6 +7,7 @@ function Forgot() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
 
+    // Kullanıcı Şifresini Unuttuğunda E-Mail Adresini Girerek Şifre Sıfırlama Bağlantısını Aldığı APİ.
     const sifremiUnuttum = async (e) => {
         try {
             e.preventDefault();

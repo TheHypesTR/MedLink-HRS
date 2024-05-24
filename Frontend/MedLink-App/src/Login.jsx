@@ -81,7 +81,7 @@ function Login() {
                             <a href="Register"> Kayıt Olun</a>
                         </p>
                     </div>
-                    </form>
+                </form>
             </div>
         </div>
     );

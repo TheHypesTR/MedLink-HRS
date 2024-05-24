@@ -61,7 +61,7 @@ router.post("/admin/polyclinic/add", UserLoginCheck, UserPermCheck, async (reque
     }
 });
 
-// ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Düzenleme API'si.
+// ID'si Belirtilen Polikliniği Düzenleme API'si.
 router.put("/admin/polyclinic/:polyclinicID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -83,7 +83,7 @@ router.put("/admin/polyclinic/:polyclinicID/edit", UserLoginCheck, UserPermCheck
     }
 });
 
-// ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Silme API'si.
+// ID'si Belirtilen Polikliniği Silme API'si.
 router.delete("/admin/polyclinic/:polyclinicID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -99,7 +99,7 @@ router.delete("/admin/polyclinic/:polyclinicID/delete", UserLoginCheck, UserPerm
     }
 });
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğine Doktor Ekleme API'si. Aynı Poliklinikteki Doktor İsimleri Aynı Olamaz.
+// ID'si Belirtilen Polikliniğine Doktor Ekleme API'si. Aynı Poliklinikteki Doktor İsimleri Aynı Olamaz.
 router.post("/admin/polyclinic/:polyclinicID/doctor/add", UserLoginCheck, UserPermCheck, checkSchema(DoctorAddValidation), async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -124,7 +124,7 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/add", UserLoginCheck, UserPe
     }
 })
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorunun Bilgilerini Düzenleme API'si.
+// ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorunun Bilgilerini Düzenleme API'si.
 router.put("/admin/polyclinic/:polyclinicID/doctor/:doctorID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -147,7 +147,7 @@ router.put("/admin/polyclinic/:polyclinicID/doctor/:doctorID/edit", UserLoginChe
     }
 });
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorunu Silme API'si.
+// ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorunu Silme API'si.
 router.delete("/admin/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -163,8 +163,8 @@ router.delete("/admin/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLog
     }
 });
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Verilen Doktoruna Randevu Ekleme API'si.
-router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", UserLoginCheck, UserPermCheck, async (request, response) => {
+// ID'si Belirtilen Polikliniğinin ID'si Verilen Doktoruna Randevu Ekleme API'si.
+router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", /*UserLoginCheck,*/ async (request, response) => {
     const language = LoadLanguage(request);
     try {
         const { polyclinicID, doctorID } = request.params;
@@ -174,12 +174,13 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", 
         let data = {};
         if(date) data.date = date;
         if(time) data.time = time; 
-        //if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.dateReq });
+        if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.dateReq });
+        if(new Date(data.date) < new Date()) return response.status(400).json({ ERROR: language.invalidDate });
 
-        const appointment = await Appointment.findOne({ doctorID: doctorID, date: date.date});
+        const appointment = await Appointment.findOne({ doctorID: doctorID, date: data.date});
         if(appointment) return response.status(400).json({ ERROR: language.appointmentAlreadyExists });
 
-        const newAppointment = new Appointment({ doctorID: doctorID, data });
+        const newAppointment = new Appointment({ doctorID: doctorID, ...data});
         await newAppointment.save();
         return response.status(201).json({ STATUS: language.appointmentAdded });
 
@@ -190,7 +191,7 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", 
     }
 });
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Randevusunu Düzenleme API'si.
+// ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Randevusunu Düzenleme API'si.
 router.put("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID/edit", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -213,7 +214,7 @@ router.put("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appoin
     }
 });
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Randevusunu Silme API'si.
+// ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Randevusunu Silme API'si.
 router.delete("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -230,7 +231,7 @@ router.delete("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:app
     }
 });
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun Raporlarını Listeleme API'si.
+// ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun Raporlarını Listeleme API'si.
 router.get("/polyclinic/:polyclinicID/doctor/:doctorID/report", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -248,7 +249,7 @@ router.get("/polyclinic/:polyclinicID/doctor/:doctorID/report", UserLoginCheck, 
     }
 });
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun ID'si Belirtilen Raporunu Listeleme API'si.
+// ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun ID'si Belirtilen Raporunu Listeleme API'si.
 router.get("/polyclinic/:polyclinicID/doctor/:doctorID/report/:reportID", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -265,7 +266,7 @@ router.get("/polyclinic/:polyclinicID/doctor/:doctorID/report/:reportID", UserLo
     }
 });
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
+// ID'si Belirtilen Polikliniğindeki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
 router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -293,7 +294,7 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserL
     }
 });
 
-// ID'si Belirtilen Hastanenin ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Raporunu Silme API'si.
+// ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Raporunu Silme API'si.
 router.delete("/admin/polyclinic/:polyclinicID/doctor/:doctorID/report/:reportID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {

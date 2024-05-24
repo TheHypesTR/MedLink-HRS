@@ -8,7 +8,7 @@ import english from "../languages/english.mjs";
 
 const router = Router();
 
-// ID'si Belirtilen Hastanedeki Poliklinikleri Listeleyen API.
+// Poliklinikleri Listeleyen API.
 router.get("/polyclinic", async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -23,7 +23,7 @@ router.get("/polyclinic", async (request, response) => {
     }
 });
 
-// ID'si Belirtilen Hastanedeki ID'si Belirtilen Polikliniği Listeleyen API.
+// ID'si Belirtilen Polikliniği Listeleyen API.
 router.get("/polyclinic/:polyclinicID", async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -38,7 +38,7 @@ router.get("/polyclinic/:polyclinicID", async (request, response) => {
     }
 });
 
-// ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki Doktorları Listeleyen API.
+// ID'si Belirtilen Poliklinikteki Doktorları Listeleyen API.
 router.get("/polyclinic/:polyclinicID/doctor", async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -56,7 +56,7 @@ router.get("/polyclinic/:polyclinicID/doctor", async (request, response) => {
     }
 });
 
-// ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktoru Listeleyen API.
+// ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktoru Listeleyen API.
 router.get("/polyclinic/:polyclinicID/doctor/:doctorID", async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -71,7 +71,7 @@ router.get("/polyclinic/:polyclinicID/doctor/:doctorID", async (request, respons
     }
 });
 
-// ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Randevularını Listeleyen API.
+// ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Randevularını Listeleyen API.
 router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment", async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -89,13 +89,13 @@ router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment", async (requ
     }
 });
 
-// ID'si Belirtilen Hastanedeki ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun ID'si Belirtilen Randevusunu Listeleyen API.
-router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID", async (request, response) => {
+// ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun ID'si Belirtilen Randevusunu Listeleyen API.
+router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentDate", async (request, response) => {
     const language = LoadLanguage(request);
     try {
-        const { polyclinicID, doctorID, appointmentID } = request.params;
+        const { polyclinicID, doctorID, appointmentDate } = request.params;
         await PolyclinicFinder(polyclinicID, request);
-        const appointment = await AppointmentFinder(doctorID, appointmentID, request);
+        const appointment = await AppointmentFinder(doctorID, appointmentDate, request);
         return response.status(200).json(appointment);
 
     } catch (err) {
@@ -104,5 +104,7 @@ router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentI
         return response.status(400).json({ ERROR: err.message });
     }
 });
+
+router.post("/")
 
 export default router;

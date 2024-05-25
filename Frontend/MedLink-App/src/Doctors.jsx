@@ -36,11 +36,22 @@ function Doctors() {
     return(
         <div className="card">
             {doctors.map((doctor, index) => (
-                <div className="card" key={index}>
-                    <img className="card-image" src={DefaultCard} alt="profile picture" width={200} height={200}/>
+                <div className="doctors-card" key={index}>
+                    <img className="doctor-card-background" src={DefaultCard} alt="profile picture" />
                     <h2 className="card-title">{`${doctor.speciality} ${doctor.name}`}</h2>
                     <p className="card-text">{doctor.polyclinic}</p>
-                </div>
+                    <div className="doctor-name-background-parent">
+        <div className="doctor-name-background" />
+        <div className="doctors-name-wrapper">
+          <div className="doctors-name32">Doctor’s Name</div>
+        </div>
+        <div className="neurology-parent">
+          <b className="neurology32">Neurology</b>
+          <div className="frame-wrapper1">
+          </div>
+        </div>
+        </div>
+        </div>
             ))}
         </div>
     );

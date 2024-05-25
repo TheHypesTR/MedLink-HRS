@@ -1,4 +1,5 @@
 import React from "react";
+import './LoginRegister.css';
 
 function PasswordForgot() {
     return(

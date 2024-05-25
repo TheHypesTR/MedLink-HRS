@@ -4,6 +4,8 @@ import Register from './Register'
 import Forgot from './Forgot';
 import Appointment from './Appointment';
 import PasswordForgot from './PasswordForgot';
+import Doctors from './Doctors';
+
 
 function App() {
 
@@ -28,6 +30,9 @@ function App() {
           <li>
             <Link to="/PasswordForgot">Şifre Sıfırlama</Link>
           </li>
+          <li>
+            <Link to="/Doctors">Doktorlar</Link>
+          </li>
         </ul>
       </nav>
       <Routes>
@@ -36,6 +41,7 @@ function App() {
         <Route path="/Forgot" element={<Forgot />}/>
         <Route path="/Appointment" element={<Appointment />} />
         <Route path="/PasswordForgot" element={<PasswordForgot />} />
+        <Route path="/Doctors" element={<Doctors />} />
       </Routes>
     </Router>
   )

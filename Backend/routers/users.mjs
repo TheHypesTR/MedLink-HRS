@@ -23,12 +23,14 @@ router.get("/auth", UserLoginCheck, (request, response) => {
 });
 
 // Local Kullanıcı Kaydının Yapılır.
-router.post("/auth/register", UserAlreadyLogged, checkSchema(UserValidation), async (request, response) => {
+router.post("/auth/register", UserAlreadyLogged, async (request, response) => {
     const language = LoadLanguage(request);
     try {
+        const userSchema = UserValidation(language);
+        await checkSchema(userSchema).run(request);
         const errors = validationResult(request);
         if(!errors.isEmpty()) return response.status(400).json({ ERROR: errors.array() });
-
+    
         const data = matchedData(request);
         data.password = HashPassword(data.password);
         data.email = data.email.toLowerCase();
@@ -45,7 +47,7 @@ router.post("/auth/register", UserAlreadyLogged, checkSchema(UserValidation), as
         const newUser = new LocalUser(data);
         await newUser.save();
         return response.status(201).json({ STATUS: language.userRegistered});
-        
+
     } catch (err) {
         const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
         console.log(language.userNotRegistered, ERROR);

@@ -1,66 +1,70 @@
 // Kullanıcı Kayıt İşlemi Sırasında Kullanılacak Doğrulama Şeması.
-export const UserValidation = {
-    TCno: {
-        isLength: {
-            options: {
-                min: 11,
-                max: 11,
+export const UserValidation = (language) => {
+    return {
+        TCno: {
+            isLength: {
+                options: {
+                    min: 11,
+                    max: 11,
+                },
+                errorMessage: language.TCnoLength,
             },
-            errorMessage: "'T.C. NO' Must be 11 Numbers!",
-        },
-        matches: {
-            options: /^\d{11}$/,
-            errorMessage: "'T.C. NO' Must Contain Only Numbers!",
-        },
-    },
-    name: {
-        isLength: {
-            options: {
-                min: 6,
-                max: 36,
+            matches: {
+                options: /^\d{11}$/,
+                errorMessage: language.TCnoMatch,
             },
-            errorMessage: "'Name' Must be at Least 6 - 36 Characters!"
         },
-    },
-    email: {
-        notEmpty: { 
-            errorMessage: "'E-Mail' Must Not be Empty!",
-        },
-        matches: {
-            options: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-            errorMessage: "Please Check Your 'E-Mail' Address!",
-        }
-    },
-    password: {
-        isLength: {
-            options: {
-                min: 8,
-                max: 24,
+        name: {
+            isLength: {
+                options: {
+                    min: 6,
+                    max: 36,
+                },
+                errorMessage: language.nameLength,
             },
-            errorMessage: "'Password' Must be at Least 8 - 24 Characters!",
         },
-        matches: {
-            options: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&_.-]{8,24}$/,
-            errorMessage: "'Password' Must Contain at Least One Uppercase Letter, One Lowercase Letter, and One Number!",
+        email: {
+            notEmpty: { 
+                errorMessage: language.emailEmpty,
+            },
+            matches: {
+                options: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                errorMessage: language.emailMatch,
+            }
         },
-    },
+        password: {
+            isLength: {
+                options: {
+                    min: 8,
+                    max: 24,
+                },
+                errorMessage: language.passwordLength,
+            },
+            matches: {
+                options: /^(?=.*[a-zçğıöşü])(?=.*[A-ZÇĞİÖŞÜ])(?=.*\d)[A-Za-zÇĞİÖŞÜçğıöşü\d@$!%*?&_.-]{8,24}$/,
+                errorMessage: language.passwordMatch,
+            },
+        },
+    }
 };
 
 // Kullanıcı Şifresi Sıfırlama İşlemi Sırasında Kullanılacak Doğrulama Şeması.
-export const PasswordValidation = {
-    password: {
-        isLength: {
-            options: {
-                min: 8,
-                max: 24,
+export const PasswordValidation = (language) => {
+    return {
+        password: {
+            isLength: {
+                options: {
+                    min: 8,
+                    max: 24,
+                },
+                errorMessage: language.passwordLength,
             },
-            errorMessage: "'Password' Must be at Least 8 - 24 Characters!",
+            matches: {
+                options: /^(?=.*[a-zçğıöşü])(?=.*[A-ZÇĞİÖŞÜ])(?=.*\d)[A-Za-zÇĞİÖŞÜçğıöşü\d@$!%*?&_.-]{8,24}$/,
+                errorMessage: language.passwordMatch,
+            },
         },
-        matches: {
-            options: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&_.-]{8,24}$/,
-            errorMessage: "'Password' Must Contain at Least One Uppercase Letter, One Lowercase Letter, and One Number!",
-        },
-    },
+    }
 };
 
 // Doktor Ekleme İşlemi Sırasında Kullanılacak Doğrulama Şeması.

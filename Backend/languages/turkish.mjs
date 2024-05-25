@@ -1,5 +1,4 @@
 const turkish = {
-
     // PARTITION OF POLYCLINIC ERRORS
     polyclinicNotFound: "Poliklinik Bulunamadı!!",
     polyclinicNotAdding: "Poliklinik Eklenemedi!!",
@@ -61,13 +60,14 @@ const turkish = {
     invalidDoctorIDReportID: "Geçersiz Doktor-ID veya Doktor İzni-ID!!",
     invalidReportDuration: "Geçersiz Rapor Süresi!!",
     
-    // PARTITION OF USER
+    // PARTITION OF USER ERRORS
     userAlreadyAdmin: "Kullanıcı Halizhazırda Admin Yetkilerine Sahip!!",
     userAlreadyExists: "Kullanıcı Halihazırda Kayıtlı!!",
     userNotFound: "Kullanıcı Bulunamadı!!",
     userNotPromoted: "Kullanıcı Yetkilendirme İşlemi Başarısız!!",
     userNotRegistered: "Kullanıcı Kayıt İşlemi Başarısız Oldu!!",
     passNotReset: "Şifre Sıfırlama İşlemi Başarısız!!",
+    badCredentials: "Hatalı Şifre!!",
     
     // PARTITION OF USER INFO
     userPromoted: "Kullanıcıya Admin Yetkileri Verildi!!",
@@ -80,7 +80,7 @@ const turkish = {
     dataNotFound: "Herhangi Bir Bilgi Girilmeden Güncelleme Yapılamaz!!",
     tokenNotFound: "Token Bulunamadı!!",
     dateReq: "Tarih Bilgileri Boş Bırakılamaz!!",
-    welcome: "Tekrar Hoşgeldiniz, ${name} Admin!!",
+    welcome: "Tekrar Hoşgeldiniz, ${name}!!",
 
     // PARTITION OF MAIL
     hello: "Merhaba ${user},",
@@ -90,6 +90,14 @@ const turkish = {
     passResetSucces: "\nŞifreniz Başarıyla Güncelleştirildi!!",
     resetPassSubject: "Şifre Sıfırlama Başarılı!!",
 
+    // PARTITION OF VALIDATION SCHEMAS ERRORS
+    TCnoLength: "'T.C. NO' 11 Haneli Olmalıdır!",
+    TCnoMatch: "'T.C. NO' Sadece Rakam İçermelidir!",
+    nameLength: "'Ad' En Az 6 - 36 Karakter Arasında Olmalıdır!",
+    emailEmpty: "'E-Posta' Boş Olmamalıdır!",
+    emailMatch: "'E-Posta' Adresinizi Kontrol Ediniz!",
+    passwordLength: "'Şifre' En Az 8 - 24 Karakter Arasında Olmalıdır!",
+    passwordMatch: "'Şifre' En Az Bir Büyük Harf, Bir Küçük Harf ve Bir Rakam İçermelidir!",
 }
 
 export default turkish;

@@ -1,5 +1,4 @@
 const english = {
-    
     // PARTITION OF POLYCLINIC ERRORS
     polyclinicNotFound: "Polyclinic Not Found!!",
     polyclinicNotAdding: "Polyclinic Not Adding!!",
@@ -68,6 +67,7 @@ const english = {
     userNotPromoted: "User Not Promoted!!",
     userNotRegistered: "User Not Registered!!",
     passNotReset: "Password Not Reset!!",
+    badCredentials: "Incorrect Password!!",
 
     // PARTITION OF USER INFO
     userPromoted: "User Promoted Successfully!!",
@@ -80,7 +80,7 @@ const english = {
     dataNotFound: "Updating Cannot be Made Without Entering any Data!!",
     tokenNotFound: "Token Not Found!!",
     dateReq: "Date is Required!!",
-    welcome: "Welcome Back, ${name} Admin!!",
+    welcome: "Welcome Back, ${name}!!",
 
     // PARTITION OF MAIL
     hello: "Hello ${user},",
@@ -90,6 +90,14 @@ const english = {
     passResetSucces: "\nYour Password has been Successfully Updated!!",
     resetPassSubject: "Password Reset Successfully!!",
 
+    // PARTITION OF VALIDATION SCHEMAS ERRORS
+    TCnoLength: "'T.C. NO' Must be 11 Numbers!",
+    TCnoMatch: "'T.C. NO' Must Contain Only Numbers!",
+    nameLength: "'Name' Must be at Least 6 - 36 Characters!",
+    emailEmpty: "'E-Mail' Must Not be Empty!",
+    emailMatch: "Please Check Your 'E-Mail' Address!",
+    passwordLength: "'Password' Must be at Least 8 - 24 Characters!",
+    passwordMatch: "'Password' Must Contain at Least One Uppercase Letter, One Lowercase Letter, and One Number!",
 }
 
 export default english;

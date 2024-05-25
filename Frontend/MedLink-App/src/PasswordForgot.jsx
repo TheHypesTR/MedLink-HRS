@@ -14,6 +14,6 @@ function PasswordForgot() {
             </div>
         </div>
     );
-};
+}
 
 export default PasswordForgot;

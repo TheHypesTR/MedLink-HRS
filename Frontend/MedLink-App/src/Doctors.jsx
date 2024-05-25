@@ -25,7 +25,7 @@ function Doctors() {
                 }
                 if(data)
                     setDoctors(data);
-            })
+            });
         
         } catch (err) {
             console.log(err);
@@ -34,24 +34,22 @@ function Doctors() {
   }, []);
 
     return(
-        <div className="card">
+        <div className="doctors-container">
             {doctors.map((doctor, index) => (
                 <div className="doctors-card" key={index}>
                     <img className="doctor-card-background" src={DefaultCard} alt="profile picture" />
-                    <h2 className="card-title">{`${doctor.speciality} ${doctor.name}`}</h2>
-                    <p className="card-text">{doctor.polyclinic}</p>
                     <div className="doctor-name-background-parent">
-        <div className="doctor-name-background" />
-        <div className="doctors-name-wrapper">
-          <div className="doctors-name32">Doctor’s Name</div>
-        </div>
-        <div className="neurology-parent">
-          <b className="neurology32">Neurology</b>
-          <div className="frame-wrapper1">
-          </div>
-        </div>
-        </div>
-        </div>
+                        <div className="doctor-name-background" />
+                            <div className="doctors-name-wrapper">
+                                <div className="doctors-name">{`${doctor.speciality} ${doctor.name}`}</div>
+                            </div>
+                            <div className="polyclinic-parent">
+                                <b className="polyclinic">{doctor.polyclinic}</b>
+                                <div className="frame-wrapper1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             ))}
         </div>
     );

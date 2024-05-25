@@ -12,12 +12,6 @@ import english from "../languages/english.mjs";
 
 const router = Router();
 
-// Admin Karşılama Ekranı.
-router.get("/admin", UserLoginCheck, UserPermCheck, (request, response) => {
-    const language = LoadLanguage(request);
-    return response.status(200).json({ STATUS: language.welcome.replace("${name}", request.user?.name) });
-});
-
 // Kullanıcıya Admin Yetkileri Veren API.
 router.post("/admin/promote", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);

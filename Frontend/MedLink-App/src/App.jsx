@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import Login from './Login'
-import Register from './Register'
-import Forgot from './Forgot';
-import Appointment from './Appointment';
-import PasswordForgot from './PasswordForgot';
+import Login from './Login.jsx'
+import Register from './Register.jsx'
+import Forgot from './Forgot.jsx';
+import Appointment from './Appointment.jsx';
+import PasswordForgot from './PasswordForgot.jsx';
 import RedirectWithParams from './RedirectWithParams.jsx';
-import Doctors from './Doctors';
-import Polyclinics from './Polyclinics';
-import AdminPanel from './AdminPanel';
+import Doctors from './Doctors.jsx';
+import Polyclinics from './Polyclinics.jsx';
+import AdminPanel from './AdminPanel.jsx';
 
 
 function App() {

@@ -12,7 +12,7 @@
   }
   
   .popup {
-    background-color: #fff;
+    background-color: #17d1a0;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -86,7 +86,7 @@ h3{
 
 .listepanel{
     display: inline-block;
-    background: linear-gradient(to bottom, #002350 0%, #0084db 50%, #2cc7ff 100%);
+    background: linear-gradient(to bottom, #108ea2 0%, #cde9ea 50%, #2cc7ff 100%);
     width: 800px;
     height: 600px;
     user-select: none;

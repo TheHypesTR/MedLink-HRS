@@ -3,14 +3,22 @@ import config from '../config.mjs';
 import './AdminPanel.css';
 
 function AdminPanel() {
+  const [TCno, setTCno] = useState("");
   const [polyclinics, setPolyclinics] = useState([]);
   const [polyclinicName, setPolyclinicName] = useState("");
   const [polyclinicDescription, setPolyclinicDescription] = useState("");
   const [selectedPolyclinic, setSelectedPolyclinic] = useState(null);
-  const [TCno, setTCno] = useState("");
+  const [doctors, setDoctors] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [doctorName, setDoctorName] = useState("");
+  const [appointmentDate, setAppointmentDate] = useState("");
+  const [report, setReport] = useState("");
+  const [isPromoteUserPopupOpen, setIsPromoteUserPopupOpen] = useState(false);
   const [isPolyclinicPopupOpen, setIsPolyclinicPopupOpen] = useState(false);
   const [isPolyclinicEditPopupOpen, setIsPolyclinicEditPopupOpen] = useState(false);
-  const [isPromoteUserPopupOpen, setIsPromoteUserPopupOpen] = useState(false);
+  const [isDoctorEditPopupOpen, setIsDoctorEditPopupOpen] = useState(false);
+  const [isAppointmentPopupOpen, setIsAppointmentPopupOpen] = useState(false);
+  const [isReportPopupOpen, setIsReportPopupOpen] = useState(false);
   
   // Kullanıcıya Admin Yetkileri Veren API.
   const promoteUser = async (e) => {
@@ -175,11 +183,19 @@ function AdminPanel() {
       console.log(err);
     }
   };
+  
+  // Polyclinic Düzenleye Basıldığında Polikliniğin Bilgileri Kutucuklarda Hazır Olarak Gelir.
+  const openEditPopup = (polyclinic) => {
+    setSelectedPolyclinic(polyclinic);
+    setPolyclinicName(polyclinic.name);
+    setPolyclinicDescription(polyclinic.description);
+    setIsPolyclinicEditPopupOpen(true);
+  };
 
   // Seçilen Poliklinikteki Doktorları Görüntüleyen API.
   const showDoctor = (id) => {
     try {
-      fetch(`http://localhost:${config.PORT}/admin/polyclinic/${id}/doctor`, {
+      fetch(`http://localhost:${config.PORT}/polyclinic/${id}/doctor`, {
         method: "GET",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -188,10 +204,11 @@ function AdminPanel() {
       .then((data) => {
         if (data.ERROR) {
           alert(data.ERROR);
+          return;
         } 
-        if (data.STATUS) {
-          alert(data.STATUS);
-          polyclinicControl();
+        if (data) {
+          setDoctors(data);
+          setPolyclinics([]);
         }
       })
     } catch (err) {
@@ -199,12 +216,26 @@ function AdminPanel() {
     }
   };
 
-  // Polyclinic Düzenleye Basıldığında Polikliniğin Bilgileri Kutucuklarda Hazır Olarak Gelir.
-  const openEditPopup = (polyclinic) => {
-    setSelectedPolyclinic(polyclinic);
-    setPolyclinicName(polyclinic.name);
-    setPolyclinicDescription(polyclinic.description);
-    setIsPolyclinicEditPopupOpen(true);
+  // Doktorları Düzenleye Basıldığında Doktorun Bilgileri Kutucuklarda Hazır Olarak Gelir.
+  const openDoctorEditPopup = (doctor) => {
+    setSelectedDoctor(doctor);
+    setDoctorName(doctor.name);
+    setIsDoctorEditPopupOpen(true);
+  };
+
+  const openAppointmentPopup = (doctor) => {
+    setSelectedDoctor(doctor);
+    setIsAppointmentPopupOpen(true);
+  };
+
+  const openReportPopup = (doctor) => {
+    setSelectedDoctor(doctor);
+    setIsReportPopupOpen(true);
+  };
+
+  const showPolyclinics = () => {
+    setDoctors([]);
+    polyclinicControl();
   };
 
   return (
@@ -270,18 +301,33 @@ function AdminPanel() {
         )}
       </div>
       <div className='listepanel'>
-        <h2>Poliklinik Listesi</h2>
+      <button className="back-button" onClick={showPolyclinics}>Geri Dön</button>
+        <h2>{doctors.length ? 'Doktor Listesi' : 'Poliklinik Listesi'}</h2>
         <ul>
-          {polyclinics.map((polyclinic, index) => (
-            <li key={index} className='li1'>
-              {polyclinic.name}
-              <div className="button-container">
-                <button className="delete-button" onClick={() => polyclinicDelete(polyclinic._id)}>Sil</button>
-                <button className="edit-button" onClick={() => openEditPopup(polyclinic)}>Düzenle</button>
-                <button className="show-doctor-button" onClick={() => showDoctor(polyclinic._id)}>Doktorları Görüntüle</button>
-              </div>
-            </li>
-          ))}
+          {doctors && doctors.length ? (
+            doctors.map((doctor, index) => (
+              <li key={index} className='li1'>
+                {doctor.name}
+                <div className="button-container">
+                  <button className="edit-button" onClick={() => openDoctorEditPopup(doctor)}>Düzenle</button>
+                 <button className="edit-button" onClick={() => doctorDelete(doctor._id)}>Sil</button>
+                  <button className="edit-button" onClick={() => openAppointmentPopup(doctor)}>Randevu Ekle</button>
+                  <button className="edit-button" onClick={() => openReportPopup(doctor)}>Rapor Ekle</button>
+                </div>
+              </li>
+            ))
+          ) : (
+            polyclinics.map((polyclinic, index) => (
+              <li key={index} className='li1'>
+                {polyclinic.name}
+                <div className="button-container">
+                  <button className="delete-button" onClick={() => polyclinicDelete(polyclinic._id)}>Sil</button>
+                  <button className="edit-button" onClick={() => openEditPopup(polyclinic)}>Düzenle</button>
+                  <button className="show-doctor-button" onClick={() => showDoctor(polyclinic._id)}>Doktorları Görüntüle</button>
+                </div>
+              </li>
+            ))
+          )}
         </ul>
       </div>
       {isPolyclinicEditPopupOpen && (
@@ -308,6 +354,66 @@ function AdminPanel() {
                   onChange={(e) => setPolyclinicDescription(e.target.value)}
                 />
                 <button type='submit' className='button'>Poliklinik Düzenle</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+      {isDoctorEditPopupOpen && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <button className="close-button" onClick={() => setIsDoctorEditPopupOpen(false)}>X</button>
+            <div className="popup-content">
+              <h3>Doktor Düzenle</h3>
+              <form onSubmit={doctorUpdate}>
+                <input
+                  type="text"
+                  placeholder='Doktor adı giriniz'
+                  className='input-box'
+                  required
+                  value={doctorName}
+                  onChange={(e) => setDoctorName(e.target.value)}
+                />
+                <button type='submit' className='button'>Doktor Düzenle</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+      {isAppointmentPopupOpen && (<div className="popup-overlay">
+          <div className="popup">
+            <button className="close-button" onClick={() => setIsAppointmentPopupOpen(false)}>X</button>
+            <div className="popup-content">
+              <h3>Randevu Ekle</h3>
+              <form onSubmit={addAppointment}>
+                <input
+                  type="date"
+                  className='input-box'
+                  value={appointmentDate}
+                  onChange={(e) => setAppointmentDate(e.target.value)}
+                  required
+                />
+                <button type='submit' className='button'>Randevu Ekle</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+      {isReportPopupOpen && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <button className="close-button" onClick={() => setIsReportPopupOpen(false)}>X</button>
+            <div className="popup-content">
+              <h3>Rapor Ekle</h3>
+              <form onSubmit={addReport}>
+                <textarea
+                  placeholder='Raporu giriniz'
+                  className='input-box'
+                  required
+                  value={report}
+                  onChange={(e) => setReport(e.target.value)}
+                />
+                <button type='submit' className='button'>Rapor Ekle</button>
               </form>
             </div>
           </div>

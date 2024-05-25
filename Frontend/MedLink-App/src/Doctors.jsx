@@ -7,7 +7,7 @@ import './Doctors.css';
 function Doctors() {
     const [doctors, setDoctors] = useState([]);
 
-    // Database'den Poliklinikleri Çeken APİ.
+    // Database'den Doktorları Çeken APİ.
     useEffect(() => {
         try {
             fetch(`http://localhost:${config.PORT}/doctor`, {
@@ -19,7 +19,6 @@ function Doctors() {
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 if(data.ERROR) {
                     alert(data.ERROR);
                     setDoctors([]);

@@ -54,6 +54,7 @@ const turkish = {
     invalidLang: "Geçerli Bir Dil Seçiniz!!",
     invalidTC: "Geçersiz 'T.C. NO'!!",
     invalidDate: "Geçersiz Tarih!!",
+    invalidPermission: "Sadece Yetkililer Girebilir!!",
     invalidPolyclinicID: "Geçersiz Poliklinik-ID!!",
     invalidPolyclinicIDDoctorID: "Geçersiz Poliklinik-ID veya Doktor-ID!!",
     invalidDoctorIDAppointmentDate: "Geçersiz Doktor-ID veya Randevu Tarihi!!",
@@ -63,9 +64,11 @@ const turkish = {
     // PARTITION OF USER ERRORS
     userAlreadyAdmin: "Kullanıcı Halizhazırda Admin Yetkilerine Sahip!!",
     userAlreadyExists: "Kullanıcı Halihazırda Kayıtlı!!",
+    UserAlreadyLoggedIn: "Çıkış Yapmadan Giriş Yapamazsınız!!",
     userNotFound: "Kullanıcı Bulunamadı!!",
     userNotPromoted: "Kullanıcı Yetkilendirme İşlemi Başarısız!!",
     userNotRegistered: "Kullanıcı Kayıt İşlemi Başarısız Oldu!!",
+    userNotLoggedIn: "Lütfen Giriş Yapınız!!",
     passNotReset: "Şifre Sıfırlama İşlemi Başarısız!!",
     badCredentials: "Hatalı Şifre!!",
     

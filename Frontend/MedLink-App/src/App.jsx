@@ -4,13 +4,14 @@ import Register from './Register'
 import Forgot from './Forgot';
 import Appointment from './Appointment';
 import PasswordForgot from './PasswordForgot';
+import RedirectWithParams from './RedirectWithParams.jsx';
 import Doctors from './Doctors';
 import Polyclinics from './Polyclinics';
 
 
 function App() {
 
-
+  
 
   return (
     <Router>
@@ -45,6 +46,7 @@ function App() {
         <Route path="/Forgot" element={<Forgot />}/>
         <Route path="/Appointment" element={<Appointment />} />
         <Route path="/PasswordForgot" element={<PasswordForgot />} />
+        <Route path="/auth/user/reset-password/:userid/:token" element={<RedirectWithParams />} />
         <Route path="/Doctors" element={<Doctors />} />
         <Route path="/Polyclinics" element={<Polyclinics />} />
       </Routes>

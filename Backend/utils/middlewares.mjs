@@ -13,24 +13,25 @@ export const logMiddleware = ((request, response, next) => {
 
 // Kullanıcı Girişi Yoksa Sitenin Belirli Kısımlarına Eriştirtmez ve /Login Ekranına Yönlendirme Yapar.
 export const UserLoginCheck = ((request, response, next) => {
+    const language = LoadLanguage(request);
     const user = request.session.passport?.user;
-    if(!user) return response.redirect("/auth/login");
+    if(!user) return response.json({ ERROR: language.userNotLoggedIn });
     next();
 });
 
 // Kullanıcı Hâli Hazırda Giriş Yapmışsa Ana Sayfaya Yönlendirme Yapar.
 export const UserAlreadyLogged = ((request, response, next) => {
     const user = request.session.passport?.user;
-    if(user) return response.redirect("/");
+    if(user) return response.json({ ERROR: language.UserAlreadyLogged })
     next();
 });
 
 // Kullanıcının Yetki Seviyesini Kontrol Eder Eğer Yetki Dışındaysa Yönlendirme Yapar.
 export const UserPermCheck = ((request, response, next) => {
     const user = request.user;
-    if(!user) return response.redirect("/auth/login");
+    if(!user) return response.json({ ERROR: language.userNotLoggedIn });
 
-    if(user.role === "User") return response.redirect("/");
+    if(user.role === "User") return response.json({ ERROR: language.invalidPermission });
     next();
 });
 

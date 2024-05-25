@@ -54,6 +54,7 @@ const english = {
     invalidLang: "Invalid Language!!",
     invalidTC: "Invalid 'T.C. NO'!!",
     invalidDate: "Invalid Date!!",
+    invalidPermission: "Only Admins Can Enter!!",
     invalidPolyclinicID: "Invalid Polyclinic-ID!!",
     invalidPolyclinicIDDoctorID: "Invalid Polyclinic-ID or Doctor-ID!!",
     invalidDoctorIDAppointmentDate: "Invalid Doctor-ID or Appointment Date!!",
@@ -63,9 +64,11 @@ const english = {
     // PARTITION OF USER ERRORS
     userAlreadyAdmin: "This User Already Admin!!",
     userAlreadyExists: "User Already Exists!!",
+    UserAlreadyLoggedIn: "You Cannot Login Without Logging Out!!",
     userNotFound: "User Not Found!!",
     userNotPromoted: "User Not Promoted!!",
     userNotRegistered: "User Not Registered!!",
+    userNotLoggedIn: "Please Login!!",
     passNotReset: "Password Not Reset!!",
     badCredentials: "Incorrect Password!!",
 

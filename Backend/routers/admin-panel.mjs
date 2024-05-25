@@ -42,15 +42,16 @@ router.post("/admin/promote", UserLoginCheck, UserPermCheck, async (request, res
 router.post("/admin/polyclinic/add", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
-        const polyclinicName = request.body.name;
+        const { name, description } = request.body;
         let data = {};
-        if(polyclinicName) data.name = polyclinicName;
+        if(name) data.name = name;
+        if(description) data.description = description;
         if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.polyclinicNameReq });
         
         const polyclinic = await Polyclinic.findOne({ name: data.name });
         if(polyclinic) return response.status(400).json({ ERROR: language.polyclinicAlreadyExists });
 
-        const newPolyclinic = new Polyclinic({ name: data.name });
+        const newPolyclinic = new Polyclinic({ name: data.name, description: data.description });
         await newPolyclinic.save();
         return response.status(200).json({ STATUS: language.polyclinicAdded });
         
@@ -164,7 +165,7 @@ router.delete("/admin/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLog
 });
 
 // ID'si Belirtilen Polikliniğinin ID'si Verilen Doktoruna Randevu Ekleme API'si.
-router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", /*UserLoginCheck,*/ async (request, response) => {
+router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", UserLoginCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
         const { polyclinicID, doctorID } = request.params;
@@ -175,9 +176,8 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", 
         if(date) data.date = date;
         if(time) data.time = time; 
         if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.dateReq });
-        if(new Date(data.date) < new Date()) return response.status(400).json({ ERROR: language.invalidDate });
-        if(new Date(data.date) < new Date(Date.setMonth(Date.getMonth() + 7))) return response.status(400).json({ ERROR: language.invalidDate });
-
+        if(new Date(data.date) < new Date() || new Date(data.date) > new Date(Date.now() + 1000 * 60 * 60 * 24 * 31 * 7)) return response.status(400).json({ ERROR: language.invalidDate });
+        
         const appointment = await Appointment.findOne({ doctorID: doctorID, date: data.date});
         if(appointment) return response.status(400).json({ ERROR: language.appointmentAlreadyExists });
 

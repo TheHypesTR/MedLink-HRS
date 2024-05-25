@@ -113,7 +113,7 @@ ul {
     transition: all 0.3s ease;
     font-size: 16px;
     cursor: pointer;
-    width: 80%;
+    width: 97.5%;
     height: 6vh;
     justify-content: space-between;
     align-items: center;
@@ -123,7 +123,8 @@ ul {
 }
 
 .edit-button,
-.delete-button {
+.delete-button,
+.show-doctor-button{
   margin-left: 10px;
   padding: 5px 10px;
   border: none;
@@ -139,6 +140,11 @@ ul {
   
   .delete-button {
     background-color: #f44336;
+    color: white;
+  }
+
+  .show-doctor-button {
+    background-color: #9111ec;
     color: white;
   }
 

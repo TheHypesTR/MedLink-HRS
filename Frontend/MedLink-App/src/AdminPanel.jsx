@@ -6,9 +6,10 @@ function AdminPanel() {
   const [polyclinics, setPolyclinics] = useState([]);
   const [polyclinicName, setPolyclinicName] = useState("");
   const [polyclinicDescription, setPolyclinicDescription] = useState("");
-  const [selectedPolyclinic, setSelectedPolyclinic] = useState("");
+  const [selectedPolyclinic, setSelectedPolyclinic] = useState(null);
   const [TCno, setTCno] = useState("");
   const [isPolyclinicPopupOpen, setIsPolyclinicPopupOpen] = useState(false);
+  const [isPolyclinicEditPopupOpen, setIsPolyclinicEditPopupOpen] = useState(false);
   const [isPromoteUserPopupOpen, setIsPromoteUserPopupOpen] = useState(false);
   
   // Kullanıcıya Admin Yetkileri Veren API.
@@ -116,8 +117,9 @@ function AdminPanel() {
   };
 
   // Seçilen Polikliniği Silme API'si.
-  const polyclinicDelete = () => {
-    fetch(`http://localhost:${config.PORT}/polyclinic/${selectedPolyclinic}/delete`, {
+  const polyclinicDelete = (id) => {
+    try {
+      fetch(`http://localhost:${config.PORT}/admin/polyclinic/${id}/delete`, {
       method: "DELETE",
       credentials: "include",
       headers: {
@@ -128,38 +130,85 @@ function AdminPanel() {
       .then((data) => {
         if (data.ERROR) {
           alert(data.ERROR);
-        } else {
+        } 
+        if(data.STATUS) {
           alert(data.STATUS)
           polyclinicControl();
         }
       })
-      .catch((err) => console.log(err));
+
+    } catch (err) {
+      console.log(err);
+    }
+    
   };
 
   // Seçilen Polikliniği Düzenleme API'si.
-  const polyclinicUpdate = () => {
-    fetch(`http://localhost:${config.PORT}/polyclinic/${selectedPolyclinic}/delete`, {
-      method: "DELETE",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  const polyclinicUpdate = async (e) => {
+    try {
+      e.preventDefault();
+      if (!selectedPolyclinic) return;
+      
+      const formData = { name: polyclinicName, description: polyclinicDescription };
+
+      await fetch(`http://localhost:${config.PORT}/admin/polyclinic/${selectedPolyclinic._id}/edit`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
       .then((response) => response.json())
       .then((data) => {
         if (data.ERROR) {
           alert(data.ERROR);
-        } else {
-          alert(data.STATUS)
+        }
+        if (data.STATUS) {
+          alert(data.STATUS);
+          setPolyclinicName("");
+          setPolyclinicDescription("");
+          setSelectedPolyclinic(null);
+          setIsPolyclinicEditPopupOpen(false);
           polyclinicControl();
         }
       })
-      .catch((err) => console.log(err));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  
-  return(
-      <>
+  // Seçilen Poliklinikteki Doktorları Görüntüleyen API.
+  const showDoctor = (id) => {
+    try {
+      fetch(`http://localhost:${config.PORT}/admin/polyclinic/${id}/doctor`, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.ERROR) {
+          alert(data.ERROR);
+        } 
+        if (data.STATUS) {
+          alert(data.STATUS);
+          polyclinicControl();
+        }
+      })
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Polyclinic Düzenleye Basıldığında Polikliniğin Bilgileri Kutucuklarda Hazır Olarak Gelir.
+  const openEditPopup = (polyclinic) => {
+    setSelectedPolyclinic(polyclinic);
+    setPolyclinicName(polyclinic.name);
+    setPolyclinicDescription(polyclinic.description);
+    setIsPolyclinicEditPopupOpen(true);
+  };
+
+  return (
+    <>
       <div>
         <button className="open-popup-button" onClick={() => setIsPromoteUserPopupOpen(true)}>
           Kullanıcı Yetkilendirmesi
@@ -223,13 +272,47 @@ function AdminPanel() {
       <div className='listepanel'>
         <h2>Poliklinik Listesi</h2>
         <ul>
-          {polyclinics.map((clinic, index) => (
+          {polyclinics.map((polyclinic, index) => (
             <li key={index} className='li1'>
-              <div className="poliklinik-ad">{clinic.name}</div>
+              {polyclinic.name}
+              <div className="button-container">
+                <button className="delete-button" onClick={() => polyclinicDelete(polyclinic._id)}>Sil</button>
+                <button className="edit-button" onClick={() => openEditPopup(polyclinic)}>Düzenle</button>
+                <button className="show-doctor-button" onClick={() => showDoctor(polyclinic._id)}>Doktorları Görüntüle</button>
+              </div>
             </li>
           ))}
         </ul>
       </div>
+      {isPolyclinicEditPopupOpen && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <button className="close-button" onClick={() => setIsPolyclinicEditPopupOpen(false)}>X</button>
+            <div className="popup-content">
+              <h3>Poliklinik Düzenle</h3>
+              <form onSubmit={polyclinicUpdate}>
+                <input
+                  type="text"
+                  placeholder='Poliklinik adı giriniz'
+                  className='input-box'
+                  required
+                  value={polyclinicName}
+                  onChange={(e) => setPolyclinicName(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder='Poliklinik açıklaması giriniz'
+                  className='input-box'
+                  required
+                  value={polyclinicDescription}
+                  onChange={(e) => setPolyclinicDescription(e.target.value)}
+                />
+                <button type='submit' className='button'>Poliklinik Düzenle</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

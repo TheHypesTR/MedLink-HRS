@@ -63,9 +63,10 @@ router.put("/admin/polyclinic/:polyclinicID/edit", UserLoginCheck, UserPermCheck
         const polyclinicID = request.params.polyclinicID;
         const polyclinic = await PolyclinicFinder(polyclinicID, request);
         
-        const polyclinicName = request.body.name;
+        const { name, description } = request.body;
         let data = {};
-        if(polyclinicName) data.name = polyclinicName;
+        if(name) data.name = name;
+        if(description) data.description = description;
         if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.polyclinicNameReq });
         
         await Polyclinic.updateOne(polyclinic, { $set: data }, { new: true });

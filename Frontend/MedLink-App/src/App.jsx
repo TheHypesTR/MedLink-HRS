@@ -7,11 +7,11 @@ import PasswordForgot from './PasswordForgot';
 import RedirectWithParams from './RedirectWithParams.jsx';
 import Doctors from './Doctors';
 import Polyclinics from './Polyclinics';
+import AdminPanel from './AdminPanel';
 
 
 function App() {
 
-  
 
   return (
     <Router>
@@ -38,6 +38,9 @@ function App() {
           <li>
             <Link to="/Polyclinics">Poliklinikler</Link>
           </li>
+          <li>
+            <Link to="/AdminPanel">Admin Panel</Link>
+          </li>
         </ul>
       </nav>
       <Routes>
@@ -49,8 +52,10 @@ function App() {
         <Route path="/auth/user/reset-password/:userid/:token" element={<RedirectWithParams />} />
         <Route path="/Doctors" element={<Doctors />} />
         <Route path="/Polyclinics" element={<Polyclinics />} />
+        <Route path="/AdminPanel" element={<AdminPanel />} />
       </Routes>
     </Router>
+    
   )
 }
 

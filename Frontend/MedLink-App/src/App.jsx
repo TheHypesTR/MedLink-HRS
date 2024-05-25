@@ -3,6 +3,7 @@ import Login from './Login'
 import Register from './Register'
 import Forgot from './Forgot';
 import Appointment from './Appointment';
+import PasswordForgot from './PasswordForgot';
 
 function App() {
 
@@ -24,6 +25,9 @@ function App() {
           <li>
             <Link to="/Appointment">Randevu Al</Link>
           </li>
+          <li>
+            <Link to="/PasswordForgot">Şifre Sıfırlama</Link>
+          </li>
         </ul>
       </nav>
       <Routes>
@@ -31,6 +35,7 @@ function App() {
         <Route path="/Register" element={<Register />} />
         <Route path="/Forgot" element={<Forgot />}/>
         <Route path="/Appointment" element={<Appointment />} />
+        <Route path="/PasswordForgot" element={<PasswordForgot />} />
       </Routes>
     </Router>
   )

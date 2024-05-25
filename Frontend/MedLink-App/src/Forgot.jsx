@@ -24,7 +24,6 @@ function Forgot() {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data);
                     if(data.ERROR) 
                         alert(data.ERROR);
                     if(data.STATUS) {

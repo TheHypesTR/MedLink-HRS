@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import Login from './Login'
-import Register from './Register'
-import Forgot from './Forgot';
-import Appointment from './Appointment';
-import PasswordForgot from './PasswordForgot';
-import Doctors from './Doctors';
-
+import Login from './Login.jsx'
+import Register from './Register.jsx'
+import Forgot from './Forgot.jsx';
+import Appointment from './Appointment.jsx';
+import PasswordForgot from './PasswordForgot.jsx';
+import Doctors from './Doctors.jsx';
+import RedirectWithParams from './RedirectWithParams.jsx';
 
 function App() {
 
@@ -41,6 +41,7 @@ function App() {
         <Route path="/Forgot" element={<Forgot />}/>
         <Route path="/Appointment" element={<Appointment />} />
         <Route path="/PasswordForgot" element={<PasswordForgot />} />
+        <Route path="/auth/user/reset-password/:userid/:token" element={<RedirectWithParams />} />
         <Route path="/Doctors" element={<Doctors />} />
       </Routes>
     </Router>

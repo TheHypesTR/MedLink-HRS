@@ -8,7 +8,6 @@ import { UserValidation, PasswordValidation } from "../utils/validation-schemas.
 import { HashPassword } from "../utils/helpers.mjs";
 import { sendEmail } from "../utils/email-sender.mjs";
 import { UserLoginCheck, UserAlreadyLogged, LoadLanguage } from "../utils/middlewares.mjs";
-import config from "../config.mjs";
 import "../strategies/local-strategy.mjs";
 import turkish from "../languages/turkish.mjs";
 import english from "../languages/english.mjs";
@@ -98,7 +97,7 @@ router.post("/auth/reset-password", async (request, response) => {
             userEMail: user.email,
         }).save();
 
-        const message = (language.hello.replace("${user}", user?.name) + language.clickResetPass + `\nhttp://localhost:${config.PORT}/auth/user/reset-password/${user._id}/${token.tokenID}`);
+        const message = (language.hello.replace("${user}", user?.name) + language.clickResetPass + `\nhttp://localhost:5173/auth/user/reset-password/${user._id}/${token.tokenID}`);
         await sendEmail(user.email, language.resetPass, message);
         return response.status(201).json({ STATUS: language.emailSent.replace("${email}", user.email) });
 
@@ -110,11 +109,13 @@ router.post("/auth/reset-password", async (request, response) => {
 });
 
 // Şifre Sıfırlama Bağlantısına Tıklayan Kullanıcı Şifresini Şemadaki Kurallara Uygun Olarak Değiştirebilir.
-router.post("/auth/user/reset-password/:id/:token", checkSchema(PasswordValidation), async (request, response) => {
+router.post("/auth/user/reset-password/:id/:token", async (request, response) => {
     const language = LoadLanguage(request);
     try {
+        const passSchema = PasswordValidation(language);
+        await checkSchema(passSchema).run(request);
         const errors = validationResult(request);
-        if (!errors.isEmpty()) return response.status(400).json({ ERROR: errors.array() });
+        if(!errors.isEmpty()) return response.status(400).json({ ERROR: errors.array() });
         
         const newPassword = HashPassword(request.body.password);
         const user = await LocalUser.findOne({ _id: request.params.id });

@@ -11,10 +11,12 @@ function AdminPanel() {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [doctorName, setDoctorName] = useState("");
+  const [doctorSpeciality, setDoctorSpeciality] = useState("");
   const [appointmentDate, setAppointmentDate] = useState("");
   const [report, setReport] = useState("");
   const [isPromoteUserPopupOpen, setIsPromoteUserPopupOpen] = useState(false);
   const [isPolyclinicPopupOpen, setIsPolyclinicPopupOpen] = useState(false);
+  const [isDoctorPopupOpen, setIsDoctorPopupOpen] = useState(false);
   const [isPolyclinicEditPopupOpen, setIsPolyclinicEditPopupOpen] = useState(false);
   const [isDoctorEditPopupOpen, setIsDoctorEditPopupOpen] = useState(false);
   const [isAppointmentPopupOpen, setIsAppointmentPopupOpen] = useState(false);
@@ -154,11 +156,13 @@ function AdminPanel() {
   // Seçilen Polikliniği Düzenleme API'si.
   const polyclinicUpdate = async (e) => {
     try {
+      const formData = {
+        name: polyclinicName,
+        description: polyclinicDescription,
+      };
+
       e.preventDefault();
       if (!selectedPolyclinic) return;
-      
-      const formData = { name: polyclinicName, description: polyclinicDescription };
-
       await fetch(`http://localhost:${config.PORT}/admin/polyclinic/${selectedPolyclinic._id}/edit`, {
         method: "PUT",
         credentials: "include",
@@ -179,6 +183,7 @@ function AdminPanel() {
           polyclinicControl();
         }
       })
+
     } catch (err) {
       console.log(err);
     }
@@ -216,17 +221,160 @@ function AdminPanel() {
     }
   };
 
+  // Doktor Ekleme API'si.                              // Bağlanacak
+  const addDoctor = async (e) => {
+    const formData = {
+        name: doctorName,
+        speciality: doctorSpeciality,
+    };
+    
+    try {
+        e.preventDefault();
+        let errorMessage = "";
+        
+        if(doctorName && doctorSpeciality) {
+            await fetch(`http://localhost:${config.PORT}/admin/polyclinic/${selectedPolyclinic._id}/doctor/add`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if(data.ERROR) {
+                    Array.isArray(data.ERROR) ? errorMessage = data.ERROR.map(err => err.msg).join("\n") : errorMessage = data.ERROR;
+                    alert(errorMessage);
+                }
+                if(data.STATUS) {
+                    alert(data.STATUS);
+                    setDoctorName("");
+                    setDoctorSpeciality("");
+                    setIsDoctorPopupOpen(false);
+                    showDoctor(selectedPolyclinic._id);
+                }
+            });
+        }
+        else
+            throw new Error("Lütfen Gerekli Alanları Doldurunuz!!");
+        
+    } catch (err) {
+        console.log(err);
+      }
+  };
+
+  // Seçilen Doktoru Silme API'si.
+  const doctorDelete = (doctor) => {
+    try {
+      fetch(`http://localhost:${config.PORT}/admin/polyclinic/${doctor.polyclinicID}/doctor/${doctor._id}/delete`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.ERROR) {
+          alert(data.ERROR);
+        } 
+        if(data.STATUS) {
+          alert(data.STATUS);
+          showDoctor(doctor.polyclinicID);
+        }
+      })
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Seçilen Doktor Düzenleme API'si.             // Doktor Speaciality Değiştirme ve Poliklinik Adı Güncelleme Eklenecek!!!
+  const doctorUpdate = async (e) => {
+    try {
+      const formData = {
+        name: doctorName,
+        speciality: doctorSpeciality,
+      };
+
+      e.preventDefault();
+      if (!selectedDoctor) return;
+      await fetch(`http://localhost:${config.PORT}/admin/polyclinic/${selectedDoctor.polyclinicID}/doctor/${selectedDoctor._id}/edit`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.ERROR) {
+          alert(data.ERROR);
+        }
+        if (data.STATUS) {
+          alert(data.STATUS);
+          setDoctorName("");
+          setDoctorSpeciality("");
+          setSelectedDoctor(null);
+          setIsDoctorEditPopupOpen(false);
+          showDoctor(selectedDoctor.polyclinicID);
+        }
+      })
+      
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // Doktorları Düzenleye Basıldığında Doktorun Bilgileri Kutucuklarda Hazır Olarak Gelir.
   const openDoctorEditPopup = (doctor) => {
     setSelectedDoctor(doctor);
     setDoctorName(doctor.name);
+    setDoctorSpeciality(doctor.speciality);
     setIsDoctorEditPopupOpen(true);
+  };
+
+  // Randevu Ekleme API'si.                              // Bağlanacak
+  const addAppointment = async (e) => {
+    try {
+        e.preventDefault();        
+        if(appointmentDate) {
+            await fetch(`http://localhost:${config.PORT}/admin/polyclinic/${selectedDoctor.polyclinicID}/doctor/${selectedDoctor._id}/appointment/add`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  date: appointmentDate,
+                }),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if(data.ERROR) {
+                    alert(data.ERROR);
+                }
+                if(data.STATUS) {
+                    alert(data.STATUS);
+                    setAppointmentDate("");
+                    setIsAppointmentPopupOpen(false);
+                }
+            });
+        }
+        else
+            throw new Error("Lütfen Gerekli Alanları Doldurunuz!!");
+        
+    } catch (err) {
+        console.log(err);
+      }
   };
 
   const openAppointmentPopup = (doctor) => {
     setSelectedDoctor(doctor);
     setIsAppointmentPopupOpen(true);
   };
+
+  // Randevu Ekleme API'si.                              // Bağlanacak
 
   const openReportPopup = (doctor) => {
     setSelectedDoctor(doctor);
@@ -266,10 +414,7 @@ function AdminPanel() {
           </div>
         )}
       </div>
-      <div>
-        <button className="open-popup-button" onClick={() => setIsPolyclinicPopupOpen(true)}>
-          Poliklinik Ekle
-        </button>
+      <      div>
         {isPolyclinicPopupOpen && (
           <div className="popup-overlay">
             <div className="popup">
@@ -301,8 +446,26 @@ function AdminPanel() {
         )}
       </div>
       <div className='listepanel'>
-      <button className="back-button" onClick={showPolyclinics}>Geri Dön</button>
-        <h2>{doctors.length ? 'Doktor Listesi' : 'Poliklinik Listesi'}</h2>
+      <div style={{display: 'flex'}}>
+        {doctors.length === 0 && (
+                  <button className="addPol-button" onClick={() => setIsPolyclinicPopupOpen(true)}>
+                  Poliklinik Ekle
+                </button>
+        )}
+
+        {doctors.length > 0 && (
+          <button className="back-button" onClick={showPolyclinics}>Geri Dön</button>
+        )}
+
+        <button className="addDoc-button" onClick={showPolyclinics} style={{ display: doctors.length > 0 ? 'block' : 'none' }}>
+          Doktor Ekle
+        </button>
+
+        <h2 style={doctors.length ? { paddingLeft: '20%' } : { paddingLeft: '28%' }}>
+          {doctors.length ? 'Doktor Listesi' : 'Poliklinik Listesi'}
+        </h2>
+      </div>
+
         <ul>
           {doctors && doctors.length ? (
             doctors.map((doctor, index) => (
@@ -310,7 +473,7 @@ function AdminPanel() {
                 {doctor.name}
                 <div className="button-container">
                   <button className="edit-button" onClick={() => openDoctorEditPopup(doctor)}>Düzenle</button>
-                 <button className="edit-button" onClick={() => doctorDelete(doctor._id)}>Sil</button>
+                  <button className="edit-button" onClick={() => doctorDelete(doctor._id)}>Sil</button>
                   <button className="edit-button" onClick={() => openAppointmentPopup(doctor)}>Randevu Ekle</button>
                   <button className="edit-button" onClick={() => openReportPopup(doctor)}>Rapor Ekle</button>
                 </div>

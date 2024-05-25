@@ -124,7 +124,8 @@ ul {
 
 .edit-button,
 .delete-button,
-.show-doctor-button{
+.show-doctor-button
+{
   margin-left: 10px;
   padding: 5px 10px;
   border: none;
@@ -147,6 +148,8 @@ ul {
     background-color: #9111ec;
     color: white;
   }
+
+ 
 
   .poliklinik-ad {
     flex-grow: 1;
@@ -173,3 +176,47 @@ ul {
     color: #333;
     font-weight: 700;
   }
+
+  .back-button {
+    background-color: #cb9ced;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .back-button:hover {
+    background-color: #a66fcb;
+  }
+  
+  .addDoc-button {
+    background-color: #e9b98f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .addDoc-button:hover {
+    background-color: #c79a5b;
+  }
+
+  .addPol-button {
+    background-color: #da5166;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .addPol-button:hover {
+    background-color: #c83a56;
+  }
+
+  

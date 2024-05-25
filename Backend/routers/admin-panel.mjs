@@ -104,7 +104,7 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/add", UserLoginCheck, UserPe
     const language = LoadLanguage(request);
     try {
         const polyclinicID = request.params.polyclinicID;
-        await PolyclinicFinder(polyclinicID, request);
+        const polyclinic = await PolyclinicFinder(polyclinicID, request);
         
         const errors = validationResult(request);
         if(!errors.isEmpty()) return response.status(400).json({ ERROR: errors.array() });
@@ -113,7 +113,7 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/add", UserLoginCheck, UserPe
         const doctor = await Doctor.findOne({ polyclinicID: polyclinicID, name: data.name });
         if(doctor) return response.status(400).json({ ERROR: language.doctorAlreadyExists });
         
-        const newDoctor = new Doctor({ polyclinicID: polyclinicID, name: data.name, speciality: data.speciality });
+        const newDoctor = new Doctor({ polyclinicID: polyclinicID, polyclinic: polyclinic.name, name: data.name, speciality: data.speciality });
         await newDoctor.save();
         return response.status(200).json({ STATUS: language.doctorAdded });
         
@@ -176,6 +176,7 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", 
         if(time) data.time = time; 
         if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.dateReq });
         if(new Date(data.date) < new Date()) return response.status(400).json({ ERROR: language.invalidDate });
+        if(new Date(data.date) < new Date(Date.setMonth(Date.getMonth() + 7))) return response.status(400).json({ ERROR: language.invalidDate });
 
         const appointment = await Appointment.findOne({ doctorID: doctorID, date: data.date});
         if(appointment) return response.status(400).json({ ERROR: language.appointmentAlreadyExists });

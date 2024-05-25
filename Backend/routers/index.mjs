@@ -1,14 +1,14 @@
 import { Router } from "express";
 import usersRouter from "./users.mjs";
 import adminPanelRouter from "./admin-panel.mjs";
-import hospitalsRouter from "./hospitals.mjs";
+import polyclinicsRouter from "./polyclinics.mjs";
 import turkish from "../languages/turkish.mjs";
 
 const router = Router();
 
 router.use(usersRouter);
 router.use(adminPanelRouter);
-router.use(hospitalsRouter);
+router.use(polyclinicsRouter);
 
 // Dil Değiştirme API'si
 router.post("/setLanguage/:languageName", (request, response) => {

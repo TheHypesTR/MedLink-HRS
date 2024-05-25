@@ -6,6 +6,11 @@ const DoctorSchema = new mongoose.Schema({
         ref: "Polyclinic",
         required: true,
     },
+    polyclinic: {
+        type: mongoose.Schema.Types.String,
+        ref: "Polyclinic",
+        required: true,
+    },
     name: {
         type: mongoose.Schema.Types.String,
         required: true,

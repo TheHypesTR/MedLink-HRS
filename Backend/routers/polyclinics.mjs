@@ -38,6 +38,21 @@ router.get("/polyclinic/:polyclinicID", async (request, response) => {
     }
 });
 
+// Tüm Polikliniklerdeki Doktorları Listeleyen API.
+router.get("/doctor", async (request, response) => {
+    const language = LoadLanguage(request);
+    try {
+        const doctors = await Doctor.find();
+        if(!doctors || doctors.length === 0) return response.status(404).json({ ERROR: language.doctorNotListing });
+        return response.status(200).json(doctors);
+
+    } catch (err) {
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.doctorNotListing, ERROR);
+        return response.status(400).json({ ERROR: err.message });
+    }
+});
+
 // ID'si Belirtilen Poliklinikteki Doktorları Listeleyen API.
 router.get("/polyclinic/:polyclinicID/doctor", async (request, response) => {
     const language = LoadLanguage(request);

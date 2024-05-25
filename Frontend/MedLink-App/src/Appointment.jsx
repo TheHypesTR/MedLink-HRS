@@ -24,12 +24,12 @@ function Appointment() {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
-                if(data.ERROR) 
+                if(data.ERROR) {
                     alert(data.ERROR);
+                    setPolyclinics([]);
+                }
                 if(data)
                     setPolyclinics(data);
-                else
-                    setPolyclinics([]);
             })
         
         } catch (err) {
@@ -51,9 +51,9 @@ function Appointment() {
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 if(data.ERROR) {
                     alert(data.ERROR);
+                    setDoctors([]);
                     return;
                 }
                 if(data)
@@ -104,7 +104,7 @@ function Appointment() {
     return (
         <form className="katman1-randevu" onSubmit={randevuOlustur}>
             <p className="isim1">Poliklinik Seçiniz</p>
-            <select className="polikliniksec" onChange={(e) => setPolyclinicID(e.target.value)}>
+            <select className="polikliniksec" required onChange={(e) => setPolyclinicID(e.target.value)}>
                 <option value="">Poliklinik Seçiniz</option>
                 {polyclinics.map(polyclinic => (
                     <option key={polyclinic._id} value={polyclinic._id}>{polyclinic.name}</option>
@@ -112,7 +112,7 @@ function Appointment() {
             </select>
     
             <p className="isim1">Doktor Seçiniz</p>
-            <select className="polikliniksec" onChange={(e) => setDoctorID(e.target.value)} value={doctorID}>
+            <select className="polikliniksec" required onChange={(e) => setDoctorID(e.target.value)} value={doctorID}>
                 <option value="">Doktor Seçiniz</option>
                 {doctors.map(doctor => (
                     <option key={doctor._id} value={doctor._id}>{doctor.name}</option>
@@ -120,7 +120,7 @@ function Appointment() {
             </select>
     
             <p className="isim1" >Randevu Tarihi</p>
-            <input type="date" id="randevutarihi" value={date} onChange={(e) => setDate(e.target.value)} />
+            <input type="date" id="randevutarihi" required value={date} onChange={(e) => setDate(e.target.value)} />
 
             <p className="isim1">Randevu Saati</p>
             <input type="time" id="randevusaati" />

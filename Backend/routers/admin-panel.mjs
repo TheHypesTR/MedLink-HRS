@@ -215,7 +215,7 @@ router.put("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appoin
 });
 
 // ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Randevusunu Silme API'si.
-router.delete("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
+router.delete("/admin/doctor/:doctorID/appointment/:appointmentID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
         const { polyclinicID, doctorID, appointmentID } = request.params;

@@ -6,7 +6,7 @@ function PolyCard({ name, description, imgSrc, onClick }) {
 
   const handleClick = () => {
     setSelected(!selected);
-    onClick(); // Kart tıklandığında, üst bileşene geri dönerek işlevi çağırır.
+    onClick();
   };
 
   return (

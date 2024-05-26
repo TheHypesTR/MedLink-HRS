@@ -68,36 +68,20 @@ function Register() {
     };
     
     return (
-        <div className="katman1-register">
+
             <div className='formbox-register'>
                 <form onSubmit={kayitOl}>
-                <h1>Kayıt Ol</h1>
-                <div className='input-box'>
-                    <input type='text' placeholder='İsim - Soyisim' required value={name} onChange={(e) => setName(e.target.value)} />
-                </div>
-                <div className='input-box'>
-                    <input type='text' placeholder='TC Kimlik No' required maxLength={11} value={TCno} onChange={(e) => setTCno(e.target.value)} />
-                </div>
-                <div className='input-box'>
-                    <input type='email' placeholder='E-Mail' required value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className='input-box'>
-                    <input type='password' placeholder='Şifre' required value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </div>
-                    <div className='sifreunut-benihatirla'>
-                        <label htmlFor=""><input type="checkbox" value={checkboxState} onChange={(e) => setCheckboxState(e.target.checked)} />Şartlar ve koşulları kabul ediyorum</label>
-                    </div>
-
-                    <button type='submit'>Kayıt Ol</button>
-
-                    <div className='kayit-ol'>
-                        <p>Zaten kayıtlı mısınız?
-                            <a href="Login"> Giriş Yapın</a>
-                        </p>
-                    </div>
-                    </form>
+                <h1 className='yazi1'>Kayıt Ol</h1>
+                    <div><span className='icon2'><img src='./assets/username.png' alt='username'  /></span><input type="text" placeholder="İsim - Soyisim" className='input-box2'/></div>
+                    <div><span className='icon2'><img src="./assets/password.jpg" alt="password" /></span><input type="email" placeholder="E-Mail" className='input-box2' /></div>
+                    <div><span className='icon2'><img src='./assets/username.png' alt='username'  /></span><input type="text" placeholder="T.C Kimlik No" className='input-box2'/></div>
+                    <div><span className='icon2'><img src='./assets/username.png' alt='username'  /></span><input type="password" placeholder="Şifre" className='input-box2'/></div>
+                    <div className='sifre-unut'><input type="checkbox" /><a href="#" className='sifrelink'>Şartları ve koşulları kabul ediyorum</a></div>
+                    <button className='girisbutonu'>Kayıt Ol</button>
+                    <div className='kayitbutondivi'><p className='p2'>Hesabınız varsa</p><a href="#" className='kayitbuton'> giriş yapın</a></div>
+                
+                </form>
             </div>
-        </div>
     );
 }
 

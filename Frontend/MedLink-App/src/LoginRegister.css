@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Yeseva+One&display=swap');
 .katman1{
     position: relative;
     width: 450px;
     height: 450px;
-    background-color: #28ca00;
-    border-radius: 10px;
+    background-color: #ffffff;
+    border-radius: 0px;
     display: flex;
     align-items: center;
     color: #fff;
@@ -123,4 +125,68 @@ form .kayit-ol {
 
 .kayit-ol p a:hover {
     text-decoration: underline;
+}
+
+.yazi1{
+    font-size: 50px;
+    color: #024100;
+    text-align: center;
+    font-family: 'Yeseva One', sans-serif;
+    font-weight: 100;
+    width: 500px;
+}
+
+.input-box2{
+    position: relative;
+    margin-top: 40px;
+    width: 100%;
+    border: 2px solid #024100;
+    height: 50px;
+    background: none;
+    padding-left: 10px;
+}
+
+.sifre-unut{
+    display: flex;
+    margin-top: 16px;
+    font-weight: 600;
+    font-family: "Montserrat", sans-serif;
+    font-size: 15px;
+    padding: 5px 5px 5px 5px;
+    color: darkgreen;
+}
+
+.sifrelink{
+    text-decoration: none;
+    color: darkgreen;
+    margin-left: 5px;
+}
+
+.girisbutonu{
+    border-radius: 0px;
+    width: 100%;
+    background-color: darkgreen;
+    margin-top: 20px;
+}
+
+.p2{
+    font-family: "Montserrat", sans-serif;
+    font-size: 17px;
+    display: inline;
+}
+
+.kayitbuton{
+    display: relative;
+    font-size: 17px;
+    font-family: "Montserrat", sans-serif;
+    text-decoration: none;
+    color: darkgreen;
+    margin-left: 5px;
+}
+
+.kayitbutondivi{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    text-align: center;
 }

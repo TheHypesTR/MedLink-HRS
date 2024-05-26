@@ -59,31 +59,18 @@ function Login() {
     };
 
     return (
-        <div className="katman1">
+        
             <div className='formbox-login'>
                 <form onSubmit={girisYap}>
-                <h1>Giriş Yap</h1>
-                <div className='input-box'>
-                    <input type='text' placeholder='TC Kimlik No' required maxLength={11} value={TCno} onChange={(e) => setTCno(e.target.value)} />
-                </div>
-                <div className='input-box'>
-                    <input type='password' placeholder='Şifre' required value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </div>
-                    <div className='sifreunut-benihatirla'>
-                        <label htmlFor=""><input type="checkbox" />Beni Hatırla</label>
-                        <a href='Forgot'> Şifremi Unuttum</a>
-                    </div>
-
-                    <button type='submit'>Giriş Yap</button>
-
-                    <div className='kayit-ol'>
-                        <p>Hesabınız yok mu?
-                            <a href="Register"> Kayıt Olun</a>
-                        </p>
-                    </div>
+                    <h1 className='yazi1'>Giriş Yap</h1>
+                    <div><span className='icon2'><img src='./assets/username.png' alt='username'  /></span><input type="text" placeholder="T.C Kimlik No" className='input-box2'/></div>
+                    <div><span className='icon2'><img src="./assets/password.jpg" alt="password" /></span><input type="password" placeholder="Şifre" className='input-box2' /></div>
+                    <div className='sifre-unut' ><a href="#" className='sifrelink'>Şifremi Unuttum</a></div>
+                    <button className='girisbutonu'>Giriş Yap</button>
+                    <div className='kayitbutondivi'><p className='p2'>Hesabınız yoksa</p><a href="#" className='kayitbuton'> kayıt olun</a></div>
+                
                 </form>
             </div>
-        </div>
     );
 }
 

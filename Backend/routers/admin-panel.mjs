@@ -273,16 +273,22 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserL
         const { polyclinicID, doctorID } = request.params;
         const doctor = await DoctorFinder(polyclinicID, doctorID, request);
 
-        const { type, day, startDay } = request.body;
+        const { type, startDay, endDay } = request.body;
         let data = {};
         if(type) data.type = type;
-        if(day) data.day = day;
         if(startDay) data.startDay = startDay;
+        if(endDay) data.endDay = endDay;
         if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.dataNotFound });
-        if(data.day < 1) return response.status(400).json({ ERROR: language.invalidReportDuration });
-        
-        data.startDay = data.startDay || new Date(Date.now() + 1000 * 60 * 60 * 3);
-        data.endDay = new Date(data.startDay.getTime() + (data.day * 1000 * 60 * 60 * 21));
+        if(startDay > endDay) return response.status(400).json({ ERROR: language.invalidReportDuration });
+        if(startDay < Date.now()) return response.status(400).json({ ERROR: language.invalidReportDuration });
+
+        const overlappingReports = await Report.find({ doctorID: doctor._id, $or: [
+                { startDay: { $lte: endDay }, endDay: { $gte: startDay } },
+                { startDay: { $gte: startDay, $lte: endDay } },
+                { endDay: { $gte: startDay, $lte: endDay } }]});
+                
+        if (overlappingReports.length > 0) return response.status(400).json({ ERROR: language.reportOverlap });
+
         const report = new Report({ doctorID: doctor._id, ...data });
         await report.save();
         return response.status(201).json({ STATUS: language.reportAdded });
@@ -295,11 +301,10 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserL
 });
 
 // ID'si Belirtilen Polikliniğinin ID'si Belirtilen Doktorununun ID'si Belirtilen Raporunu Silme API'si.
-router.delete("/admin/polyclinic/:polyclinicID/doctor/:doctorID/report/:reportID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
+router.delete("/admin/doctor/:doctorID/report/:reportID/delete", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
-        const { polyclinicID, doctorID, reportID } = request.params;
-        await PolyclinicFinder(polyclinicID, request);
+        const { doctorID, reportID } = request.params;
         const report = await ReportFinder(doctorID, reportID, request);
         await Report.deleteOne(report);
         return response.status(200).json({ STATUS: language.reportDeleted });

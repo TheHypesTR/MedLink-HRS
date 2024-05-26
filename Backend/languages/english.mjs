@@ -45,6 +45,7 @@ const english = {
     reportNotAdding: "Doctor's Report Not Adding!!",
     reportNotDeleting: "Doctor's Report Not Deleting!!",
     reportNotListing: "Doctor's Reports Not Listing!!",
+    reportOverlap: "Report's Overlapping!!",
     
     // PARTITION OF DOCTOR'S REPORT INFO
     reportAdded: "Doctor's Report Added Successfully!!",

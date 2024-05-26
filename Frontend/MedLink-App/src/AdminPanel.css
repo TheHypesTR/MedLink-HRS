@@ -43,7 +43,7 @@
     border-radius: 5px;
     transition: background-color 0.3s;
     margin-top: 20px;
-    max-width: 250px;
+    max-width: 350px;
   }
   
   .open-popup-button:hover {
@@ -112,7 +112,6 @@ ul {
     border: 1px solid rgb(0, 255, 0);
     transition: all 0.3s ease;
     font-size: 16px;
-    cursor: pointer;
     width: 97.5%;
     height: 6vh;
     justify-content: space-between;
@@ -124,7 +123,7 @@ ul {
 
 .edit-button,
 .delete-button,
-.show-doctor-button
+.show-button
 {
   margin-left: 10px;
   padding: 5px 10px;
@@ -144,7 +143,7 @@ ul {
     color: white;
   }
 
-  .show-doctor-button {
+  .show-button {
     background-color: #9111ec;
     color: white;
   }
@@ -156,7 +155,7 @@ ul {
   }
 
   .doctor-count {
-    font-weight: normal;
+    margin-block: auto;
     color:rgb(132, 244, 132);
   }
 
@@ -224,4 +223,17 @@ ul {
     background-color: #c83a56;
   }
 
+  .reportShowType{
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  .reportShowStart{
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .reportShowEnd{
+    margin-left: 10px;
+  }
   

@@ -10,10 +10,6 @@ const ReportsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,
     },
-    day: {
-        type: mongoose.Schema.Types.Number,
-        default: 0,
-    },
     startDay: {
         type: mongoose.Schema.Types.Date,
         required: true,

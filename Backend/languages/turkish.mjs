@@ -45,6 +45,7 @@ const turkish = {
     reportNotAdding: "Doktor İzni Eklenemedi!!",
     reportNotDeleting: "Doktor İzni Silinemedi!!",
     reportNotListing: "Doktor İzin Bilgileri Yüklenemedi!!",
+    reportOverlap: "Aynı Zaman Aralığında Başka Rapor Mevcut!!",
     
     // PARTITION OF DOCTOR'S REPORT INFO
     reportAdded: "Doktor İzni Ekleme İşlemi Başarılı!!",

@@ -87,7 +87,7 @@ h3{
 .listepanel{
     display: inline-block;
     background: linear-gradient(to bottom, #108ea2 0%, #cde9ea 50%, #2cc7ff 100%);
-    width: 800px;
+    width: 900px;
     height: 600px;
     user-select: none;
     border-radius: 10px;
@@ -149,10 +149,15 @@ ul {
     color: white;
   }
 
- 
-
   .poliklinik-ad {
     flex-grow: 1;
+    margin: 10px;
+    font-weight: bold;
+  }
+
+  .doctor-count {
+    font-weight: normal;
+    color:rgb(132, 244, 132);
   }
 
   .buttons {

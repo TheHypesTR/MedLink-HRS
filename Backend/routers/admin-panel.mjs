@@ -70,6 +70,7 @@ router.put("/admin/polyclinic/:polyclinicID/edit", UserLoginCheck, UserPermCheck
         if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.polyclinicNameReq });
         
         await Polyclinic.updateOne(polyclinic, { $set: data }, { new: true });
+        await Doctor.updateMany({ polyclinicID: polyclinicID }, { $set: { polyclinic: name }, new: true });
         return response.status(200).json({ STATUS: language.polyclinicUpdated });
         
     } catch (err) {
@@ -86,6 +87,7 @@ router.delete("/admin/polyclinic/:polyclinicID/delete", UserLoginCheck, UserPerm
         const polyclinicID = request.params.polyclinicID;        
         const polyclinic = await PolyclinicFinder(polyclinicID, request);
         await Polyclinic.deleteOne(polyclinic);
+        await Doctor.deleteMany({ polyclinicID: polyclinic._id });
         return response.status(200).json({ STATUS: language.polyclinicDeleted });
         
     } catch (err) {
@@ -150,6 +152,8 @@ router.delete("/admin/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLog
         const { polyclinicID, doctorID } = request.params;
         const doctor = await DoctorFinder(polyclinicID, doctorID, request);
         await Doctor.deleteOne(doctor);
+        await Appointment.deleteMany({ doctorID: doctorID });
+        await Report.deleteMany({ doctorID: doctorID });
         return response.status(200).json({ STATUS: language.doctorDeleted });
         
     } catch (err) {

@@ -9,10 +9,14 @@ function AdminPanel() {
   const [polyclinicDescription, setPolyclinicDescription] = useState("");
   const [selectedPolyclinic, setSelectedPolyclinic] = useState(null);
   const [doctors, setDoctors] = useState([]);
+  const [allDoctors, setAllDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [doctorName, setDoctorName] = useState("");
   const [doctorSpeciality, setDoctorSpeciality] = useState("");
   const [appointmentDate, setAppointmentDate] = useState("");
+  const [reportType, setReportType] = useState("");
+  const [reportDate, setReportDate] = useState("");
+  const [reportDay, setReportDay] = useState("");
   const [report, setReport] = useState("");
   const [isPromoteUserPopupOpen, setIsPromoteUserPopupOpen] = useState(false);
   const [isPolyclinicPopupOpen, setIsPolyclinicPopupOpen] = useState(false);
@@ -60,6 +64,7 @@ function AdminPanel() {
   // Sayfa Açıldığında Poliklinikleri Listeleyen API.
   useEffect(() => {
     polyclinicControl();
+    doctorControl();
   }, []);
 
   // DB'den Poliklinkleri Listeleyen API.
@@ -197,6 +202,31 @@ function AdminPanel() {
     setIsPolyclinicEditPopupOpen(true);
   };
 
+  // Database'den Doktorları Çeken APİ.
+  const doctorControl = () => {
+      try {
+          fetch(`http://localhost:${config.PORT}/doctor`, {
+              method: "GET",
+              credentials: "include",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+          })
+          .then((response) => response.json())
+          .then((data) => {
+              if(data.ERROR) {
+                  alert(data.ERROR);
+                  setAllDoctors([]);
+              }
+              if(data)
+                  setAllDoctors(data);
+          });
+      
+      } catch (err) {
+          console.log(err);
+      }
+  };
+
   // Seçilen Poliklinikteki Doktorları Görüntüleyen API.
   const showDoctor = (id) => {
     try {
@@ -209,7 +239,8 @@ function AdminPanel() {
       .then((data) => {
         if (data.ERROR) {
           alert(data.ERROR);
-          addDoctor();
+          if (doctors.length === 0)
+            setIsDoctorPopupOpen(true);
         } 
         if (data) {
           setDoctors(data);
@@ -230,7 +261,8 @@ function AdminPanel() {
     };
     
     try {
-        e.preventDefault();        
+        e.preventDefault();
+        let errorMessage = "";     
         if(doctorName && doctorSpeciality) {
             await fetch(`http://localhost:${config.PORT}/admin/polyclinic/${selectedPolyclinic}/doctor/add`, {
                 method: "POST",
@@ -243,7 +275,8 @@ function AdminPanel() {
             .then((response) => response.json())
             .then((data) => {
                 if(data.ERROR) {
-                    alert(data.ERROR);
+                  Array.isArray(data.ERROR) ? errorMessage = data.ERROR.map(err => err.msg).join("\n") : errorMessage = data.ERROR;
+                  alert(errorMessage);
                 }
                 if(data.STATUS) {
                     alert(data.STATUS);
@@ -276,6 +309,7 @@ function AdminPanel() {
       .then((data) => {
         if (data.ERROR) {
           alert(data.ERROR);
+          showPolyclinics();
         } 
         if(data.STATUS) {
           alert(data.STATUS);
@@ -332,6 +366,10 @@ function AdminPanel() {
     setIsDoctorEditPopupOpen(true);
   };
 
+  const getDoctorCount = (polyclinicId) => {
+    return allDoctors.filter(doctor => doctor.polyclinicID === polyclinicId).length;
+  };
+
   // Randevu Ekleme API'si.
   const addAppointment = async (e) => {
     try {
@@ -373,6 +411,45 @@ function AdminPanel() {
   };
 
   // Randevu Ekleme API'si.
+  const addReport = async (e) => {
+    try {
+      const formData = {
+        type: reportType,
+        day: reportDay,
+        startDay: reportDate,
+      };
+
+        e.preventDefault();        
+        if(reportType && reportDay && reportDate) {
+            await fetch(`http://localhost:${config.PORT}/admin/polyclinic/${selectedDoctor.polyclinicID}/doctor/${selectedDoctor._id}/giveReport`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if(data.ERROR) {
+                    alert(data.ERROR);
+                }
+                if(data.STATUS) {
+                    alert(data.STATUS);
+                    setReportDate("");
+                    setReportDay("");
+                    setReportType("");
+                    setIsReportPopupOpen(false);
+                }
+            });
+        }
+        else
+            throw new Error("Lütfen Gerekli Alanları Doldurunuz!!");
+        
+    } catch (err) {
+        console.log(err);
+      }
+  };
 
   const openReportPopup = (doctor) => {
     setSelectedDoctor(doctor);
@@ -506,7 +583,8 @@ function AdminPanel() {
           ) : (
             polyclinics.map((polyclinic, index) => (
               <li key={index} className='li1'>
-                {polyclinic.name}
+                <span className="polyclinic-name">{polyclinic.name}</span>
+                <span className="doctor-count">(Doktor Sayısı: {getDoctorCount(polyclinic._id)})</span>
                 <div className="button-container">
                   <button className="delete-button" onClick={() => polyclinicDelete(polyclinic._id)}>Sil</button>
                   <button className="edit-button" onClick={() => openEditPopup(polyclinic)}>Düzenle</button>
@@ -602,11 +680,26 @@ function AdminPanel() {
               <h3>Rapor Ekle</h3>
               <form onSubmit={addReport}>
                 <textarea
-                  placeholder='Raporu giriniz'
+                  placeholder='Raporu Tipini Giriniz'
                   className='input-box'
                   required
-                  value={report}
-                  onChange={(e) => setReport(e.target.value)}
+                  value={reportType}
+                  onChange={(e) => setReportType(e.target.value)}
+                />
+                <textarea
+                  placeholder='İzin Süresi Giriniz (Gün)'
+                  className='input-box'
+                  required
+                  value={reportDay}
+                  onChange={(e) => setReportDay(e.target.value)}
+                />
+                <input
+                  type="date"
+                  placeholder='Raporu Tarihi'
+                  className='input-box'
+                  required
+                  value={reportDate}
+                  onChange={(e) => setReportDate(e.target.value)}
                 />
                 <button type='submit' className='button'>Rapor Ekle</button>
               </form>

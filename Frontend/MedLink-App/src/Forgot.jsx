@@ -41,28 +41,13 @@ function Forgot() {
     }
 
     return(
-        <div className="katman1-forgot">
         <div className='formbox-forgot'>
             <form onSubmit={sifremiUnuttum}>
-            <h1>Şifre Sıfırlama</h1>
-            <div className='input-box'>
-                <input type='email' placeholder='E-Mail' required value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
-                <button type='submit'>Mail Gönder</button>
-                <div className='kayit-ol'>
-                        <p>Zaten hesabınız var mı?
-                            <a href="Login"> Giriş Yapın</a>
-                        </p>
-                    </div>
-                    <div className='kayit-ol'>
-                        <p>Hesabınız yok mu?
-                            <a href="Register"> Kayıt Olun</a>
-                        </p>
-                    </div>
-                
+            <h1 className='yazi1'>Şifremi Sıfırla</h1>
+                    <div><span className='icon2'><img src='./src/assets/username.png' alt='username'  /></span><input type="email" placeholder="E-Mail" className='input-box2'/></div>
+                    <button className='girisbutonu'>Şifremi Sıfırla</button>
                 </form>
         </div>
-    </div>
     );
 }
 

@@ -47,17 +47,13 @@ function PasswordForgot() {
     }
 
     return(
-        <div className="katman1-forgot">
             <div className='formbox-forgot'>
                 <form onSubmit={sifreSifirla}>
-                    <h1>Şifre Sıfırlama</h1>
-                    <div className='input-box'>
-                        <input type='text' placeholder='Yeni Şifreyi Giriniz' required value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </div>
-                    <button type='submit'>Sıfırla</button>
+                <h1 className='yazi1'>Şifre Sıfırlama</h1>
+                    <div><span className='icon2'><img src='./src/assets/username.png' alt='username'  /></span><input type="text" placeholder="Yeni Şifreyi Giriniz" className='input-box2'/></div>
+                    <button className='girisbutonu'>Şifremi Sıfırla</button>
                 </form>
             </div>
-        </div>
     );
 }
 

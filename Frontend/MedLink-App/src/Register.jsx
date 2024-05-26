@@ -34,7 +34,7 @@ function Register() {
             e.preventDefault();
             let errorMessage = "";
             if(checkboxState === false) {
-                alert("'Şartlar ve koşulları kabul ediyorum' Kısmını İşaretleyiniz!!");
+                alert("'Şartlar ve Koşulları Kabul Ediyorum' Kısmını İşaretleyiniz!!");
                 return;
             }
                 
@@ -72,13 +72,13 @@ function Register() {
             <div className='formbox-register'>
                 <form onSubmit={kayitOl}>
                 <h1 className='yazi1'>Kayıt Ol</h1>
-                    <div><span className='icon2'><img src='./src/assets/username.png' alt='username'  /></span><input type="text" placeholder="İsim - Soyisim" className='input-box2'/></div>
-                    <div><span className='icon2'><img src="./src/assets/password.jpg" alt="password" /></span><input type="email" placeholder="E-Mail" className='input-box2' /></div>
-                    <div><span className='icon2'><img src='./src/assets/username.png' alt='username'  /></span><input type="text" placeholder="T.C Kimlik No" className='input-box2'/></div>
-                    <div><span className='icon2'><img src='./src/assets/username.png' alt='username'  /></span><input type="password" placeholder="Şifre" className='input-box2'/></div>
-                    <div className='sifre-unut'><input type="checkbox" /><a href="#" className='sifrelink'>Şartları ve koşulları kabul ediyorum</a></div>
+                    <div><span className='icon2'><img src='./src/assets/username.png' alt='name surname'  /></span><input type="text" placeholder="İsim - Soyisim" className='input-box2' value={name} onChange={(e) => setName(e.target.value)} /></div>
+                    <div><span className='icon2'><img src='./src/assets/username.png' alt='TCno'  /></span><input type="text" placeholder="T.C Kimlik No" className='input-box2' maxLength={11} value={TCno} onChange={(e) => setTCno(e.target.value)} /></div>
+                    <div><span className='icon2'><img src="./src/assets/username.png" alt="email" /></span><input type="email" placeholder="E-Mail" className='input-box2' value={email} onChange={(e) => setEmail(e.target.value)} /></div>
+                    <div><span className='icon2'><img src='./src/assets/password.jpg' alt='password'  /></span><input type="password" placeholder="Şifre" className='input-box2' value={password} onChange={(e) => setPassword(e.target.value)} /></div>
+                    <div className='sifre-unut'><input type="checkbox" value={checkboxState} onChange={(e) => setCheckboxState(e.target.checked)} /><a href="#" className='sifrelink' >Şartları ve Koşulları Kabul Ediyorum</a></div>
                     <button className='girisbutonu'>Kayıt Ol</button>
-                    <div className='kayitbutondivi'><p className='p2'>Hesabınız varsa</p><a href="#" className='kayitbuton'> giriş yapın</a></div>
+                    <div className='kayitbutondivi'><p className='p2'>Hesabınız Varsa</p><a href="/Login" className='kayitbuton'> Giriş Yapın</a></div>
                 
                 </form>
             </div>

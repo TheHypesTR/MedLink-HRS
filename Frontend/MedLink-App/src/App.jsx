@@ -10,6 +10,8 @@ import Polyclinics from './Polyclinics.jsx';
 import AdminPanel from './AdminPanel.jsx';
 import Header from './components/Header.jsx';
 import PolyCards from './PolyCards.jsx';
+import WelcomePage from './welcome-page.jsx';
+import Footer from './Footer.jsx';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/AdminPanel" element={<AdminPanel />} />
           <Route path="/PolyCards" element={<PolyCards />} />
           <Route path="/auth/user/reset-password/:userid/:token" element={<RedirectWithParams />} />
+          <Route path="/" element={<WelcomePage />} />
+          <Route path="/Footer" element={<Footer />} />
         </Routes>
       </Router>
     </div>

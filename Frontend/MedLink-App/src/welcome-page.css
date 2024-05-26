@@ -1,0 +1,27 @@
+.news {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.news-item {
+    width: 100%;
+    max-width: 1200px;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    margin: 20px 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    background-image: image("./src/assets/hospital.png");
+}
+
+.news-content {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+}

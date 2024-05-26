@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import './PolyCards.css';
 
-function PolyCard({ name, description, imgSrc }) {
+function PolyCard({ name, description, imgSrc, onClick }) {
   const [selected, setSelected] = useState(false);
 
   const handleClick = () => {
     setSelected(!selected);
+    onClick(); // Kart tıklandığında, üst bileşene geri dönerek işlevi çağırır.
   };
 
   return (
@@ -15,7 +16,7 @@ function PolyCard({ name, description, imgSrc }) {
     >
       <img 
         className="polycard-image" 
-        src={imgSrc || '/assets/default-card.jpg'} 
+        src={imgSrc || './src/assets/default-card.jpg'} 
         alt={name} 
       />
       <h2 className="polycard-title">{name}</h2>

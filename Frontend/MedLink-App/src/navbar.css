@@ -32,6 +32,7 @@
   .dropdown {
     position: relative;
     display: inline-block;
+    max-width: 120px;
   }
   
   .dropbtn {
@@ -47,14 +48,20 @@
     display: none;
     position: absolute;
     background-color: #464866;
-    min-width: 160px;
+    min-width: 175px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
   }
   
   .dropdown-content ol {
     list-style-type: none;
     padding: 0;
+    margin-left: -35px;
+    text-align: left;
   }
   
   .dropdown-content ol li {

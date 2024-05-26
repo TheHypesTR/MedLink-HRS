@@ -50,7 +50,7 @@ function PasswordForgot() {
             <div className='formbox-forgot'>
                 <form onSubmit={sifreSifirla}>
                 <h1 className='yazi1'>Şifre Sıfırlama</h1>
-                    <div><span className='icon2'><img src='./src/assets/username.png' alt='username' /></span><input type="text" placeholder="Yeni Şifreyi Giriniz" className='input-box2' value={password} onChange={(e) => setPassword(e.target.value)} /></div>
+                    <div><img src='./src/assets/username.png' alt='username' className="icon3"/><input type="text" placeholder="Yeni Şifreyi Giriniz" className='input-box2' value={password} onChange={(e) => setPassword(e.target.value)} /></div>
                     <button className='girisbutonu'>Şifremi Sıfırla</button>
                 </form>
             </div>

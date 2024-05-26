@@ -143,7 +143,7 @@ form .kayit-ol {
     border: 2px solid #024100;
     height: 50px;
     background: none;
-    padding-left: 10px;
+    padding-left: 50px;
 }
 
 .sifre-unut{
@@ -192,6 +192,9 @@ form .kayit-ol {
 }
 
 .icon3{
-    margin: 0;
-    padding: 0;
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    margin-top: 46px;
+    margin-left: 10px;
 }

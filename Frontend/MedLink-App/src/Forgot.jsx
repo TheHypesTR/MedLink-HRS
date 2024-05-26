@@ -44,7 +44,7 @@ function Forgot() {
         <div className='formbox-forgot'>
             <form onSubmit={sifremiUnuttum}>
             <h1 className='yazi1'>Şifremi Sıfırla</h1>
-                    <div><span className='icon2'><img src='./src/assets/username.png' alt='username' /></span><input type="email" placeholder="E-Mail" className='input-box2' value={email} onChange={(e) => setEmail(e.target.value)} /></div>
+                    <div><img src='./src/assets/username.png' alt='username' className="icon3" /><input type="email" placeholder="E-Mail" className='input-box2' value={email} onChange={(e) => setEmail(e.target.value)} /></div>
                     <button className='girisbutonu'>Şifremi Sıfırlama Bağlantısı Gönder</button>
                 </form>
         </div>

@@ -63,8 +63,8 @@ function Login() {
             <div className='formbox-login'>
                 <form onSubmit={girisYap}>
                     <h1 className='yazi1'>Giriş Yap</h1>
-                    <div><span className='icon2'><img src='./src/assets/username.png' alt='username' className='icon3' /></span><input type="text" placeholder="T.C Kimlik No" className='input-box2' maxLength={11} value={TCno} onChange={(e) => setTCno(e.target.value)} /></div>
-                    <div><span className='icon2'><img src="./src/assets/password.jpg" alt="password" className='icon3'/></span><input type="password" placeholder="Şifre" className='input-box2' value={password} onChange={(e) => setPassword(e.target.value)} /></div>
+                    <div><img src='./src/assets/username.png' alt='username' className='icon3' /><input type="text" placeholder="T.C Kimlik No" className='input-box2' maxLength={11} value={TCno} onChange={(e) => setTCno(e.target.value)} /></div>
+                    <div><img src="./src/assets/password.png" alt="password" className='icon3'/><input type="password" placeholder="Şifre" className='input-box2' value={password} onChange={(e) => setPassword(e.target.value)} /></div>
                     <div className='sifre-unut' ><a href="/Forgot" className='sifrelink'>Şifremi Unuttum</a></div>
                     <button className='girisbutonu'>Giriş Yap</button>
                     <div className='kayitbutondivi'><p className='p2'>Hesabınız Yoksa</p><a href="/Register" className='kayitbuton'> Kayıt Olun</a></div>

@@ -7,12 +7,13 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <Link to="/">Ana Sayfa</Link>
-            <Dropdown title="Kurumsal" items={["Hakkımızda", "Organizasyon", "Misyon-Vizyon", "Hasta Hakları"]} />
-            <Link to="/Departments">Bölümler</Link>
+            <Link to="/Polyclinics">Tıbbi Birimler</Link>
             <Link to="/Doctors">Doktorlar</Link>
             <Link to="/Blog">Blog</Link>
-            <Dropdown title="İletişim" items={["+90 561 610 61 61", "@hastane.com", "@hastane.gmail.com"]} />
-            <Dropdown title="E-Randevu" items={[ {link: "/Appointment", label: "Randevu Al" }]} id="sola-al" />
+            <Link to="/Contact">İletişim</Link>
+            <Link to ="/AboutUs">Hakkımızda</Link>
+            <Dropdown title="E-Randevu" items={[ {link: "/Appointment", label: "Randevu Al" },
+                                                 {link: "/", label: "Randevu Sorgula"}]} id="sola-al" />
             <Dropdown 
                 title="Üye Girişi" 
                 items={[
@@ -20,9 +21,6 @@ const Navbar = () => {
                     { link: "/Register", label: "Kayıt Ol" }
                 ]}
             />
-            <Link to="/Appointment">Randevu Al</Link>
-            <Link to="/Polyclinics">Poliklinikler</Link>
-            <Link to="/AdminPanel">Admin Panel</Link>
         </div>
     );
 };

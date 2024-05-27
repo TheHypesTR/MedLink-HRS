@@ -120,6 +120,4 @@ router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentD
     }
 });
 
-router.post("/")
-
 export default router;

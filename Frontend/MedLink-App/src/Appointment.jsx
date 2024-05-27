@@ -9,6 +9,8 @@ function PolyCards() {
   const [selectedPolyclinic, setSelectedPolyclinic] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState("");
+  const [appointments, setAppointments] = useState([]);
+  const [selectedAppointment, setSelectedAppointment] = useState("");
   const [date, setDate] = useState("");
 
   // Sayfa Açıldığında Poliklinikleri Listeleyen API.
@@ -82,10 +84,39 @@ function PolyCards() {
     showPolyclinics();
   };
 
-  // Randevu Oluşturma API'si.
-  const randevuOlustur = async (e) => {
+  const randevuGoruntule = async (e) => {
     try {
         e.preventDefault();      
+        if(selectedDoctor, date) {
+            await fetch(`http://localhost:${config.PORT}/polyclinic/${selectedDoctor.polyclinicID}/doctor/${selectedDoctor._id}/appointment/${date}`, {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+                if(data.ERROR) {
+                  randevuOlustur()
+                }
+                if(data.STATUS) {
+                  setAppointments(data);
+                }
+            })
+        }
+        else
+            throw new Error("Lütfen Gerekli Alanları Doldurunuz!!");
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+  // Randevu Oluşturma API'si.
+  const randevuOlustur = async () => {
+    try {
         if(selectedDoctor, date) {
             await fetch(`http://localhost:${config.PORT}/admin/polyclinic/${selectedDoctor.polyclinicID}/doctor/${selectedDoctor._id}/appointment/add`, {
                 method: "POST",
@@ -144,7 +175,7 @@ function PolyCards() {
       )}{selectedDoctor && (
         <div className="appointment-form">
           <h2>{selectedDoctor.polyclinic} - {selectedDoctor.speciality + " " + selectedDoctor.name} ile Randevu Oluştur</h2>
-          <form onSubmit={randevuOlustur}>
+          <form onSubmit={randevuGoruntule}>
             <div>
               <label>Randevu Tarihi:</label>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />

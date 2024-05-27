@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PolyCard from './PolyCard';
 import config from '../config.mjs';
-import './PolyCards.css';
+import './Cards.css';
 
 function PolyCards() {
   const [polyclinics, setPolyclinics] = useState([]);
@@ -68,6 +68,12 @@ function PolyCards() {
     }
   };
 
+  const selectDoctor = (doctor) => {
+    setSelectedDoctor(doctor);
+    setDoctors([]);
+    showAppointments(doctor);
+  };
+
   return (
     <div>
       <div className="grid">
@@ -86,7 +92,13 @@ function PolyCards() {
           <h2>{selectedPolyclinic.name} Doktorları</h2>
           <ul>
             {doctors.map((doctor, index) => (
-              <li key={index}>{doctor.name}</li>
+              <PolyCard
+              key={index}
+              name={doctor.speciality + " " + doctor.name} 
+              description={doctor.polyclinic} 
+              imgSrc={doctor.imgSrc || './src/assets/default-card.jpg'}
+              onClick={() => selectDoctor(doctor)}
+            />
             ))}
           </ul>
         </div>

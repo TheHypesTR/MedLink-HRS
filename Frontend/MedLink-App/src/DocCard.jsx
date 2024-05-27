@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './Cards.css';
 
-function PolyCard({ name, description, imgSrc, onClick }) {
+function PolyCard({ name, polyclinicName, imgSrc, onClick }) {
   const [selected, setSelected] = useState(false);
 
   const handleClick = () => {
@@ -12,16 +12,16 @@ function PolyCard({ name, description, imgSrc, onClick }) {
 
   return (
     <div 
-      className={`polycard ${selected ? 'selected' : ''}`} 
+      className={`doccard ${selected ? 'selected' : ''}`} 
       onClick={handleClick}
     >
       <img 
-        className="polycard-image" 
+        className="doccard-image" 
         src={imgSrc || './src/assets/default-card.jpg'} 
         alt={name} 
       />
-      <h2 className="polycard-title">{name}</h2>
-      <p className="polycard-text">{description}</p>
+      <h2 className="doccard-name">{name}</h2>
+      <p className="doccard-polyclinicName">{polyclinicName}</p>
     </div>
   );
 }

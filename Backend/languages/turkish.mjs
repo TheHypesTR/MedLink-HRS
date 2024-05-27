@@ -32,13 +32,18 @@ const turkish = {
     appointmentNotUpdating: "Randevu Tarihi Bilgileri Güncellenemedi!!",
     appointmentNotDeleting: "Randevu Tarihi Silinemedi!!",
     appointmentNotListing: "Randevu Tarihi Bilgileri Yüklenemedi!!",
+    appointmentNotDeletingForUser: "Kullanıcının Randevu Bilgileri Bulunamadı!!",
     appointmentAlreadyExists: "Randevu Tarihi Halihazırda Mevcut!!",
+    appointmentAlreadyTaken: "Aynı Tarihte Başka Bir Kullanıcının Randevusu Var!!",
+    appointmentDuplicate: "Aynı Tarihte Aynı Doktordan Başka Randevu Alınamaz!!",
     appointmentTimeReq: "Randevu Tarihi İçin Zaman Bilgileri Gerekli!!",
 
     // PARTITION OF APPOINTMENT INFO
+    appointmentMade: "Randevu Alma İşlemi Başarılı!!",
     appointmentAdded: "Randevu Tarihi Ekleme İşlemi Başarılı!!",
     appointmentUpdated: "Randevu Tarihi Düzenleme İşlemi Başarılı!!",
     appointmentDeleted: "Randevu Tarihi Silme İşlemi Başarılı!!",
+    appointmentDeletedForUser: "Randevu İptali Başarılı!!",
 
     // PARTITION OF DOCTOR'S REPORT ERRORS
     reportNotFound: "Doktor İzni Yok!!",
@@ -52,15 +57,16 @@ const turkish = {
     reportDeleted: "Doktor İzni Silme İşlemi Başarılı!!",
 
     // PARTITION OF INVALID ERRORS
-    invalidLang: "Geçerli Bir Dil Seçiniz!!",
     invalidTC: "Geçersiz 'T.C. NO'!!",
     invalidDate: "Geçersiz Tarih!!",
+    invalidLang: "Geçerli Bir Dil Seçiniz!!",
+    invalidTimeSlot: "Geçersiz Randevu Saati!!",
     invalidPermission: "Sadece Yetkililer Girebilir!!",
     invalidPolyclinicID: "Geçersiz Poliklinik-ID!!",
+    invalidReportDuration: "Geçersiz Rapor Süresi!!",
+    invalidDoctorIDReportID: "Geçersiz Doktor-ID veya Doktor İzni-ID!!",
     invalidPolyclinicIDDoctorID: "Geçersiz Poliklinik-ID veya Doktor-ID!!",
     invalidDoctorIDAppointmentDate: "Geçersiz Doktor-ID veya Randevu Tarihi!!",
-    invalidDoctorIDReportID: "Geçersiz Doktor-ID veya Doktor İzni-ID!!",
-    invalidReportDuration: "Geçersiz Rapor Süresi!!",
     
     // PARTITION OF USER ERRORS
     userAlreadyAdmin: "Kullanıcı Halizhazırda Admin Yetkilerine Sahip!!",

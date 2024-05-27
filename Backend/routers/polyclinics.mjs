@@ -120,4 +120,57 @@ router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentD
     }
 });
 
+// Kullanıcnın ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Tarihi Belirtilen Randevusunu Oluşturan API.
+router.post("/doctor/:doctorID/appointment/:appointmentDate/makeAppointment", async (request, response) => {
+    const language = LoadLanguage(request);
+    try {
+        const { doctorID, appointmentDate } = request.params;
+        const { timeSlot } = request.body;
+        const appointment = await AppointmentFinder(doctorID, appointmentDate, request);
+
+        const userID = request.session.passport?.user;
+        if(!userID) return response.status(400).json({ ERROR: language.userNotLoggedIn });
+
+        const timeIndex = appointment.time[timeSlot];
+        if (!timeIndex) return response.status(400).json({ ERROR: language.invalidTimeSlot });
+        if (appointment.active[timeSlot] !== false) return response.status(400).json({ ERROR: language.appointmentAlreadyTaken });
+        if ((appointment.active).map((active) => active === userID).length > 1) return response.status(400).json({ ERROR: language.appointmentDuplicate });
+
+        appointment.active[timeSlot] = userID;
+        await appointment.save();
+        return response.status(200).json({ STATUS: language.appointmentMade });
+
+    } catch (err) {
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.appointmentNotAdding, ERROR);
+        return response.status(400).json({ ERROR: err.message });
+    }
+});
+
+// Kullanıcının ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Tarihi Belirtilen Randevusunu Silen API.
+router.delete("/doctor/:doctorID/appointment/:appointmentDate/deleteAppointment", async (request, response) => {
+    const language = LoadLanguage(request);
+    try {
+        const { doctorID, appointmentDate } = request.params;
+        const { timeSlot } = request.body;
+        const appointment = await AppointmentFinder(doctorID, appointmentDate, request);
+
+        const userID = request.session.passport?.user;
+        if(!userID) return response.status(400).json({ ERROR: language.userNotLoggedIn });
+
+        const timeIndex = appointment.time[timeSlot];
+        if (!timeIndex) return response.status(400).json({ ERROR: language.invalidTimeSlot });
+        if (appointment.active[timeSlot] !== userID) return response.status(400).json({ ERROR: language.appointmentNotDeletingForUser });
+
+        appointment.active[timeSlot] = false;
+        await appointment.save();
+        return response.status(200).json({ STATUS: language.appointmentDeleted });
+
+    } catch (err) {
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.appointmentNotDeletingForUser, ERROR);
+        return response.status(400).json({ ERROR: err.message });
+    }
+});
+
 export default router;

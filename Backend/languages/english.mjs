@@ -32,13 +32,18 @@ const english = {
     appointmentNotUpdating: "Appointment Not Updating!!",
     appointmentNotDeleting: "Appointment Not Deleting!!",
     appointmentNotListing: "Appointments Not Listing!!",
+    appointmentNotDeletingForUser: "No Appointment Information to be Deleted Found!!",
     appointmentAlreadyExists: "Appointment Already Exists!!",
+    appointmentAlreadyTaken: "Another User Has an Appointment on the Same Date!!",
+    appointmentDuplicate: "No other appointment can be made with the same doctor on the same date!!",
     appointmentTimeReq: "Appointment Time (Array) is Required!!",
 
     // PARTITION OF APPOINTMENT INFO
+    appointmentMade: "Appointment Made Successfully!!",
     appointmentAdded: "Appointment Added Successfully!!",
     appointmentUpdated: "Appointment Edited Successfully!!",
     appointmentDeleted: "Appointment Deleted Successfully!!",
+    appointmentDeletedForUser: "Appointment Cancellation Successful!!",
 
     // PARTITION OF DOCTOR'S REPORT ERRORS
     reportNotFound: "Doctor's Report Not Found!!",
@@ -52,15 +57,16 @@ const english = {
     reportDeleted: "Doctor's Report Deleted Successfully!!",
 
     // PARTITION OF INVALID ERRORS
-    invalidLang: "Invalid Language!!",
     invalidTC: "Invalid 'T.C. NO'!!",
     invalidDate: "Invalid Date!!",
+    invalidLang: "Invalid Language!!",
+    invalidTimeSlot: "Invalid Time Slot!!",
     invalidPermission: "Only Admins Can Enter!!",
     invalidPolyclinicID: "Invalid Polyclinic-ID!!",
+    invalidReportDuration: "Invalid Report Duration!!",
+    invalidDoctorIDReportID: "Invalid Doctor-ID or Report-ID!!",
     invalidPolyclinicIDDoctorID: "Invalid Polyclinic-ID or Doctor-ID!!",
     invalidDoctorIDAppointmentDate: "Invalid Doctor-ID or Appointment Date!!",
-    invalidDoctorIDReportID: "Invalid Doctor-ID or Report-ID!!",
-    invalidReportDuration: "Invalid Report Duration!!",
 
     // PARTITION OF USER ERRORS
     userAlreadyAdmin: "This User Already Admin!!",

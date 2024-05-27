@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import config from "../config.mjs";
 import './Polyclinics.css';
+import DefaultCard from "./assets/default-card.jpg";
 
 function Polyclinics() {
     const [polyclinics, setPolyclinics] = useState([]);
@@ -33,13 +34,21 @@ function Polyclinics() {
   }, []);
 
     return (
-        <div className="polyclinics">
-            {polyclinics.map((polyclinic, index) => (
-                <div className="card" key={index}>
-                    <h2 >{polyclinic.name}</h2>
-                    <p >{polyclinic.description}</p>
+<div className="poly-container">
+                <div className="poly-card">
+                    <img className="poly-card-background" src={DefaultCard} alt="profile picture" />
+                    <div className="poly-name-background-parent">
+                        <div className="poly-name-background" />
+                            <div className="poly-name-wrapper">
+                                <div className="poly-name">AaaaAa</div>
+                            </div>
+                            <div className="polyclinic-parent">
+                                <b className="polyclinic">AaaAaaa</b>
+                                <div className="frame-wrapper1">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            ))}
         </div>
     );
 }

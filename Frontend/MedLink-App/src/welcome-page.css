@@ -17,7 +17,7 @@
     justify-content: center;
     color: white;
     text-align: center;
-    background-image: image("./src/assets/hospital.png");
+    background-image: url("./src/assets/hospital.png");
 }
 
 .news-content {

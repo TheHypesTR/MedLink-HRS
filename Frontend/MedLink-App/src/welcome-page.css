@@ -9,7 +9,7 @@
     position: relative;
     background: linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0)), url('background-image.jpg') no-repeat center center/cover;
     color: white;
-    height: 70vh;
+    height: 80vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -47,9 +47,10 @@
 }
 
 .hero-image img {
-    padding-top: 65px;
+    padding-top: 75px;
     max-height: 625px;
     max-width: 1000px;
+    margin-right: -25px;
 }
 
 @media (max-width: 768px) {

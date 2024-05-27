@@ -1,0 +1,21 @@
+.yazino1{
+text-align: center;
+}
+
+.yazino2{
+    text-align: left;
+    margin-left: 10px;
+    position: relative;
+    display: flex;
+}
+
+.yazino3{
+    text-align: right;
+    position: relative;
+    top: -25px;
+}
+
+.yazino4{
+    top: 5px;
+    position: relative;
+}

@@ -10,14 +10,14 @@ import AdminPanel from './AdminPanel.jsx';
 import Header from './components/Header.jsx';
 import Appointment from './Appointment.jsx';
 import WelcomePage from './welcome-page.jsx';
-import Footer from './Footer.jsx';
+import Footer from './components/Footer.jsx';
+import MainLayout from './components/MainLayout.jsx';
 
 function App() {
   return (
-    <div className="App">
         <Router>
-        <Header />
         <Routes>
+        <Route path="/" element={<MainLayout />}>
           <Route path="/" element={<WelcomePage />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
@@ -28,10 +28,10 @@ function App() {
           <Route path="/Polyclinics" element={<Polyclinics />} />
           <Route path="/Appointment" element={<Appointment />} />
           <Route path="/AdminPanel" element={<AdminPanel />} />
-          <Route path="/Footer" element={<Footer />} />
+          </Route>
         </Routes>
-      </Router>
-    </div>
+        </Router>
+      
   )
 }
 

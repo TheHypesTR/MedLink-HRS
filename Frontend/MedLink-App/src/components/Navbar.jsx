@@ -19,11 +19,11 @@ const Navbar = () => {
             <Link to="/">Ana Sayfa</Link>
             <Link to="/Polyclinics">Tıbbi Birimler</Link>
             <Link to="/Doctors">Doktorlar</Link>
-            <Link to="/Blog">Blog</Link>
-            <Link to="/Contact">İletişim</Link>
+            <Link to="/Blog" className="haber1">Haberler</Link>
+            <Link to="/Contact" className='iletisim1'>İletişim</Link>
             <Link to ="/AboutUs">Hakkımızda</Link>
-            <Dropdown title="E-Randevu" items={[ {link: "/Appointment", label: "Randevu Al" },
-                                                 {link: "/", label: "Randevu Sorgula"}]} id="sola-al" />
+            <Dropdown title="E-Randevu" items={[ {link: "/Appointment", label: "Randevu Al"},
+                                                 {link: "/", label: "Randevu Sorgula"}]}  />
             {user !== "undefined" ? (
                 <>
                     <Dropdown 

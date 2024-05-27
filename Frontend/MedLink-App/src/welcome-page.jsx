@@ -40,7 +40,7 @@ function WelcomePage() {
             <img src="./src/assets/kurul2.png" alt="Doc!" />
         </div>
     </section>
-</main>
+<br />
 <div className="specialties-container">
         <h2 className="title">Her Zaman Yanınızdayız</h2>
         <h1 className="subtitle">Alanlarımız</h1>
@@ -95,7 +95,7 @@ function WelcomePage() {
             </div>
             </div>
         </div>
-
+        </main>
 
 </>
   );

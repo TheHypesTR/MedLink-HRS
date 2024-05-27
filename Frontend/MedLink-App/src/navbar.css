@@ -27,6 +27,7 @@
     margin: 0 10px;
     text-decoration: none;
     color: white;
+    font-size: 18px;
   }
   
   .dropdown {
@@ -37,18 +38,19 @@
   
   .dropbtn {
     background-color: #25274D;
-    color: rgb(255, 255, 255);
+    color: white;
     padding: 16px;
-    font-size: 16px;
+    font-size: 18px;
     border: none;
     cursor: pointer;
+    min-width: 200px;
   }
   
   .dropdown-content {
     display: none;
     position: absolute;
     background-color: #464866;
-    min-width: 175px;
+    min-width: 195px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     text-align: center;
@@ -74,3 +76,9 @@
     display: block;
   }
   
+  .navbar .adminpanelad{
+    font-size: 18px;
+    align-items: right;
+    justify-content: right;
+    padding-left: 720px;
+  }

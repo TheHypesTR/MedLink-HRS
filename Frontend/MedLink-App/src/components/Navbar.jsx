@@ -32,7 +32,7 @@ const Navbar = () => {
                         { link: "/Logout", label: "Çıkış Yap" }
                     ]}
                 />
-                    {isAdmin === "Admin" && <Link to="/AdminPanel">Admin Paneli</Link>}
+                    {isAdmin === "Admin" && <Link to="/AdminPanel" className='adminpanelad'>Admin Paneli</Link>}
                 </>
             ) : (
                 <Dropdown 

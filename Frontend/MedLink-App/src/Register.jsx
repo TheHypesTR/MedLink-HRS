@@ -14,11 +14,9 @@ function Register() {
 
     // Kullanıcı Bilgilerinin Denetleyip Giriş Yapıp Yapmadığını Kontrol Ediyor.
     useEffect(() => {
-        const loggedInStatus = localStorage.getItem("isLoggedIn");
-        if(loggedInStatus === "true") {
-            setIsLoggedIn(true);
+        const loggedInStatus = sessionStorage.getItem("user");
+        if(loggedInStatus !== "undefined")
             navigate("/");
-        }
     }, [navigate]);
 
     // Kullanıcı'nın Bilgilerini DB'ye Kaydetmek İçin BE'den Çağırılan APİ.
@@ -54,7 +52,6 @@ function Register() {
                         alert(errorMessage);
                     }
                     if(data.STATUS) {
-                        alert(data.STATUS);
                         navigate("/login");
                     }
                 })

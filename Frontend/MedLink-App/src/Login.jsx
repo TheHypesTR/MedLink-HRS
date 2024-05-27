@@ -7,15 +7,12 @@ function Login() {
     const navigate = useNavigate();
     const [TCno, setTCno] = useState("");
     const [password, setPassword] = useState("");
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // Kullanıcı Bilgilerinin Denetleyip Giriş Yapıp Yapmadığını Kontrol Ediyor.
     useEffect(() => {
-        const loggedInStatus = localStorage.getItem("isLoggedIn");
-        if(loggedInStatus === "true"){
-            setIsLoggedIn(true);
+        const loggedInStatus = sessionStorage.getItem("user");
+        if(loggedInStatus !== "undefined")
             navigate("/");
-        }
     }, [navigate]);
 
     // Kullanıcı Bilgilerini DB'den Doğrulayan BE'den Çekilen APİ.
@@ -44,8 +41,6 @@ function Login() {
                         alert(errorMessage);
                     }
                     if(data.STATUS) {
-                        alert(data.STATUS);
-                        localStorage.setItem("isLoggedIn", "true");
                         navigate("/");
                     }
                 })

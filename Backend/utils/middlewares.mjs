@@ -21,6 +21,7 @@ export const UserLoginCheck = ((request, response, next) => {
 
 // Kullanıcı Hâli Hazırda Giriş Yapmışsa Ana Sayfaya Yönlendirme Yapar.
 export const UserAlreadyLogged = ((request, response, next) => {
+    const language = LoadLanguage(request);
     const user = request.session.passport?.user;
     if(user) return response.json({ ERROR: language.UserAlreadyLogged })
     next();
@@ -28,6 +29,7 @@ export const UserAlreadyLogged = ((request, response, next) => {
 
 // Kullanıcının Yetki Seviyesini Kontrol Eder Eğer Yetki Dışındaysa Yönlendirme Yapar.
 export const UserPermCheck = ((request, response, next) => {
+    const language = LoadLanguage(request);
     const user = request.user;
     if(!user) return response.json({ ERROR: language.userNotLoggedIn });
 

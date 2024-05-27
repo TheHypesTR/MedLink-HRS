@@ -1,23 +1,18 @@
-.news {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.news-item {
-    width: 100%;
-    max-width: 1200px;
-    height: 300px;
+.news-item{
+    background-image: url("./src/assets/blackdoctor.png");
     background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     background-position: center;
-    margin: 20px 0;
-    position: relative;
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    min-height: 500px;
+    min-width: 1920px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
-    background-image: url("./src/assets/hospital.png");
+    justify-content: left;
+    align-items: bottom;
+    text-align: left;
 }
 
 .news-content {

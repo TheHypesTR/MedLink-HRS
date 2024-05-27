@@ -23,20 +23,26 @@ function WelcomePage() {
           alert(data.ERROR);
         } 
         if(data) {
-          localStorage.setItem("user", data.name);
-          localStorage.setItem("role", data.role);
+          sessionStorage.setItem("user", data.name);
+          sessionStorage.setItem("role", data.role);
         }
       })
       .catch((err) => console.log(err));
   };
 
   return (
-        <div class="news-item">
-          <div class="news-content">
-            <h2>Haber Başlığı 1</h2>
-            <p>Haber içeriği 1</p>
-          </div>
+    <main className="body1">
+    <section className="hero">
+        <div className="hero-content">
+            <h1>All for Health, Health for All</h1>
+            <p>Dünya sağlık örgütünün 77. "Herkes için Sağlık" kurul toplantısı Birleşmiş Milletler önderliğinde gerçekleşiyor.</p>
+            <a href="#" className="hero-button">Detaylı Bilgi İçin</a>
         </div>
+        <div className="hero-image">
+            <img src="./src/assets/kurul2.png" alt="Doc!" />
+        </div>
+    </section>
+</main>
   );
 }
 

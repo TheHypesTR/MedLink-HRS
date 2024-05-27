@@ -1,22 +1,73 @@
-.news-item{
-    background-image: url("./src/assets/blackdoctor.png");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
+.body1{
     margin: 0;
-    padding: 0;
+    padding-top: 0px;
     font-family: "Poppins", sans-serif;
-    min-height: 500px;
-    min-width: 1920px;
-    display: flex;
-    justify-content: left;
-    align-items: bottom;
-    text-align: left;
+    min-height: 103vh;
 }
 
-.news-content {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    border-radius: 10px;
+.hero {
+    position: relative;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('background-image.jpg') no-repeat center center/cover;
+    color: white;
+    height: 70vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 50px;
+}
+
+.hero-content {
+    max-width: 37%;
+}
+
+.hero h1 {
+    font-size: 3em;
+    margin: 0 0 20px;
+}
+
+.hero p {
+    font-size: 1.5em;
+    margin: 0 0 20px;
+}
+
+.hero-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 7.5px;
+    transition: background-color 0.3s ease;
+    font-size: 20px;
+    font-family: "Poppins", sans-serif;
+}
+
+.hero-button:hover {
+    background-color: #0056b3;
+}
+
+.hero-image img {
+    max-height: 625px;
+    max-width: 1000px;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .hero-content, .hero-image {
+        max-width: 100%;
+        margin: 20px 0;
+    }
+
+    .hero h1 {
+        font-size: 2em;
+    }
+
+    .hero p {
+        font-size: 1.2em;
+    }
 }

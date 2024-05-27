@@ -7,7 +7,7 @@
 
 .hero {
     position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('background-image.jpg') no-repeat center center/cover;
+    background: linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0)), url('background-image.jpg') no-repeat center center/cover;
     color: white;
     height: 70vh;
     display: flex;
@@ -47,6 +47,7 @@
 }
 
 .hero-image img {
+    padding-top: 65px;
     max-height: 625px;
     max-width: 1000px;
 }
@@ -70,4 +71,60 @@
     .hero p {
         font-size: 1.2em;
     }
+}
+
+.specialties-container {
+    text-align: center;
+}
+
+.title {
+    color: #1e90ff;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 2rem;
+    margin: 0;
+    margin-bottom: 1rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.grid-item {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+    text-align: center;
+}
+
+.grid-item:hover {
+    background: #e0e0e0;
+    transform: translateY(-5px);
+}
+
+.grid-item img {
+    max-width: 100%;
+    height: 50px;
+}
+
+.grid-item p {
+    margin: 0.5rem 0 0;
+    font-size: 1rem;
+}
+
+.grid-item.selected {
+    background: #1e90ff;
+    color: #fff;
+}
+
+.grid-item.selected img {
+    filter: brightness(0) invert(1);
 }

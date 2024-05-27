@@ -19,9 +19,6 @@ function WelcomePage() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.ERROR) {
-          alert(data.ERROR);
-        } 
         if(data) {
           sessionStorage.setItem("user", data.name);
           sessionStorage.setItem("role", data.role);
@@ -44,21 +41,57 @@ function WelcomePage() {
         </div>
     </section>
 </main>
-<div class="specialties-container">
-        <h2 class="title">Always Caring</h2>
-        <h1 class="subtitle">Our Specialties</h1>
-        <div class="grid">
-            <div class="grid-item selected">
-                <img src="path/to/icon.png" alt="Bones"/>
-                <p>Bones</p>
+<div className="specialties-container">
+        <h2 className="title">Her Zaman Yanınızdayız</h2>
+        <h1 className="subtitle">Alanlarımız</h1>
+        <div className="grid">
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Nöroloji</p>
             </div>
-            <div class="grid-item">
-                <img src="path/to/icon.png" alt="Neurology"/>
-                <p>Neurology</p>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Nefroloji</p>
             </div>
-            <div class="grid-item">
-                <img src="path/to/icon.png" alt="Oncology"/>
-                <p>Oncology</p>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Çocuk Sağlığı</p>
+            </div>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Dahiliye</p>
+            </div>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Kulak Burun Boğaz</p>
+            </div>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Üroloji</p>
+            </div>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Ruh Sağlığı</p>
+            </div>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Endokrin</p>
+            </div>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Onkoloji</p>
+            </div>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Gastroentoloji</p>
+            </div>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Kardiyoloji</p>
+            </div>
+            <div className="grid-item">
+                <img src="./src/assets/heart.png" alt="resim"/>
+                <p>Ortopedi</p>
             </div>
             </div>
         </div>

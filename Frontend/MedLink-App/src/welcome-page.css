@@ -93,6 +93,8 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
+    max-width: 50%;
+    margin: 0 auto;
 }
 
 .grid-item {
@@ -106,7 +108,7 @@
 }
 
 .grid-item:hover {
-    background: #e0e0e0;
+    background: #31708E;
     transform: translateY(-5px);
 }
 

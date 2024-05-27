@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import './Cards.css';
+import './Appointment.css';
 
-function PolyCard({ name, polyclinicName, imgSrc, onClick }) {
+function DocCard({ name, polyclinicName, imgSrc, onClick }) {
   const [selected, setSelected] = useState(false);
 
   const handleClick = () => {
@@ -26,4 +26,4 @@ function PolyCard({ name, polyclinicName, imgSrc, onClick }) {
   );
 }
 
-export default PolyCard;
+export default DocCard;

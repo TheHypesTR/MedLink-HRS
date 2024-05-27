@@ -34,21 +34,23 @@ function Polyclinics() {
   }, []);
 
     return (
-<div className="poly-container">
-                <div className="poly-card">
+        <div className="poly-container">
+            {polyclinics.map((polyclinic, index) => (
+                <div className="poly-card" key={index} >
                     <img className="poly-card-background" src={DefaultCard} alt="profile picture" />
                     <div className="poly-name-background-parent">
                         <div className="poly-name-background" />
                             <div className="poly-name-wrapper">
-                                <div className="poly-name">AaaaAa</div>
+                                <div className="poly-name">{polyclinic.name}</div>
                             </div>
                             <div className="polyclinic-parent">
-                                <b className="polyclinic">AaaAaaa</b>
+                                <b className="polyclinic">{polyclinic.description}</b>
                                 <div className="frame-wrapper1">
                             </div>
                         </div>
                     </div>
                 </div>
+            ))}
         </div>
     );
 }

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import './Cards.css';
+import './Appointment.css';
 
 function PolyCard({ name, description, imgSrc, onClick }) {
   const [selected, setSelected] = useState(false);

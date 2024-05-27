@@ -8,7 +8,7 @@ import Doctors from './Doctors.jsx';
 import Polyclinics from './Polyclinics.jsx';
 import AdminPanel from './AdminPanel.jsx';
 import Header from './components/Header.jsx';
-import PolyCards from './Cards.jsx';
+import Appointment from './Appointment.jsx';
 import WelcomePage from './welcome-page.jsx';
 import Footer from './Footer.jsx';
 
@@ -18,16 +18,16 @@ function App() {
         <Router>
         <Header />
         <Routes>
+          <Route path="/" element={<WelcomePage />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/Forgot" element={<Forgot />} />
-          <Route path="/Appointment" element={<PolyCards />} />
           <Route path="/PasswordForgot" element={<PasswordForgot />} />
+          <Route path="/auth/user/reset-password/:userid/:token" element={<RedirectWithParams />} />
           <Route path="/Doctors" element={<Doctors />} />
           <Route path="/Polyclinics" element={<Polyclinics />} />
+          <Route path="/Appointment" element={<Appointment />} />
           <Route path="/AdminPanel" element={<AdminPanel />} />
-          <Route path="/auth/user/reset-password/:userid/:token" element={<RedirectWithParams />} />
-          <Route path="/" element={<WelcomePage />} />
           <Route path="/Footer" element={<Footer />} />
         </Routes>
       </Router>

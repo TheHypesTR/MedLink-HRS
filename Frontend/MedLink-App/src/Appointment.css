@@ -18,6 +18,7 @@
     height: 450px;
     background-color: aliceblue;
     border-radius: 10px;
+    margin-left: 10px;
   }
   
   .polycard img {
@@ -83,7 +84,7 @@
   }
 
   #doktoradih2{
-    left: 120px;
+    left: 130px;
     position: relative;
     top: 10px;
     max-width: 786.86px;
@@ -91,13 +92,13 @@
 
   #tarihdivi{
     position: relative;
-    right: 275px;
+    right: 265px;
     top: 85px;
   }
 
   #tarihbutonu{
     position: relative;
-    right: 275px;
+    right: 265px;
     top: 95px;
   }
 
@@ -117,7 +118,7 @@
     font-size: 10px;
     font-family: "Poppins", sans-serif;
     position: relative;
-    top: -220px;
+    top: -240px;
   }
 
   #doktordonus:hover{
@@ -133,10 +134,17 @@
   color: white;
   text-decoration: none;
   border-radius: 7.5px;
-  font-size: 15px;
+  font-size: 18px;
   font-family: "Poppins", sans-serif;
   margin: 5px;
-  width: 120px;
+  width: 140px;
+}
+
+#saatlistesi{
+  max-width: 600px;
+  position: relative;
+  top: -150px;
+  right: -75px;
 }
 
 #saatlistesi li:hover{
@@ -148,7 +156,7 @@
 #randevusaatih3{
   color: #25274D;
   position: relative;
-  left: -375px;
+  left: -360px;
   bottom: 150px;
 }
 
@@ -162,13 +170,11 @@
 
 .AppCard-date{
   position: relative;
-  left: 300px;
-  bottom: 120px;
+  left: 240px;
+  bottom: 4px;
   display: inline-block;
   color: #000000;
 }
-
-
 
 .doccard {
   position: relative;
@@ -180,7 +186,7 @@
   height: 450px;
   background-color: aliceblue;
   border-radius: 10px;
-
+  margin-left: 10px;
 }
 
 .doccard img {
@@ -251,4 +257,9 @@
   cursor: pointer;
   transition: 0.3s;
   background-color: rgb(30, 30, 30);
+}
+
+.doctorlistul{
+  display: flex;
+  margin-bottom: 10px;
 }

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { Polyclinic } from "../mongoose/schemas/polyclinics.mjs";
 import { Doctor } from "../mongoose/schemas/doctors.mjs";
 import { Appointment } from "../mongoose/schemas/appointment.mjs";
-import { PolyclinicFinder, DoctorFinder, AppointmentFinder, LoadLanguage } from "../utils/middlewares.mjs";
+import { PolyclinicFinder, DoctorFinder, AppointmentFinder, LoadLanguage, UserLoginCheck } from "../utils/middlewares.mjs";
 import turkish from "../languages/turkish.mjs";
 import english from "../languages/english.mjs";
 
@@ -121,7 +121,7 @@ router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment/:appointmentD
 });
 
 // Kullanıcnın ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Tarihi Belirtilen Randevusunu Oluşturan API.
-router.post("/doctor/:doctorID/appointment/:appointmentDate/makeAppointment", async (request, response) => {
+router.post("/doctor/:doctorID/appointment/:appointmentDate/makeAppointment", UserLoginCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
         const { doctorID, appointmentDate } = request.params;
@@ -134,7 +134,8 @@ router.post("/doctor/:doctorID/appointment/:appointmentDate/makeAppointment", as
         const timeIndex = appointment.time[timeSlot];
         if (!timeIndex) return response.status(400).json({ ERROR: language.invalidTimeSlot });
         if (appointment.active[timeSlot] !== false) return response.status(400).json({ ERROR: language.appointmentAlreadyTaken });
-        if ((appointment.active).map((active) => active === userID).length > 1) return response.status(400).json({ ERROR: language.appointmentDuplicate });
+        const activeAppointments = appointment.active.filter(active => active === userID);
+        if (activeAppointments.length >= 1) return response.status(400).json({ ERROR: language.appointmentDuplicate });
 
         appointment.active[timeSlot] = userID;
         await appointment.save();
@@ -148,13 +149,12 @@ router.post("/doctor/:doctorID/appointment/:appointmentDate/makeAppointment", as
 });
 
 // Kullanıcının ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Tarihi Belirtilen Randevusunu Silen API.
-router.delete("/doctor/:doctorID/appointment/:appointmentDate/deleteAppointment", async (request, response) => {
+router.delete("/doctor/:doctorID/appointment/:appointmentDate/deleteAppointment", UserLoginCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
         const { doctorID, appointmentDate } = request.params;
         const { timeSlot } = request.body;
         const appointment = await AppointmentFinder(doctorID, appointmentDate, request);
-
         const userID = request.session.passport?.user;
         if(!userID) return response.status(400).json({ ERROR: language.userNotLoggedIn });
 
@@ -169,6 +169,38 @@ router.delete("/doctor/:doctorID/appointment/:appointmentDate/deleteAppointment"
     } catch (err) {
         const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
         console.log(language.appointmentNotDeletingForUser, ERROR);
+        return response.status(400).json({ ERROR: err.message });
+    }
+});
+
+// Kullanıcı Oturum Açmış ise Randevularını Görüntüleyen API.
+router.get("/user/appointments", UserLoginCheck, async (request, response) => {
+    const language = LoadLanguage(request);
+    try {
+        const userID = request.session.passport?.user;
+        const appointments = await Appointment.find({ active: userID });
+        if(!appointments || appointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotListing });
+
+        let userAppointments = [];
+        for (const appointment of appointments) {
+            const doctor = await Doctor.findOne({ _id: appointment.doctorID });
+            const userAppointment = {
+                doctorID: doctor._id,
+                doctor: doctor.name,
+                polyclinic: doctor.polyclinic,
+                date: appointment.date,
+                time: appointment.time[appointment.active.indexOf(userID)],
+                timeSlot: appointment.active.indexOf(userID)
+            };
+            userAppointments.push(userAppointment);
+            console.log(userAppointment);
+        };      
+        if (!userAppointments || userAppointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotListing });
+        return response.status(200).json(userAppointments);
+
+    } catch (err) {
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.appointmentNotListing, ERROR);
         return response.status(400).json({ ERROR: err.message });
     }
 });

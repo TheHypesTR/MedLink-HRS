@@ -164,7 +164,7 @@ router.delete("/admin/polyclinic/:polyclinicID/doctor/:doctorID/delete", UserLog
 });
 
 // ID'si Belirtilen Polikliniğinin ID'si Verilen Doktoruna Randevu Ekleme API'si.
-router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", UserLoginCheck, async (request, response) => {
+router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/appointment/add", async (request, response) => {
     const language = LoadLanguage(request);
     try {
         const { polyclinicID, doctorID } = request.params;

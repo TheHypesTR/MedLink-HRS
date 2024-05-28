@@ -9,9 +9,10 @@ const Navbar = () => {
     useEffect(() => {
         const userName = sessionStorage.getItem('user');
         const userPerm = sessionStorage.getItem('role');
-        if (userName !== "undefined" && userPerm !== "undefined")
+        if (userName !== "undefined" && userPerm !== "undefined") {
             setUser(userName);
             setIsAdmin(userPerm);
+        }
     }, []);
 
     return (
@@ -23,7 +24,7 @@ const Navbar = () => {
             <Link to="/Contact" className='iletisim1'>İletişim</Link>
             <Link to ="/AboutUs">Hakkımızda</Link>
             <Dropdown title="E-Randevu" items={[ {link: "/Appointment", label: "Randevu Al"},
-                                                 {link: "/", label: "Randevu Sorgula"}]}  />
+                                                 {link: "/CheckAppointment", label: "Randevu Sorgula"}]}  />
             {user !== "undefined" ? (
                 <>
                     <Dropdown 

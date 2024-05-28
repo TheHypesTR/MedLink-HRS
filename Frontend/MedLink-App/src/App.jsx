@@ -16,6 +16,7 @@ import Contact from './Contact.jsx'
 import Logout from "./Logout.jsx"
 import AboutUs from "./AboutUs.jsx"
 import News from "./News.jsx"
+import CheckAppointment from './CheckAppointment.jsx';
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
           <Route path='/Logout' element={<Logout/>}/>
           <Route path='/AboutUs' element={<AboutUs/>}/>
           <Route path='/Blog' element={<News/>}/>
+          <Route path='/CheckAppointment' element={<CheckAppointment/>}/>
+
           </Route>
         </Routes>
         </Router>

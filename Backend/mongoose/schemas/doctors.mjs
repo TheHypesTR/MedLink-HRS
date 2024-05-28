@@ -19,6 +19,10 @@ const DoctorSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,
     },
+    image: {
+        type: mongoose.Schema.Types.String,
+        default: "./src/assets/default-card.jpg",
+    },
 }, { versionKey: false, timestamps: { currentTime: () => new Date(Date.now() + 1000 * 60 * 60 * 3) } });
 
 export const Doctor = mongoose.model("Doctors", DoctorSchema);

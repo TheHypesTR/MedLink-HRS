@@ -211,7 +211,7 @@ function Appointment() {
               key={index}
               name={doctor.speciality + " " + doctor.name} 
               polyclinicName={doctor.polyclinic} 
-              imgSrc={doctor.imgSrc || './src/assets/default-card.jpg'}
+              image={doctor.image || './src/assets/Faruk1.jpg'}
               onClick={() => selectDoctor(doctor)}
             />
             ))}

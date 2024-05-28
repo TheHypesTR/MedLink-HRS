@@ -37,7 +37,7 @@ function Doctors() {
         <div className="doctors-container">
             {doctors.map((doctor, index) => (
                 <div className="doctors-card" key={index}>
-                    <img className="doctor-card-background" src={DefaultCard} alt="profile picture" />
+                    <img className="doctor-card-background" src={doctor.image} alt="profile picture" />
                     <div className="doctor-name-background-parent">
                         <div className="doctor-name-background" />
                             <div className="doctors-name-wrapper">

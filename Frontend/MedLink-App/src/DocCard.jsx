@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './Appointment.css';
 
-function DocCard({ name, polyclinicName, imgSrc, onClick }) {
+function DocCard({ name, polyclinicName, image, onClick }) {
   const [selected, setSelected] = useState(false);
 
   const handleClick = () => {
@@ -18,7 +18,7 @@ function DocCard({ name, polyclinicName, imgSrc, onClick }) {
     >
       <img 
         className="doccard-image" 
-        src={imgSrc || './src/assets/default-card.jpg'} 
+        src={image || './src/assets/default-card.jpg'} 
         alt={name} 
       />
       <h2 className="doccard-name">{name}</h2>

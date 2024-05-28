@@ -1,15 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import config from "../config.mjs";
+import { useNavigate } from "react-router-dom";
 
 function Logout () {
+    const navigate = useNavigate();
 
     useEffect(() => {
         LogoutUser();
     }, []);
 
-    const LogoutUser = async (e) => {
+    const LogoutUser = async () => {
         try {
-            e.preventDefault();
             let errorMessage = "";
             await fetch(`http://localhost:${config.PORT}/auth/logout`, {
                 method: "POST",
@@ -28,6 +30,7 @@ function Logout () {
                     alert(data.STATUS);
                     sessionStorage.removeItem('user');
                     sessionStorage.removeItem('role');
+                    navigate("/");
                 }
             })
             

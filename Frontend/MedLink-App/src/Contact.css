@@ -1,0 +1,58 @@
+.mapstyle{
+    width: 300px;
+    height: 300px;
+    margin-top: 50px;
+    left: 50px;
+    position: relative;
+}
+
+.build{
+    margin-top: 130px;
+    width: 800px;
+    height: 400px;
+    display: flex;
+    margin-left: 360px;
+}
+
+#yazi1{
+    color: black;
+    display: inline;
+    position: relative;
+    left: 350px;
+    top: -275px;
+}
+
+#yazi2{
+    display: inline;
+    position: relative;
+    left: -150px;
+    top: -250px;
+}
+
+#yazi6{
+    display: inline;
+    position: relative;
+    left: 406px;
+    top: -250px;
+}
+
+#yazi3{
+    display: inline;
+    position: relative;
+    left: -262.5px;
+    top: -200px;
+}
+
+#yazi4{
+    display: inline-block;
+    position: relative;
+    left: -655px;
+    top: -160px;
+}
+
+#yazi5{
+    display: inline;
+    position: relative;
+    left: 455px;
+    top: -150px;
+}

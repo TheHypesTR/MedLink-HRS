@@ -12,5 +12,10 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 120vh;
-  background-color: #ffffff;
+  background-color: #AAABB8;
+  overflow-x: hidden;
+}
+
+#root{
+  width: 100%;
 }

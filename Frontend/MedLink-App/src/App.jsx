@@ -12,6 +12,10 @@ import Appointment from './Appointment.jsx';
 import WelcomePage from './welcome-page.jsx';
 import Footer from './components/Footer.jsx';
 import MainLayout from './components/MainLayout.jsx';
+import Contact from './Contact.jsx'
+import Logout from "./Logout.jsx"
+import AboutUs from "./AboutUs.jsx"
+import News from "./News.jsx"
 
 function App() {
   return (
@@ -28,6 +32,10 @@ function App() {
           <Route path="/Polyclinics" element={<Polyclinics />} />
           <Route path="/Appointment" element={<Appointment />} />
           <Route path="/AdminPanel" element={<AdminPanel />} />
+          <Route path='/Contact' element={<Contact/>}/>
+          <Route path='/Logout' element={<Logout/>}/>
+          <Route path='/AboutUs' element={<AboutUs/>}/>
+          <Route path='/Blog' element={<News/>}/>
           </Route>
         </Routes>
         </Router>

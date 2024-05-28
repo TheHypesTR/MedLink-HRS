@@ -1,0 +1,42 @@
+body{
+    font-family: "Arial", sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.kutucukcuk{
+    margin-top: 25px;
+    padding: 7.5px;
+    margin-right: 100px;
+    margin-left: 75px;
+}
+
+#merkez{
+    text-align: center;
+    font-size: 18px;
+}
+
+h2{
+    color: #25274D;
+}
+
+#corridor{
+left: 800px;
+position: relative;
+top: 30px;
+width: 650px;
+height: 250px;
+border: 4px solid blue;
+border-radius: 100px;
+}
+
+#baslik{
+    position: relative;
+    top: 200px;
+    font-size: 60px;
+    left: 100px;
+    font-family: "Poppins";
+    color: darkblue;
+}

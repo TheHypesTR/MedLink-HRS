@@ -86,16 +86,33 @@ router.get("/polyclinic/:polyclinicID/doctor/:doctorID", async (request, respons
     }
 });
 
-// ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Randevularını Listeleyen API.
+// ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun Alınmış Randevularını Listeleyen API.
 router.get("/polyclinic/:polyclinicID/doctor/:doctorID/appointment", async (request, response) => {
     const language = LoadLanguage(request);
     try {
         const { polyclinicID, doctorID } = request.params;
         await DoctorFinder(polyclinicID, doctorID, request);
-
         const appointments = await Appointment.find({ doctorID: doctorID });
-        if(!appointments || appointments.length === 0) return response.status(400).json({ ERROR: language.appointmentNotListing });
-        return response.status(200).json(appointments);
+        if (!appointments || appointments.length === 0) return response.status(400).json({ ERROR: language.appointmentNotListing });
+
+        let activeAppointments = [];
+        for (const appointment of appointments) {
+            let activeTimes = [];
+            appointment.active.forEach((active, index) => {
+                if (active !== false) activeTimes.push({
+                    time: appointment.time[index],
+                    active: active
+                });
+            });
+
+            if (activeTimes.length > 0) activeAppointments.push({
+                doctorID: doctorID,
+                date: appointment.date,
+                times: activeTimes
+            });
+        }
+        if (activeAppointments.length === 0) return response.status(400).json({ ERROR: language.appointmentNotAvailable });
+        return response.status(200).json(activeAppointments);
 
     } catch (err) {
         const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
@@ -179,7 +196,7 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
     try {
         const userID = request.session.passport?.user;
         const appointments = await Appointment.find({ active: userID });
-        if(!appointments || appointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotListing });
+        if(!appointments || appointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotAvailable });
 
         let userAppointments = [];
         for (const appointment of appointments) {
@@ -193,9 +210,8 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
                 timeSlot: appointment.active.indexOf(userID)
             };
             userAppointments.push(userAppointment);
-            console.log(userAppointment);
         };      
-        if (!userAppointments || userAppointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotListing });
+        if (!userAppointments || userAppointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotAvailable });
         return response.status(200).json(userAppointments);
 
     } catch (err) {

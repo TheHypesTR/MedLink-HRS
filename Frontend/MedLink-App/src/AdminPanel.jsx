@@ -71,7 +71,7 @@ function AdminPanel() {
     ShowAllDoctors();
   }, []);
 
-  // DB'den Poliklinkleri Listeleyen API.
+  // Database'den Poliklinkleri Listeleyen API.
   const ShowPolyclinics = () => {
     fetch(`http://localhost:${config.PORT}/polyclinic`, {
       method: "GET",
@@ -200,8 +200,16 @@ function AdminPanel() {
     }
   };
   
-  // Polyclinic Düzenleye Basıldığında Polikliniğin Bilgileri Kutucuklarda Hazır Olarak Gelir.
-  const OpenEditPopup = (polyclinic) => {
+  // Poliklinikleri Listeleme Fonksiyonu.
+  const ShowPolyclinicss = () => {
+    setDoctors([]);
+    setSelectedPolyclinic(null);
+    ShowPolyclinics();
+    GetDoctorCount();
+  };
+  
+  // Poliklinik Düzenleye Basıldığında Polikliniğin Bilgileri Kutucuklarda Hazır Olarak Getiren Fonksiyon.
+  const OpenPolyclinicEditPopup = (polyclinic) => {
     setSelectedPolyclinic(polyclinic);
     setPolyclinicName(polyclinic.name);
     setPolyclinicDescription(polyclinic.description);
@@ -373,11 +381,12 @@ function AdminPanel() {
     setIsDoctorEditPopupOpen(true);
   };
 
+  // Doktorların Sayısını Görüntüleyen Fonksiyon.
   const GetDoctorCount = (polyclinicId) => {
     return allDoctors.filter(doctor => doctor.polyclinicID === polyclinicId).length;
   };
   
-  // Seçilen Poliklinikteki Doktorları Görüntüleyen API.
+  // Seçilen Doktorun İzin Bilgilerini Görüntüleyen API.
   const ShowReports = (doctor) => {
     try {
       fetch(`http://localhost:${config.PORT}/polyclinic/${doctor.polyclinicID}/doctor/${doctor._id}/report`, {
@@ -442,7 +451,7 @@ function AdminPanel() {
       }
   };
 
-  // Seçilen Raporu Silme API'si.
+  // Seçilen İzni Silme API'si.
   const DeleteReport = (report) => {
     try {
       fetch(`http://localhost:${config.PORT}/admin/doctor/${report.doctorID}/report/${report._id}/delete`, {
@@ -469,30 +478,27 @@ function AdminPanel() {
     }
   };
 
+  // Rapor Ekleme Popup'ını Açan Fonksiyon.
   const OpenReportAddPopup = (doctor) => {
     setSelectedDoctor(doctor);
     AddReport();
     setIsReportAddPopupOpen(true);
   };
 
-  const ShowPolyclinicss = () => {
-    setDoctors([]);
-    setSelectedPolyclinic(null);
-    ShowPolyclinics();
-    GetDoctorCount();
-  };
 
+  // Doktorun Raporlarını Görüntüleyen Popup'ı Açan Fonksiyon.
   const ShowReportDetails = (doctor) => {
     setSelectedDoctor(doctor);
     ShowReports(doctor);
     setIsShowReportPopupOpen(true);
   };
 
+  // Tarih Formatını Düzenleyen Fonksiyon.
   const RemoveTime = (str) => {
     return str.split('T')[0];
   };
 
-  // Seçilen Poliklinikteki Doktorları Görüntüleyen API.
+  // Seçilen Doktorun Randevularını Görüntüleyen API.
   const ShowAppointments = (doctor) => {
     try {
       fetch(`http://localhost:${config.PORT}/polyclinic/${doctor.polyclinicID}/doctor/${doctor._id}/appointment`, {
@@ -503,9 +509,10 @@ function AdminPanel() {
       .then((response) => response.json())
       .then((data) => {
         if (data.ERROR) {
-          alert(data.ERROR);
+          // alert(data.ERROR);
         } 
         if (data) {
+          console.log(data);
           setAppointments(data);
           setSelectedDoctor(doctor);
         }
@@ -534,13 +541,14 @@ function AdminPanel() {
             .then((data) => {
                 if(data.ERROR) {
                     alert(data.ERROR);
+                    return;
                 }
                 if(data.STATUS) {
                     // alert(data.STATUS);
                     setAppointmentDate("");
                     setIsAppointmentAddPopupOpen(false);
-                    ShowDoctors(selectedDoctor.polyclinicID);
                 }
+                ShowAppointmentDetails(selectedDoctor);
             });
         }
         else
@@ -551,10 +559,12 @@ function AdminPanel() {
       }
   };
 
-  // Seçilen Raporu Silme API'si.
+  // Seçilen Randevuyu Silme API'si.
   const DeleteAppointment = (appointment) => {
+    console.log(appointment);
+    const formattedDate = new Date(appointment.date).toISOString().split('T')[0];
     try {
-      fetch(`http://localhost:${config.PORT}/admin/doctor/${appointment.doctorID}/appointment/${appointment._id}/delete`, {
+      fetch(`http://localhost:${config.PORT}/admin/doctor/${appointment.doctorID}/appointment/${formattedDate}/delete`, {
       method: "DELETE",
       credentials: "include",
       headers: {
@@ -578,15 +588,18 @@ function AdminPanel() {
     }
   };
 
+  // Randevu Ekleme Popup'ını Açan Fonksiyon.
   const OpenAppointmentAddPopup = (doctor) => {
     setSelectedDoctor(doctor);
     AddAppointment();
     setIsAppointmentAddPopupOpen(true);
+    ShowAppointments(doctor);
   };
 
+  // Randevuları Görüntüleyen Popup'ı Açan Fonksiyon.
   const ShowAppointmentDetails = (doctor) => {
     setSelectedDoctor(doctor);
-    ShowAppointments();
+    ShowAppointments(doctor);
     setIsShowAppointmentPopupOpen(true);
   };
 
@@ -701,7 +714,7 @@ function AdminPanel() {
             <li key={index} className="li1">
               {doctor.speciality + " " + doctor.name}
               <div className="button-container">
-                <button className="show-button" onClick={() => ShowAppointmentDetails(doctor)}>Randevular</button>
+                <button className="show-button" onClick={() => ShowAppointmentDetails(doctor)}>Aktif Randevular</button>
                 <button className="show-button" onClick={() => ShowReportDetails(doctor)}>Raporlar</button>
                 <button className="edit-button" onClick={() => OpenDoctorEditPopup(doctor)}>Düzenle</button>
                 <button className="delete-button" onClick={() => DeleteDoctor(doctor)}>Sil</button>
@@ -715,7 +728,7 @@ function AdminPanel() {
               <span className="doctor-count">Doktor Sayısı: {GetDoctorCount(polyclinic._id)}</span>
               <div className="button-container">
                 <button className="show-button" onClick={() => ShowDoctors(polyclinic._id)}>Doktorları Görüntüle</button>
-                <button className="edit-button" onClick={() => OpenEditPopup(polyclinic)}>Düzenle</button>
+                <button className="edit-button" onClick={() => OpenPolyclinicEditPopup(polyclinic)}>Düzenle</button>
                 <button className="delete-button" onClick={() => DeletePolyclinic(polyclinic._id)}>Sil</button>
               </div>
             </li>
@@ -805,35 +818,42 @@ function AdminPanel() {
             </div>
           </div>
         </div>
-      )}{isShowAppointmentPopupOpen && (
-        <div className="popup-overlay">
-          <div className="popup">
-            <button className="close-button" onClick={() => setIsShowAppointmentPopupOpen(false)}>X</button>
-              <div className="popup-content">
-              <button className="edit-button" onClick={() => OpenAppointmentAddPopup(selectedDoctor)}>Rapor Ekle</button>
-              <h3>Randevuları Görüntüle</h3>
-              <ul>
-                {appointments && appointments.length ? (
-                  appointments.map((appointment, index) => (
-                    <li key={index} className="li1">
-                      <div className='reportShowType'>{appointment.date}</div>
-
-                      <button className='delete-button' onClick={() => DeleteAppointment(appointment)}>Sil</button>
-                    </li>
-                  ))
-                ) : (
-                  <li>Herhangi bir randevu bulunamadı.</li>
-                )}
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
+      )}<div>
+          {isShowAppointmentPopupOpen && (
+              <div className="popup-overlay">
+                  <div className="popup">
+                      <button className="close-button" onClick={() => setIsShowAppointmentPopupOpen(false)}>X</button>
+                      <div className="popup-content">
+                        <h3>Randevuları Görüntüle</h3>
+                        <ul>
+                            {appointments && appointments.length ? (
+                                appointments.map((appointment, index) => (
+                                    <li key={index} className="li1">
+                                        <div className='reportShowType'>{RemoveTime(appointment.date)}</div>
+                                        <ul>
+                                            {appointment.times.map((timeSlot, timeIndex) => (
+                                                <li key={timeIndex}>
+                                                    {timeSlot.time} - {timeSlot.active}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                      <button className='delete-button' onClick={() => DeleteAppointment(appointment)}>Sil</button>
+                                    </li>
+                                ))
+                            ) : (
+                                <li>Herhangi bir randevu bulunamadı.</li>
+                            )}
+                        </ul>
+                      </div>
+                  </div>
+              </div>
+          )}
+      </div>
       {isAppointmentAddPopupOpen && (<div className="popup-overlay">
           <div className="popup">
             <button className="close-button" onClick={() => setIsAppointmentAddPopupOpen(false)}>X</button>
             <div className="popup-content">
-              <h3>Randevu Ekle</h3>
+              <h3>Aktif Randevuları Görüntüle</h3>
               <form onSubmit={AddAppointment}>
                 <input
                   type="date"

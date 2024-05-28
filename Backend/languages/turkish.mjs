@@ -32,6 +32,7 @@ const turkish = {
     appointmentNotUpdating: "Randevu Tarihi Bilgileri Güncellenemedi!!",
     appointmentNotDeleting: "Randevu Tarihi Silinemedi!!",
     appointmentNotListing: "Randevu Tarihi Bilgileri Yüklenemedi!!",
+    appointmentNotAvailable: "Herhangi bir Aktif Randevunuz Bulunmamaktadır!!",
     appointmentNotDeletingForUser: "Kullanıcının Randevu Bilgileri Bulunamadı!!",
     appointmentAlreadyExists: "Randevu Tarihi Halihazırda Mevcut!!",
     appointmentAlreadyTaken: "Aynı Tarihte Başka Bir Kullanıcının Randevusu Var!!",

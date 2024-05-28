@@ -6,7 +6,7 @@ function CheckAppointment() {
     const navigate = useNavigate();
     const [appointments, setAppointments] = useState([]);
 
-    // Sayfa Açıldığında Kullanıcnın Randevularını Listeleyen API.
+  // Sayfa Açıldığında Kullanıcnın Randevularını Listeleyen API.
   useEffect(() => {
     showAppointments();
   }, []);
@@ -23,7 +23,7 @@ function CheckAppointment() {
       .then((response) => response.json())
       .then((data) => {
         if (data.ERROR) {
-            alert("Aktif Randevunuz Bulunmamaktadır!!");
+            alert(data.ERROR);
             navigate("/Appointment");
             return;
         } 
@@ -34,7 +34,7 @@ function CheckAppointment() {
       .catch((err) => console.log(err));
   };
 
-  // Randevu Silme API'si.
+  // Kullanıcının Aktif Randevularını Silme API'si.
   const DeleteAppointment = async (appointment) => {
     const formattedDate = new Date(appointment.date).toISOString().split('T')[0];
     console.log(formattedDate);
@@ -67,6 +67,7 @@ function CheckAppointment() {
     }
   };
 
+  // Tarih Formatını Düzenleyen Fonksiyon.
   const RemoveTime = (str) => {
     if (!str)
       return '';

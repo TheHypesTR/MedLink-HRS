@@ -32,6 +32,7 @@ const english = {
     appointmentNotUpdating: "Appointment Not Updating!!",
     appointmentNotDeleting: "Appointment Not Deleting!!",
     appointmentNotListing: "Appointments Not Listing!!",
+    appointmentNotAvailable: "You do not have any active appointments!!",
     appointmentNotDeletingForUser: "No Appointment Information to be Deleted Found!!",
     appointmentAlreadyExists: "Appointment Already Exists!!",
     appointmentAlreadyTaken: "Another User Has an Appointment on the Same Date!!",

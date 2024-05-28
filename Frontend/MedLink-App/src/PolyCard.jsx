@@ -11,6 +11,7 @@ function PolyCard({ name, description, imgSrc, onClick }) {
   };
 
   return (
+    <div id='grid3'>
     <div 
       className={`polycard ${selected ? 'selected' : ''}`} 
       onClick={handleClick}
@@ -22,6 +23,7 @@ function PolyCard({ name, description, imgSrc, onClick }) {
       />
       <h2 className="polycard-title">{name}</h2>
       <p className="polycard-text">{description}</p>
+    </div>
     </div>
   );
 }

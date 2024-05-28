@@ -45,10 +45,10 @@ function WelcomePage() {
 <div className="specialties-container">
         <h2 className="title">Her Zaman Yanınızdayız</h2>
         <h1 className="subtitle">Alanlarımız</h1>
-        <div className="grid">
+        <div className="grid1">
             <div className="grid-item">
                 <img src="./src/assets/heart.png" alt="resim"/>
-                <p>Nöroloji</p>
+                <p>Kulak Burun Boğaz</p>
             </div>
             <div className="grid-item">
                 <img src="./src/assets/heart.png" alt="resim"/>
@@ -64,7 +64,7 @@ function WelcomePage() {
             </div>
             <div className="grid-item">
                 <img src="./src/assets/heart.png" alt="resim"/>
-                <p>Kulak Burun Boğaz</p>
+                <p>Nöroloji</p>
             </div>
             <div className="grid-item">
                 <img src="./src/assets/heart.png" alt="resim"/>
@@ -84,7 +84,7 @@ function WelcomePage() {
             </div>
             <div className="grid-item">
                 <img src="./src/assets/heart.png" alt="resim"/>
-                <p>Gastroentoloji</p>
+                <p>Gastroentroloji</p>
             </div>
             <div className="grid-item">
                 <img src="./src/assets/heart.png" alt="resim"/>

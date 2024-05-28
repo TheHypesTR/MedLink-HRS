@@ -200,7 +200,7 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
 
         let userAppointments = [];
         for (const appointment of appointments) {
-            const doctor = await Doctor.findOne({ _id: appointment.doctorID });
+            const doctor = await Doctor.find({ _id: appointment.doctorID });
             const userAppointment = {
                 doctorID: doctor._id,
                 doctor: doctor.name,
@@ -212,6 +212,7 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
             userAppointments.push(userAppointment);
         };      
         if (!userAppointments || userAppointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotAvailable });
+        console.log(userAppointments)
         return response.status(200).json(userAppointments);
 
     } catch (err) {

@@ -159,14 +159,6 @@ function Appointment() {
     return str.split('T')[0];
   };
 
-  const FormatTime = (timeStr) => {
-    if (!timeStr)
-      return '';
-    let time = parseFloat(timeStr);
-    time = Math.round(time * 100) / 100;
-    return time.toFixed(2);
-  };
-
   return (
     <div>
       <div className="grid">
@@ -182,7 +174,7 @@ function Appointment() {
       </div>
       {selectedPolyclinic && !selectedDoctor && (
         <div className="doctors-list">
-          <button onClick={resetSelectionDoctor}>Poliklinik Seçimine Dön</button>
+          <button id='polybutton3' onClick={resetSelectionDoctor}>Poliklinik Seçimine Dön</button>
           <ul>
             {doctors.map((doctor, index) => (
               <DocCard
@@ -198,21 +190,21 @@ function Appointment() {
       )}
       {selectedPolyclinic && selectedDoctor && (
         <div className="appointment-form">
-          <h2>{selectedDoctor.polyclinic} - {selectedDoctor.speciality + " " + selectedDoctor.name} ile Randevu Oluştur</h2>
+          <h2 id='doktoradih2'>{selectedDoctor.polyclinic} - {selectedDoctor.speciality + " " + selectedDoctor.name}</h2>
           <form onSubmit={selectAppointment}>
-            <div>
+            <div id='tarihdivi'>
               <label>Randevu Tarihi:</label>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
             </div>
-            <button type="submit">Randevu Bul</button>
+            <button id='tarihbutonu' type="submit">Randevu Bul</button>
           </form>
         </div>
       )}
       {selectedPolyclinic && selectedDoctor && appointment.length !== 0  && (
         <div className="appointment-list">
-          <button onClick={resetSelectionAppointment}>Doktor Seçimine Dön</button>
-          <h3>Randevu Saatleri</h3>
-          <ul>
+          <button id='doktordonus' onClick={resetSelectionAppointment}>Doktor Seçimine Dön</button>
+          <h3 id='randevusaatih3'>Randevu Saatleri</h3>
+          <ul id='saatlistesi'>
               <AppCard 
                 date={RemoveTime(appointment.date)}
                 time={appointment.time}

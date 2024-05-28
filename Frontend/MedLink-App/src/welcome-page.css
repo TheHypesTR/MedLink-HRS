@@ -91,7 +91,7 @@
     margin-bottom: 1rem;
 }
 
-.grid {
+.grid1 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;

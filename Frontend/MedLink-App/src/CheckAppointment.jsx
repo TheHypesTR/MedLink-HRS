@@ -22,6 +22,7 @@ function CheckAppointment() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data)
         if (data.ERROR) {
             alert(data.ERROR);
             navigate("/Appointment");

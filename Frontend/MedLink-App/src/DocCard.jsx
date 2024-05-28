@@ -11,6 +11,7 @@ function DocCard({ name, polyclinicName, imgSrc, onClick }) {
   };
 
   return (
+    <div id='grid3'>
     <div 
       className={`doccard ${selected ? 'selected' : ''}`} 
       onClick={handleClick}
@@ -22,6 +23,7 @@ function DocCard({ name, polyclinicName, imgSrc, onClick }) {
       />
       <h2 className="doccard-name">{name}</h2>
       <p className="doccard-polyclinicName">{polyclinicName}</p>
+    </div>
     </div>
   );
 }

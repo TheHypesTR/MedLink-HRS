@@ -28,8 +28,8 @@ function Logout () {
                 }
                 if(data.STATUS) {
                     alert(data.STATUS);
-                    sessionStorage.removeItem('user');
-                    sessionStorage.removeItem('role');
+                    sessionStorage.setItem('user', "undefined");
+                    sessionStorage.setItem('role', "undefined");
                     navigate("/");
                 }
             })

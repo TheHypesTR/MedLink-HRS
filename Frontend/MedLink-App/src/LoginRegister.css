@@ -214,3 +214,9 @@ form .kayit-ol {
     margin-top: 90px;
     margin-bottom: 30px;
 }
+
+.formbox-forgot{
+    display: flex;
+    justify-content: center;
+    margin-top: 160px;
+}

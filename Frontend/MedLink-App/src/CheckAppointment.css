@@ -1,0 +1,32 @@
+.randevucheckdiv{
+    display: flex;
+    justify-content: center;
+    margin-top: 95px;
+}
+
+.ornekyazi2{
+    font-family: "Poppins", sans-serif;
+}
+
+.randevudeletebutton{
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000540;
+    color: white;
+    text-decoration: none;
+    border-radius: 7.5px;
+    transition: 0.3s;
+    font-size: 10px;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.randevukutucukdiv{
+    display: block;
+    border: 2px solid #000;
+    margin: 20px;
+    padding: 5px;
+    width: 250px;
+    height: auto;
+}

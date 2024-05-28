@@ -196,23 +196,27 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
     try {
         const userID = request.session.passport?.user;
         const appointments = await Appointment.find({ active: userID });
-        if(!appointments || appointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotAvailable });
+        if (!appointments || appointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotAvailable });
 
-        let userAppointments = [];
-        for (const appointment of appointments) {
-            const doctor = await Doctor.find({ _id: appointment.doctorID });
-            const userAppointment = {
-                doctorID: doctor._id,
-                doctor: doctor.name,
-                polyclinic: doctor.polyclinic,
+        const doctorIDs = appointments.map(appointment => appointment.doctorID).filter(id => id);
+        const doctors = await Doctor.find({ _id: { $in: doctorIDs } });
+        const doctorMap = doctors.reduce((acc, doctor) => {
+            acc[doctor._id] = doctor;
+            return acc;
+        }, {});
+        let userAppointments = appointments.map(appointment => {
+            const doctor = doctorMap[appointment.doctorID];
+            return {
+                doctorID: appointment.doctorID,
+                doctor: doctor ? doctor.name : "Unknown Doctor",
+                polyclinic: doctor ? doctor.polyclinic : "Unknown Polyclinic",
                 date: appointment.date,
                 time: appointment.time[appointment.active.indexOf(userID)],
                 timeSlot: appointment.active.indexOf(userID)
             };
-            userAppointments.push(userAppointment);
-        };      
+        });
         if (!userAppointments || userAppointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotAvailable });
-        console.log(userAppointments)
+        console.log(userAppointments);
         return response.status(200).json(userAppointments);
 
     } catch (err) {

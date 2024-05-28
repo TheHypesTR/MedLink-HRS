@@ -1,4 +1,4 @@
-// AppCard.jsx
+
 import React, { useState } from 'react';
 import './Appointment.css';
 

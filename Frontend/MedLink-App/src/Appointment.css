@@ -263,3 +263,10 @@
   display: flex;
   margin-bottom: 10px;
 }
+
+.time-slot.deActive {
+  background-color: gray !important;
+  color: white !important; 
+  border: 2px solid red !important;
+  pointer-events: none;
+}

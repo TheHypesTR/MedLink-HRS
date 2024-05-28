@@ -10,7 +10,7 @@ function Appointment() {
   const [selectedPolyclinic, setSelectedPolyclinic] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState("");
-  const [appointment, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState("");
   const [date, setDate] = useState("");
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
@@ -101,7 +101,6 @@ function Appointment() {
           return;
         }
         setAppointments(data);
-        console.log(data)
       })
 
     } catch (err) {
@@ -145,7 +144,6 @@ function Appointment() {
   const selectAppointment = async (e) => {
     e.preventDefault();
     await showAppointments(e);
-    console.log(appointment);
   };
 
   const resetSelectionAppointment = () => {
@@ -161,22 +159,22 @@ function Appointment() {
   };
 
   // Randevu Oluşturma API'si.
-  const MakeAppointment = async () => {
+  const MakeAppointment = async (appointment, date, timeSlot) => {
     try {
-      console.log(appointment);
-        const formattedDate = new Date(selectedAppointment.date).toISOString().split('T')[0];
-        await fetch(`http://localhost:${config.PORT}/doctor/${selectedAppointment.doctorID}/appointment/${formattedDate}/makeAppointment`, {
+      console.log(`appointment: ${appointment}, date: ${date}, timeSlot: ${timeSlot}`)
+        await fetch(`http://localhost:${config.PORT}/doctor/${appointment.doctorID}/appointment/${date}/makeAppointment`, {
             method: "POST",
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              timeSlot: appointment.timeSlot,
+              timeSlot: timeSlot,
             }),
         })
         .then((response) => response.json())
         .then((data) => {
+          console.log(data)
             if(data.ERROR) {
               alert(data.ERROR);
             }
@@ -232,16 +230,17 @@ function Appointment() {
           </form>
         </div>
       )}
-      {selectedPolyclinic && selectedDoctor && appointment.length !== 0  && (
+      {selectedPolyclinic && selectedDoctor && appointments.length !== 0  && (
         <div className="appointment-list">
           <button id='doktordonus' onClick={resetSelectionAppointment}>Doktor Seçimine Dön</button>
           <h3 id='randevusaatih3'>Randevu Saatleri</h3>
           <ul id='saatlistesi'>
-              <AppCard 
-                date={RemoveTime(appointment.date)}
-                time={appointment.time}
-                active={appointment.active}
-                onClick={() => setSelectedAppointment(appointment)}
+              <AppCard
+                appointment={appointments}
+                date={RemoveTime(appointments.date)}
+                time={appointments.time}
+                active={appointments.active}
+                onClick={(appointment, date, timeSlot) => MakeAppointment(appointment, date, timeSlot)}
               />
           </ul>
         </div>

@@ -1,13 +1,13 @@
-/* eslint-disable react/prop-types */
+// AppCard.jsx
 import React, { useState } from 'react';
 import './Appointment.css';
 
-function AppCard({ date, time, active, onClick }) {
+function AppCard({ appointment, date, time, active, onClick }) {
   const [selected, setSelected] = useState(false);
 
-  const handleClick = () => {
+  const handleClick = (timeSlot) => {
     setSelected(!selected);
-    onClick();
+    onClick(appointment, date, timeSlot);
   };
 
   return (
@@ -18,7 +18,7 @@ function AppCard({ date, time, active, onClick }) {
           <li 
             key={index} 
             className={`time-slot ${active[index] ? 'deActive' : 'active'}`} 
-            onClick={() => onClick(timeSlot)}
+            onClick={() => handleClick(index)}
           >
             {timeSlot}
           </li>

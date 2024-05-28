@@ -126,10 +126,12 @@ function Appointment() {
             .then((data) => {
                 if(data.ERROR) {
                   alert(data.ERROR);
+                  return;
                 }
                 if(data.STATUS){
                   setAppointments(data);
                   showAppointments();
+                  return;
                 }
             })
         }
@@ -181,6 +183,7 @@ function Appointment() {
             if(data.STATUS){
               setAppointments(data);
               showAppointments();
+              return;
             }
         })
 

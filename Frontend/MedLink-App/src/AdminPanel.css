@@ -12,10 +12,10 @@
   }
   
   .popup {
-    background-color: #17d1a0;
+    background-color: #143a30;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgb(0, 0, 0);
     position: relative;
   }
   
@@ -55,7 +55,7 @@
     margin: 30px 0;
     width: 100%;
     height: 50px;
-    background-color: #333;
+    background-color: #aaaaaa;
     border-radius: 40px;
     padding: 10px;
 }
@@ -66,15 +66,15 @@
     background: transparent;
     border: none;
     outline: none;
-    border: 2px solid rgba(255, 255, 255, .1);
+    border: 2px solid rgb(255, 255, 255);
     border-radius: 40px;
     font-size: 16px;
-    color: #fff;
+    color: #ffffff;
     padding: 20px 45px 20px 20px;
 }
 
 .input-box input::placeholder {
-    color: #fff;
+    color: #ffffff;
 }
 
 h3{
@@ -86,15 +86,15 @@ h3{
 
 .listepanel{
     display: inline-block;
-    background: linear-gradient(to bottom, #108ea2 0%, #cde9ea 50%, #2cc7ff 100%);
+    background: linear-gradient(to bottom, #003038 0%, #01a6ab 50%, #003038 100%);
     width: 900px;
     height: 600px;
     user-select: none;
     border-radius: 10px;
     margin-top: 30px;
-    align-items: center;
     text-align: center;
     overflow-y: auto;
+    margin-left: 300px;
 }
 
 ul {
@@ -104,13 +104,13 @@ ul {
 
 .li1{
     color:#ffffff;
-    background-color: #0050c7;
+    background-color: #1b3b47;
     font-family: 'Poppins', sans-serif;
     user-select: none;
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 15px;
-    border: 1px solid rgb(0, 255, 0);
+    border: 1px solid rgb(255, 255, 255);
     transition: all 0.3s ease;
     font-size: 16px;
     width: 97.5%;
@@ -149,6 +149,19 @@ ul {
     color: white;
   }
 
+  .show-button:hover{
+    transition: 0.3s;
+    background-color: #6d015b;
+  } 
+  .edit-button:hover{
+    transition: 0.3s;
+    background-color: darkgreen;
+  } 
+  .delete-button:hover{
+    transition: 0.3s;
+    background-color: darkred;
+  }
+
   .poliklinik-ad {
     flex-grow: 1;
     margin: 10px;
@@ -157,7 +170,7 @@ ul {
 
   .doctor-count {
     margin-block: auto;
-    color:rgb(132, 244, 132);
+    color:rgb(255, 255, 255);
   }
 
   .buttons {
@@ -175,10 +188,10 @@ ul {
     border: none;
     outline: none;
     border-radius: 40px;
-    box-shadow: 0 0 10px rgb(46, 197, 0);
+    box-shadow: 0 0 10px rgb(0, 0, 0);
     cursor: pointer;
     font-size: 16px;
-    color: #333;
+    color: #000000;
     font-weight: 700;
   }
 
@@ -214,10 +227,13 @@ ul {
     background-color: #da5166;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     padding: 5px 10px;
     cursor: pointer;
     font-size: 14px;
+    right: -780px;
+    position: relative;
+    top: 8px;
   }
   
   .addPol-button:hover {
@@ -238,3 +254,8 @@ ul {
     margin-left: 10px;
   }
   
+  #baslikyazi2{
+    color: lightgray;
+    top: 8px;
+    position: relative;
+  }

@@ -144,6 +144,7 @@ form .kayit-ol {
     height: 50px;
     background: none;
     padding-left: 50px;
+    background-color: #DEF2F1;
 }
 
 .sifre-unut{
@@ -167,6 +168,7 @@ form .kayit-ol {
     width: 100%;
     background-color: darkgreen;
     margin-top: 20px;
+    color: #ffffff;
 }
 
 .p2{
@@ -197,4 +199,18 @@ form .kayit-ol {
     height: 35px;
     margin-top: 46px;
     margin-left: 10px;
+    z-index: 1000;
+}
+
+.formbox-login{
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.formbox-register{
+    display: flex;
+    justify-content: center;
+    margin-top: 90px;
+    margin-bottom: 30px;
 }

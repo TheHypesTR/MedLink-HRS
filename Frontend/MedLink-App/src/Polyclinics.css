@@ -58,6 +58,8 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+    margin-top: 90px;
+    margin-bottom: 10px;
   }
   
   .poly-card-background {
@@ -101,9 +103,9 @@
   
   .polyclinic {
     position: relative;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    font-weight: 400;
+    font-weight: 500;
     z-index: 1;
   }
   

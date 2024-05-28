@@ -691,7 +691,7 @@ function AdminPanel() {
         {doctors.length > 0 && (
           <button className="addDoc-button" onClick={() => setIsDoctorAddPopupOpen(true)} style={{ display: doctors.length > 0 ? 'block' : 'none' }}>Doktor Ekle</button>        
         )}
-        <h2 style={doctors.length ? { paddingLeft: '20%' } : { paddingLeft: '28%' }}>
+        <h2 id='baslikyazi2' style={doctors.length ? { paddingLeft: '20%' } : { paddingLeft: '28%' }}>
           {doctors.length ? 'Doktor Listesi' : 'Poliklinik Listesi'}
         </h2>
       </div>  
@@ -714,9 +714,9 @@ function AdminPanel() {
               <span className="polyclinic-name">{polyclinic.name}</span>
               <span className="doctor-count">Doktor Sayısı: {GetDoctorCount(polyclinic._id)}</span>
               <div className="button-container">
-                <button className="delete-button" onClick={() => DeletePolyclinic(polyclinic._id)}>Sil</button>
-                <button className="edit-button" onClick={() => OpenEditPopup(polyclinic)}>Düzenle</button>
                 <button className="show-button" onClick={() => ShowDoctors(polyclinic._id)}>Doktorları Görüntüle</button>
+                <button className="edit-button" onClick={() => OpenEditPopup(polyclinic)}>Düzenle</button>
+                <button className="delete-button" onClick={() => DeletePolyclinic(polyclinic._id)}>Sil</button>
               </div>
             </li>
           ))

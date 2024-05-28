@@ -13,6 +13,14 @@ const AppointmentSchema = new mongoose.Schema({
     time: {
         type: mongoose.Schema.Types.Array,
         default: ["9.00 - 9.25", "9.30 - 9.55", "10.00 - 10.25", "10.30 - 10.55", "11.00 - 11.25", "11.30 - 11.55", "13.30 - 13.55", "14.00 - 14.25", "14.30 - 14.55", "15.00 - 15.25", "15.30 - 15.55", "16.00 - 16.25"],
+        set: function(times) {
+            return times.map(time => {
+                let [start, end] = time.split(" - ");
+                start = parseFloat(start).toFixed(2);
+                end = parseFloat(end).toFixed(2);
+                return `${start} - ${end}`;
+            });
+        }
     },
     active: {
         type: mongoose.Schema.Types.Array,

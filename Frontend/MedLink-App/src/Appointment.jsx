@@ -3,13 +3,14 @@ import PolyCard from './PolyCard.jsx';
 import DocCard from './DocCard.jsx';
 import config from '../config.mjs';
 import './Appointment.css';
+import AppCard from './AppCard.jsx';
 
-function PolyCards() {
+function Appointment() {
   const [polyclinics, setPolyclinics] = useState([]);
   const [selectedPolyclinic, setSelectedPolyclinic] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState("");
-  const [appointments, setAppointments] = useState([]);
+  const [appointment, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState("");
   const [date, setDate] = useState("");
 
@@ -43,27 +44,26 @@ function PolyCards() {
   const selectPolyclinic = (polyclinic) => {
     setSelectedPolyclinic(polyclinic);
     setPolyclinics([]);
-    showDoctors(polyclinic._id);
+    showDoctors(polyclinic);
   };
 
   // Seçilen Poliklinikteki Doktorları Görüntüleyen API.
-  const showDoctors = (id) => {
+  const showDoctors = (polyclinic) => {
     try {
-      fetch(`http://localhost:${config.PORT}/polyclinic/${id}/doctor`, {
+      fetch(`http://localhost:${config.PORT}/polyclinic/${polyclinic._id}/doctor`, {
         method: "GET",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
       })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
         if (data.ERROR) {
           alert(data.ERROR);
+          setSelectedPolyclinic("");
           showPolyclinics();
         } 
         if (data) {
           setDoctors(data);
-          setSelectedPolyclinic(id);
           setPolyclinics([]);
         }
       })
@@ -75,47 +75,41 @@ function PolyCards() {
   const selectDoctor = (doctor) => {
     setSelectedDoctor(doctor);
     setDoctors([]);
-    showAppointments(doctor);
   };
-  
+
   const resetSelectionDoctor = () => {
     setSelectedPolyclinic("");
     setDoctors([]);
+    setSelectedDoctor("");
     showPolyclinics();
   };
 
-  const randevuGoruntule = async (e) => {
+  const showAppointments = async () => {
     try {
-        e.preventDefault();      
-        if(selectedDoctor, date) {
-            await fetch(`http://localhost:${config.PORT}/polyclinic/${selectedDoctor.polyclinicID}/doctor/${selectedDoctor._id}/appointment/${date}`, {
-                method: "GET",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log(data);
-                if(data.ERROR) {
-                  randevuOlustur()
-                }
-                if(data.STATUS) {
-                  setAppointments(data);
-                }
-            })
+      await fetch(`http://localhost:${config.PORT}/polyclinic/${selectedDoctor.polyclinicID}/doctor/${selectedDoctor._id}/appointment/${date}`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+              "Content-Type": "application/json",
+          }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if(data.ERROR) {
+          addAppointment();
+          return;
         }
-        else
-            throw new Error("Lütfen Gerekli Alanları Doldurunuz!!");
+        setAppointments(data);
+        console.log(data)
+      })
 
     } catch (err) {
         console.log(err);
     }
-};
+  };
 
   // Randevu Oluşturma API'si.
-  const randevuOlustur = async () => {
+  const addAppointment = async () => {
     try {
         if(selectedDoctor, date) {
             await fetch(`http://localhost:${config.PORT}/admin/polyclinic/${selectedDoctor.polyclinicID}/doctor/${selectedDoctor._id}/appointment/add`, {
@@ -130,10 +124,13 @@ function PolyCards() {
             })
             .then((response) => response.json())
             .then((data) => {
-                if(data.ERROR) 
-                    alert(data.ERROR);
-                if(data.STATUS)
-                    alert(data.STATUS);
+                if(data.ERROR) {
+                  alert(data.ERROR);
+                }
+                if(data.STATUS){
+                  setAppointments(data);
+                  showAppointments();
+                }
             })
         }
         else
@@ -142,7 +139,33 @@ function PolyCards() {
     } catch (err) {
         console.log(err);
     }
-};
+  };
+
+  const selectAppointment = async (e) => {
+    e.preventDefault();
+    await showAppointments(e);
+    console.log(appointment);
+  };
+
+  const resetSelectionAppointment = () => {
+    setSelectedDoctor("");
+    setAppointments([]);
+    showDoctors(selectedPolyclinic);
+  };
+
+  const RemoveTime = (str) => {
+    if (!str)
+      return '';
+    return str.split('T')[0];
+  };
+
+  const FormatTime = (timeStr) => {
+    if (!timeStr)
+      return '';
+    let time = parseFloat(timeStr);
+    time = Math.round(time * 100) / 100;
+    return time.toFixed(2);
+  };
 
   return (
     <div>
@@ -172,21 +195,34 @@ function PolyCards() {
             ))}
           </ul>
         </div>
-      )}{selectedDoctor && (
+      )}
+      {selectedPolyclinic && selectedDoctor && (
         <div className="appointment-form">
           <h2>{selectedDoctor.polyclinic} - {selectedDoctor.speciality + " " + selectedDoctor.name} ile Randevu Oluştur</h2>
-          <form onSubmit={randevuGoruntule}>
+          <form onSubmit={selectAppointment}>
             <div>
               <label>Randevu Tarihi:</label>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
             </div>
             <button type="submit">Randevu Bul</button>
           </form>
-          <button onClick={resetSelectionDoctor}>Geri Dön</button>
+        </div>
+      )}
+      {selectedPolyclinic && selectedDoctor && appointment.length !== 0  && (
+        <div className="appointment-list">
+          <button onClick={resetSelectionAppointment}>Doktor Seçimine Dön</button>
+          <h3>Randevu Saatleri</h3>
+          <ul>
+              <AppCard 
+                date={RemoveTime(appointment.date)}
+                time={appointment.time}
+                active={appointment.active}
+              />
+          </ul>
         </div>
       )}
     </div>
   );
 }
 
-export default PolyCards;
+export default Appointment;

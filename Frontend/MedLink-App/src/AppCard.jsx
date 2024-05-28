@@ -11,18 +11,16 @@ function AppCard({ date, time, active, onClick }) {
   };
 
   return (
-    <div 
-      className={`AppCard ${selected ? 'selected' : ''}`} 
-      onClick={handleClick}
-    >
+    <div className="AppCard">
       <h2 className="AppCard-date">{date}</h2>
-      <ul className="AppCard-times">
-        {time.map((t, index) => (
+      <ul>
+        {time.map((timeSlot, index) => (
           <li 
             key={index} 
-            className={`AppCard-time ${active[index] ? 'deActive' : 'active'}`}
+            className={`time-slot ${active[index] ? 'deActive' : 'active'}`} 
+            onClick={() => onClick(timeSlot)}
           >
-            {t}
+            {timeSlot}
           </li>
         ))}
       </ul>

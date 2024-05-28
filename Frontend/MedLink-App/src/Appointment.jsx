@@ -13,6 +13,7 @@ function Appointment() {
   const [appointment, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState("");
   const [date, setDate] = useState("");
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
 
   // Sayfa Açıldığında Poliklinikleri Listeleyen API.
   useEffect(() => {
@@ -159,6 +160,37 @@ function Appointment() {
     return str.split('T')[0];
   };
 
+  // Randevu Oluşturma API'si.
+  const MakeAppointment = async () => {
+    try {
+      console.log(appointment);
+        const formattedDate = new Date(selectedAppointment.date).toISOString().split('T')[0];
+        await fetch(`http://localhost:${config.PORT}/doctor/${selectedAppointment.doctorID}/appointment/${formattedDate}/makeAppointment`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              timeSlot: appointment.timeSlot,
+            }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.ERROR) {
+              alert(data.ERROR);
+            }
+            if(data.STATUS){
+              setAppointments(data);
+              showAppointments();
+            }
+        })
+
+    } catch (err) {
+        console.log(err);
+    }
+  };
+
   return (
     <div>
       <div className="grid">
@@ -175,7 +207,7 @@ function Appointment() {
       {selectedPolyclinic && !selectedDoctor && (
         <div className="doctors-list">
           <button id='polybutton3' onClick={resetSelectionDoctor}>Poliklinik Seçimine Dön</button>
-          <ul>
+          <ul className='doctorlistul'>
             {doctors.map((doctor, index) => (
               <DocCard
               key={index}
@@ -209,6 +241,7 @@ function Appointment() {
                 date={RemoveTime(appointment.date)}
                 time={appointment.time}
                 active={appointment.active}
+                onClick={() => setSelectedAppointment(appointment)}
               />
           </ul>
         </div>

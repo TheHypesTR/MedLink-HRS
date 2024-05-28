@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../config.mjs";
+import "./CheckAppointment.css"
 
 function CheckAppointment() {
     const navigate = useNavigate();
@@ -76,14 +77,14 @@ function CheckAppointment() {
   };
 
   return (
-    <div>
+    <div className="randevucheckdiv">
         {appointments.map((appointment, index) => (
-            <div key={index}>
-                <p>Poliklinik: {appointment.polyclinic}</p>
-                <p>Doktor: {appointment.doctor}</p>
-                <p>Randevu Tarihi: {RemoveTime(appointment.date)}</p>
-                <p>Randevu Saati: {appointment.time}</p>
-                <button onClick={() => DeleteAppointment(appointment)}>Randevuyu Sil</button>
+            <div className="randevukutucukdiv" key={index}>
+                <p className="ornekyazi2">Poliklinik: {appointment.polyclinic}</p>
+                <p className="ornekyazi2">Doktor: {appointment.doctor}</p>
+                <p className="ornekyazi2">Randevu Tarihi: {RemoveTime(appointment.date)}</p>
+                <p className="ornekyazi2">Randevu Saati: {appointment.time}</p>
+                <button className="randevudeletebutton" onClick={() => DeleteAppointment(appointment)}>Randevuyu Sil</button>
                 <hr />
             </div>
         ))}

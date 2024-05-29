@@ -172,12 +172,12 @@ router.delete("/doctor/:doctorID/appointment/:appointmentDate/deleteAppointment"
         const { doctorID, appointmentDate } = request.params;
         const { timeSlot } = request.body;
         const appointment = await AppointmentFinder(doctorID, appointmentDate, request);
-        const userID = request.session.passport?.user;
-        if(!userID) return response.status(400).json({ ERROR: language.userNotLoggedIn });
+        const user = request.user;
+        if(!user) return response.status(400).json({ ERROR: language.userNotLoggedIn });
 
         const timeIndex = appointment.time[timeSlot];
         if (!timeIndex) return response.status(400).json({ ERROR: language.invalidTimeSlot });
-        if (appointment.active[timeSlot] !== userID) return response.status(400).json({ ERROR: language.appointmentNotDeletingForUser });
+        if (appointment.active[timeSlot] !== user.TCno) return response.status(400).json({ ERROR: language.appointmentNotDeletingForUser });
 
         appointment.active[timeSlot] = false;
         await appointment.save();
@@ -194,8 +194,9 @@ router.delete("/doctor/:doctorID/appointment/:appointmentDate/deleteAppointment"
 router.get("/user/appointments", UserLoginCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
-        const userID = request.session.passport?.user;
-        const appointments = await Appointment.find({ active: userID });
+        const user = request.user;
+        if(!user) return response.status(400).json({ ERROR: language.userNotLoggedIn });
+        const appointments = await Appointment.find({ active: user.TCno });
         if (!appointments || appointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotAvailable });
 
         const doctorIDs = appointments.map(appointment => appointment.doctorID).filter(id => id);
@@ -211,12 +212,11 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
                 doctor: doctor ? doctor.speciality + " " + doctor.name : "Unknown Doctor",
                 polyclinic: doctor ? doctor.polyclinic : "Unknown Polyclinic",
                 date: appointment.date,
-                time: appointment.time[appointment.active.indexOf(userID)],
-                timeSlot: appointment.active.indexOf(userID)
+                time: appointment.time[appointment.active.indexOf(user.TCno)],
+                timeSlot: appointment.active.indexOf(user.TCno)
             };
         });
         if (!userAppointments || userAppointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotAvailable });
-        console.log(userAppointments);
         return response.status(200).json(userAppointments);
 
     } catch (err) {

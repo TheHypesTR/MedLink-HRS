@@ -160,7 +160,7 @@ function Appointment() {
     return str.split('T')[0];
   };
 
-  // Randevu Oluşturma API'si.
+  // Randevu Alma API'si.
   const MakeAppointment = async (appointment, date, timeSlot) => {
     try {
       console.log(`appointment: ${appointment}, date: ${date}, timeSlot: ${timeSlot}`)
@@ -183,6 +183,7 @@ function Appointment() {
             if(data.STATUS){
               setAppointments(data);
               showAppointments();
+              alert (data.STATUS);
               return;
             }
         })

@@ -27,7 +27,10 @@ function CheckAppointment() {
         console.log(data)
         if (data.ERROR) {
             alert(data.ERROR);
-            navigate("/Appointment");
+            if(sessionStorage.getItem('user') === "undefined")
+              navigate("/Login")
+            else
+              navigate("/Appointment");
             return;
         } 
         if(data) {
@@ -77,9 +80,12 @@ function CheckAppointment() {
     return str.split('T')[0];
   };
 
+  // Yaklaşan Randevulardan Daha İleri Tarihli Olanlara Göre Sıralama Yapar.
+  const sortedAppointments = appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
+
   return (
     <div className="randevucheckdiv">
-        {appointments.map((appointment, index) => (
+        {sortedAppointments.map((appointment, index) => (
             <div className="randevukutucukdiv" key={index}>
                 <p className="ornekyazi2">Randevu - {index + 1}</p>
                 <hr />

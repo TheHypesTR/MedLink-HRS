@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import config from '../config.mjs';
 import './AdminPanel.css';
 
 function AdminPanel() {
+  const navigate = useNavigate();
   const [TCno, setTCno] = useState("");
   const [polyclinics, setPolyclinics] = useState([]);
   const [selectedPolyclinic, setSelectedPolyclinic] = useState(null);
@@ -30,6 +32,22 @@ function AdminPanel() {
   const [isReportAddPopupOpen, setIsReportAddPopupOpen] = useState(false);
   const [isShowReportPopupOpen, setIsShowReportPopupOpen] = useState(false);
   
+  // Kullanıcı Rolü "Admin" Değilse Bu Kısma Erişemez!
+  const [user, setUser] = useState("undefined");
+  const [isAdmin, setIsAdmin] = useState("undefined");
+
+  useEffect(() => {
+      const userName = sessionStorage.getItem('user');
+      const userPerm = sessionStorage.getItem('role');
+      if (userName !== "undefined" && userPerm !== "undefined") {
+          setUser(userName);
+          setIsAdmin(userPerm);
+      }
+      if(isAdmin !== "Admin"){
+        navigate("/");
+      }
+  }, []);
+
   // Kullanıcıya Admin Yetkileri Veren API.
   const PromoteUser = async (e) => {
     try {

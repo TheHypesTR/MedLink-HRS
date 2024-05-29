@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import config from "../config.mjs";
 import "./welcome-page.css";
+import DefaultCard from "./assets/logo.png";
 
 function WelcomePage() {
   const [polyclinics, setPolyclinics] = useState([]);
@@ -86,6 +87,32 @@ return (
                     ))}
                 </div>
             </div>
+            <section className="hastaneyonetim">
+            <h2 className="title2">Uzman Kadromuzla Beraber</h2>
+            <h1 className="subtitle2">Yöneticilerimiz</h1> 
+                <div className="yonetim-container">   
+                    <div className="yonetim-content">
+                            <div className="yonetim-card">
+                                <img className="yonetim-card-background" src={DefaultCard} alt="resima1" />
+                                <div className="yonetim-name-background-parent">
+                        <div className="yonetim-name-background" />
+                            <div className="yonetim-name-wrapper">
+                                <div className="yonetim-name">
+                                    Yönetim İsim
+                                </div>
+                            </div>
+                            <div className="yonetim-parent">
+                                <b className="yonetim">
+                                    Yönetim Açıklaması
+                                </b>
+                                <div className="frame-wrapper1">
+                            </div>
+                        </div>
+                    </div>
+                            </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </>
 );

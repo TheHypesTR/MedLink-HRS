@@ -616,7 +616,7 @@ function AdminPanel() {
   return (
     <>
       <div>
-        <button className="open-popup-button" onClick={() => setIsPromoteUserPopupOpen(true)}>
+        <button id='kullanicibuton2' className="open-popup-button" onClick={() => setIsPromoteUserPopupOpen(true)}>
           Kullanıcı Yetkilendirmesi
         </button>
         {isPromoteUserPopupOpen && (

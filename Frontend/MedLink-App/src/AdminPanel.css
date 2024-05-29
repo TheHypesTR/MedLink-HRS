@@ -12,7 +12,7 @@
   }
   
   .popup {
-    background-color: #143a30;
+    background-color: #1b7372;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgb(0, 0, 0);
@@ -69,8 +69,11 @@
     border: 2px solid rgb(255, 255, 255);
     border-radius: 40px;
     font-size: 16px;
-    color: #ffffff;
     padding: 20px 45px 20px 20px;
+}
+
+.input-box[type=text]{
+  color: #fff;
 }
 
 .input-box input::placeholder {
@@ -232,7 +235,7 @@ ul {
     padding: 5px 10px;
     cursor: pointer;
     font-size: 14px;
-    right: -780px;
+    right: -767.5px;
     position: relative;
     top: 8px;
   }
@@ -259,4 +262,10 @@ ul {
     color: lightgray;
     top: 8px;
     position: relative;
+  }
+
+  #kullanicibuton2{
+    position: relative;
+    top: 70px;
+    left: 15px;
   }

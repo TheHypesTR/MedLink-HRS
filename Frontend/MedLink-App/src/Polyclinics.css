@@ -71,6 +71,7 @@
     max-height: 75%;
     object-fit: cover;
     border-radius: 5px;
+    border-bottom: 2px solid black;
   }
   
   .poly-name-background {
@@ -148,5 +149,7 @@
     padding: 5px;
     margin: 5px;
     text-align: center;
+    border: 3px solid black;
+    cursor: pointer;
   }
   

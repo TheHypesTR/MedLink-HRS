@@ -33,9 +33,12 @@ function Doctors() {
 
   }, []);
 
+  // Doktorları Poliklinik İsimlerine Göre Sıralama Yapar.
+  const sortedDoctors = doctors.sort((a, b) => a.polyclinic.localeCompare(b.polyclinic));
+
     return(
         <div className="doctors-container">
-            {doctors.map((doctor, index) => (
+            {sortedDoctors.map((doctor, index) => (
                 <div className="doctors-card" key={index}>
                     <img className="doctor-card-background" src={doctor.image} alt="profile picture" />
                     <div className="doctor-name-background-parent">

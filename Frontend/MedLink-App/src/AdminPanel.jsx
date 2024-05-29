@@ -33,20 +33,12 @@ function AdminPanel() {
   const [isShowReportPopupOpen, setIsShowReportPopupOpen] = useState(false);
   
   // Kullanıcı Rolü "Admin" Değilse Bu Kısma Erişemez!
-  const [user, setUser] = useState("undefined");
-  const [isAdmin, setIsAdmin] = useState("undefined");
-
   useEffect(() => {
-      const userName = sessionStorage.getItem('user');
-      const userPerm = sessionStorage.getItem('role');
-      if (userName !== "undefined" && userPerm !== "undefined") {
-          setUser(userName);
-          setIsAdmin(userPerm);
-      }
-      if(isAdmin !== "Admin"){
-        navigate("/");
-      }
-  }, []);
+    const userPerm = sessionStorage.getItem('role');
+    if(userPerm !== "Admin"){
+      navigate("/");
+    }
+  }, [navigate]);
 
   // Kullanıcıya Admin Yetkileri Veren API.
   const PromoteUser = async (e) => {
@@ -745,7 +737,7 @@ function AdminPanel() {
               <span className="polyclinic-name">{polyclinic.name}</span>
               <span className="doctor-count">Doktor Sayısı: {GetDoctorCount(polyclinic._id)}</span>
               <div className="button-container">
-                <button className="show-button" onClick={() => ShowDoctors(polyclinic._id)}>Doktorları Görüntüle</button>
+                <button className="show-button" onClick={() => ShowDoctors(polyclinic._id)}>{(GetDoctorCount(polyclinic._id) < 1) ? "Doktor Ekle" : "Doktorları Görüntüle"}</button>
                 <button className="edit-button" onClick={() => OpenPolyclinicEditPopup(polyclinic)}>Düzenle</button>
                 <button className="delete-button" onClick={() => DeletePolyclinic(polyclinic._id)}>Sil</button>
               </div>

@@ -33,9 +33,12 @@ function Polyclinics() {
 
   }, []);
 
+  // Poliklinikleri Alfabetik Sıraya Göre Sıralama Yapar.
+  const sortedPolyclinics = polyclinics.sort((a, b) => a.name.localeCompare(b.name));
+
     return (
         <div className="poly-container">
-            {polyclinics.map((polyclinic, index) => (
+            {sortedPolyclinics.map((polyclinic, index) => (
                 <div className="poly-card" key={index} >
                     <img className="poly-card-background" src={DefaultCard} alt="profile picture" />
                     <div className="poly-name-background-parent">

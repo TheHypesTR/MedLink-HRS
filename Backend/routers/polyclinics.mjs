@@ -209,8 +209,8 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
             const doctor = doctorMap[appointment.doctorID];
             return {
                 doctorID: appointment.doctorID,
-                doctor: doctor ? doctor.speciality + " " + doctor.name : "Unknown Doctor",
-                polyclinic: doctor ? doctor.polyclinic : "Unknown Polyclinic",
+                doctor: doctor ? doctor.speciality + " " + doctor.name : "Doktor",
+                polyclinic: doctor ? doctor.polyclinic : "Poliklinik",
                 date: appointment.date,
                 time: appointment.time[appointment.active.indexOf(user.TCno)],
                 timeSlot: appointment.active.indexOf(user.TCno)

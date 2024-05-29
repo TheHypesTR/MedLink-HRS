@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import './Appointment.css';
 
-function AppCard({ appointment, date, time, active, onClick }) {
+function AppCard({ appointment, date, time = [], active = [], onClick }) {
   const [selected, setSelected] = useState(false);
 
   const handleClick = (timeSlot) => {
@@ -27,5 +27,13 @@ function AppCard({ appointment, date, time, active, onClick }) {
     </div>
   );
 }
+
+AppCard.propTypes = {
+  appointment: PropTypes.object.isRequired,
+  date: PropTypes.string.isRequired,
+  time: PropTypes.array,
+  active: PropTypes.array,
+  onClick: PropTypes.func.isRequired,
+};
 
 export default AppCard;

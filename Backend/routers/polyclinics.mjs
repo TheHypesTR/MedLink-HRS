@@ -145,16 +145,16 @@ router.post("/doctor/:doctorID/appointment/:appointmentDate/makeAppointment", Us
         const { timeSlot } = request.body;
         const appointment = await AppointmentFinder(doctorID, appointmentDate, request);
 
-        const userID = request.session.passport?.user;
-        if(!userID) return response.status(400).json({ ERROR: language.userNotLoggedIn });
+        const user = request.user;
+        if(!user) return response.status(400).json({ ERROR: language.userNotLoggedIn });
 
         const timeIndex = appointment.time[timeSlot];
         if (!timeIndex) return response.status(400).json({ ERROR: language.invalidTimeSlot });
         if (appointment.active[timeSlot] !== false) return response.status(400).json({ ERROR: language.appointmentAlreadyTaken });
-        const activeAppointments = appointment.active.filter(active => active === userID);
+        const activeAppointments = appointment.active.filter(active => active === user.TCno);
         if (activeAppointments.length >= 1) return response.status(400).json({ ERROR: language.appointmentDuplicate });
 
-        appointment.active[timeSlot] = userID;
+        appointment.active[timeSlot] = user.TCno;
         await appointment.save();
         return response.status(200).json({ STATUS: language.appointmentMade });
 
@@ -208,7 +208,7 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
             const doctor = doctorMap[appointment.doctorID];
             return {
                 doctorID: appointment.doctorID,
-                doctor: doctor ? doctor.name : "Unknown Doctor",
+                doctor: doctor ? doctor.speciality + " " + doctor.name : "Unknown Doctor",
                 polyclinic: doctor ? doctor.polyclinic : "Unknown Polyclinic",
                 date: appointment.date,
                 time: appointment.time[appointment.active.indexOf(userID)],

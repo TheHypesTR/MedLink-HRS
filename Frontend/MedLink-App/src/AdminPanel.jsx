@@ -831,9 +831,9 @@ function AdminPanel() {
                                     <li key={index} className="li1">
                                         <div className='reportShowType'>{RemoveTime(appointment.date)}</div>
                                         <ul>
-                                            {appointment.times.map((timeSlot, timeIndex) => (
+                                            {appointment.times.map((userAppointment, timeIndex) => (
                                                 <li key={timeIndex}>
-                                                    {timeSlot.time} - {timeSlot.active}
+                                                    {userAppointment.time} - {userAppointment.active}
                                                 </li>
                                             ))}
                                         </ul>

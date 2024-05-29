@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './Appointment.css';
 
-function PolyCard({ name, description, imgSrc, onClick }) {
+function PolyCard({ name, description, image, onClick }) {
   const [selected, setSelected] = useState(false);
 
   const handleClick = () => {
@@ -18,7 +18,7 @@ function PolyCard({ name, description, imgSrc, onClick }) {
     >
       <img 
         className="polycard-image" 
-        src={imgSrc || './src/assets/default-card.jpg'} 
+        src={image || './src/assets/logo.png'} 
         alt={name} 
       />
       <h2 className="polycard-title">{name}</h2>

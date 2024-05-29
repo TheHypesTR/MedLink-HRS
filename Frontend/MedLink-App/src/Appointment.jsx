@@ -200,7 +200,7 @@ function Appointment() {
             key={index}
             name={polyclinic.name} 
             description={polyclinic.description} 
-            imgSrc={polyclinic.imgSrc || './src/assets/default-card.jpg'}
+            imgSrc={polyclinic.imgSrc || './src/assets/logo.png'}
             onClick={() => selectPolyclinic(polyclinic)}
           />
         ))}
@@ -214,7 +214,7 @@ function Appointment() {
               key={index}
               name={doctor.speciality + " " + doctor.name} 
               polyclinicName={doctor.polyclinic} 
-              image={doctor.image || './src/assets/Faruk1.jpg'}
+              image={doctor.image || './src/assets/default-card.jpg'}
               onClick={() => selectDoctor(doctor)}
             />
             ))}

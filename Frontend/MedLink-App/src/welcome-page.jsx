@@ -84,7 +84,7 @@ function WelcomePage() {
             </div>
             <div className="grid-item">
                 <img src="./src/assets/heart.png" alt="resim"/>
-                <p>Gastroentroloji</p>
+                <p>Gastroenteroloji</p>
             </div>
             <div className="grid-item">
                 <img src="./src/assets/heart.png" alt="resim"/>

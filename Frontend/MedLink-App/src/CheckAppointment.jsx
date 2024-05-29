@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../config.mjs";
@@ -80,12 +81,16 @@ function CheckAppointment() {
     <div className="randevucheckdiv">
         {appointments.map((appointment, index) => (
             <div className="randevukutucukdiv" key={index}>
-                <p className="ornekyazi2">Poliklinik: {appointment.polyclinic}</p>
-                <p className="ornekyazi2">Doktor: {appointment.doctor}</p>
-                <p className="ornekyazi2">Randevu Tarihi: {RemoveTime(appointment.date)}</p>
-                <p className="ornekyazi2">Randevu Saati: {appointment.time}</p>
-                <button className="randevudeletebutton" onClick={() => DeleteAppointment(appointment)}>Randevuyu Sil</button>
+                <p className="ornekyazi2">Randevu - {index + 1}</p>
                 <hr />
+                <p className="ornekyazi2">{appointment.polyclinic}</p>
+                <p className="ornekyazi2">{appointment.doctor}</p>
+                <hr />
+                <p className="ornekyazi2">Tarih: {RemoveTime(appointment.date)}</p>
+                <hr />
+                <p className="ornekyazi2">Saat: {appointment.time}</p>
+                <hr />
+                <button className="randevudeletebutton" onClick={() => DeleteAppointment(appointment)}>Randevuyu İptal Et</button>
             </div>
         ))}
     </div>

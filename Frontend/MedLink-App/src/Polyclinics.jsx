@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import config from "../config.mjs";
 import './Polyclinics.css';
-import DefaultCard from "./assets/default-card.jpg";
+import DefaultCard from "./assets/logo.png";
 
 function Polyclinics() {
     const [polyclinics, setPolyclinics] = useState([]);

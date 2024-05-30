@@ -11,19 +11,20 @@
   .polycard {
     position: relative;
     overflow: hidden;
-    border: 2px solid transparent;
     cursor: pointer;
     transition: border-color 0.3s;
     max-width: 350px;
-    height: 450px;
-    background-color: aliceblue;
+    height: 500px;
+    background-color: rgb(0, 136, 255);
     border-radius: 10px;
     margin-left: 10px;
+    border: 3px solid black;
   }
   
   .polycard img {
     width: 100%;
-    height: 60%;
+    height: 65%;
+    border-bottom: 1px solid black;
   }
   
   .polycard-title {
@@ -72,118 +73,118 @@
   }
 
   .appointment-form{
-    margin-top: 200px;
-    width: 800px;
-    height: 500px;
-    background-color: aqua;
     display: flex;
-    text-align: center;
-    left: 300px;
-    bottom: 50px;
-    position: relative;
+    background-color: #3AAFA9;
+    width: 750px;
+    margin: auto;
+    margin-bottom: 80px;
+    height: 600px;
+    border: 3px solid black;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 5px;
   }
 
   #doktoradih2{
-    left: 130px;
-    position: relative;
-    top: 10px;
-    max-width: 786.86px;
+  color: white;
+  margin: 10px 0;
+  }
+
+  #polikadih2{
+    color: white;
+    margin: 10px 0;
   }
 
   #tarihdivi{
-    position: relative;
-    right: 265px;
-    top: 85px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
   }
 
   #tarihbutonu{
-    position: relative;
-    right: 265px;
-    top: 95px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+  }
+
+  #tarihbutonu:hover{
+    transition: 0.3s;
+    background-color: gray;
   }
 
   .appointment-list{
-    position: relative;
-    left: 330px;
-    bottom: 240px;
+    margin-top: 20px;
+    width: 700px;
+    height: 500px;
   }
 
   #doktordonus{
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #000000;
-    color: white;
-    text-decoration: none;
-    border-radius: 7.5px;
-    font-size: 10px;
-    font-family: "Poppins", sans-serif;
-    position: relative;
-    top: -240px;
+    padding: 10px 20px;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    margin-left: 35px;
+    font-size: 16px;
+    font-weight: 700;
   }
 
   #doktordonus:hover{
     transition: 0.3s;
-    background-color: rgb(47, 47, 47);
+    background-color: darkgray;
     cursor: pointer;
   }
 
 #saatlistesi li{
-  display: inline-block;
-  padding: 10px 15px;
-  background-color: #000000;
-  color: white;
-  text-decoration: none;
-  border-radius: 7.5px;
-  font-size: 18px;
-  font-family: "Poppins", sans-serif;
-  margin: 5px;
-  width: 140px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    max-width: 140px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    margin-left: 5px;
 }
 
-#saatlistesi{
-  max-width: 600px;
-  position: relative;
-  top: -150px;
-  right: -75px;
+#saatlistesi ul{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-left: 10px;
+  margin-bottom: 5px;
 }
 
 #saatlistesi li:hover{
   transition: 0.3s;
-  background-color: rgb(47, 47, 47);
+  background-color: darkgray;
   cursor: pointer;
-}
-
-#randevusaatih3{
-  color: #25274D;
-  position: relative;
-  left: -360px;
-  bottom: 150px;
 }
 
 .AppCard-times{
-  max-width: 600px;
-  bottom: 110px;
-  position: relative;
-  left: 120px;
-  margin-right: 600px;
+  align-items: center;
 }
 
 .AppCard-date{
-  position: relative;
-  left: 240px;
-  bottom: 4px;
-  display: inline-block;
-  color: #000000;
+  text-align: center;
 }
 
 .doccard {
-  position: relative;
   overflow: hidden;
-  border: 2px solid transparent;
+  border: 3px solid black;
   cursor: pointer;
   transition: border-color 0.3s;
-  max-width: 350px;
-  height: 450px;
+  width: 400px;
+  height: 500px;
   background-color: aliceblue;
   border-radius: 10px;
   margin-left: 10px;
@@ -191,7 +192,8 @@
 
 .doccard img {
   width: 100%;
-  height: 60%;
+  height: 75%;
+  border-bottom: 2px solid black;
 }
 
 .doccard-title {
@@ -206,7 +208,7 @@
 }
 
 .doccard.selected {
-  border-color: rgba(21, 255, 0, 0.623); /* Seçili kartın kenarlık rengi */
+  border-color: rgba(21, 255, 0, 0.623);
 }
 
 .doccard:hover .doccard__overlay {
@@ -239,24 +241,33 @@
   transition: transform 0.3s;
 }
 
+.doccard-name{
+  text-align: center;
+}
+
+.doccard-polyclinicName{
+  text-align: center;
+}
+
 #polybutton3{
-  display: inline-block;
-  padding: 10px 15px;
-  background-color: #000000;
-  color: white;
-  text-decoration: none;
-  border-radius: 7.5px;
-  font-size: 10px;
-  font-family: "Poppins", sans-serif;
+  padding: 10px 20px;
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  margin-left: 35px;
+  font-size: 16px;
+  font-weight: 700;
   position: relative;
-  top: -25px;
-  right: -25px;
+  top: -20px;
+  right: 15px;
 }
 
 #polybutton3:hover{
   cursor: pointer;
   transition: 0.3s;
-  background-color: rgb(30, 30, 30);
+  background-color: darkgray;
 }
 
 .doctorlistul{

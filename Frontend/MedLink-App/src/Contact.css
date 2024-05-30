@@ -19,45 +19,10 @@
     border-bottom-left-radius: 15%;
 }
 
-#yazi1{
-    color: black;
-    display: inline;
+#contact-adres{
     position: relative;
-    left: 350px;
-    top: -300px;
-}
-
-#yazi2{
-    display: inline;
-    position: relative;
-    left: -200px;
-    top: -250px;
-}
-
-#yazi6{
-    display: inline;
-    position: relative;
-    left: 430px;
-    top: -250px;
-}
-
-#yazi3{
-    display: inline;
-    position: relative;
-    left: -287.5px;
-    top: -200px;
-}
-
-#yazi4{
-    display: inline-block;
-    position: relative;
-    left: -680px;
-    top: -160px;
-}
-
-#yazi5{
-    display: inline;
-    position: relative;
-    left: 455px;
-    top: -150px;
+    max-width: 900px;
+    left: 450px;
+    bottom: 300px;
+    margin-bottom: -100px;
 }

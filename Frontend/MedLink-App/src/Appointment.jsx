@@ -223,8 +223,10 @@ function Appointment() {
         </div>
       )}
       {selectedPolyclinic && selectedDoctor && (
-        <div className="appointment-form">
-          <h2 id='doktoradih2'>{selectedDoctor.polyclinic} - {selectedDoctor.speciality + " " + selectedDoctor.name}</h2>
+      <div><button id='doktordonus' onClick={resetSelectionAppointment}>Doktor Seçimine Dön</button>
+      <div className="appointment-form">
+          <h2 id='polikadih2'>{selectedDoctor.polyclinic}</h2>
+          <h2 id='doktoradih2'>{selectedDoctor.speciality + " " + selectedDoctor.name}</h2>
           <form onSubmit={selectAppointment}>
             <div id='tarihdivi'>
               <label>Randevu Tarihi:</label>
@@ -232,24 +234,24 @@ function Appointment() {
             </div>
             <button id='tarihbutonu' type="submit">Randevu Bul</button>
           </form>
+          {selectedPolyclinic && selectedDoctor && appointments.length !== 0  && (
+            <div className="appointment-list">
+              <h3 id='randevusaatih3'>Randevu Saatleri</h3>
+              <ul id='saatlistesi'>
+                  <AppCard
+                    appointment={appointments}
+                    date={RemoveTime(appointments.date)}
+                    time={appointments.time}
+                    active={appointments.active}
+                    onClick={(appointment, date, timeSlot) => MakeAppointment(appointment, date, timeSlot)}
+                  />
+              </ul>
+            </div>
+          )}
+        </div>
         </div>
       )}
-      {selectedPolyclinic && selectedDoctor && appointments.length !== 0  && (
-        <div className="appointment-list">
-          <button id='doktordonus' onClick={resetSelectionAppointment}>Doktor Seçimine Dön</button>
-          <h3 id='randevusaatih3'>Randevu Saatleri</h3>
-          <ul id='saatlistesi'>
-              <AppCard
-                appointment={appointments}
-                date={RemoveTime(appointments.date)}
-                time={appointments.time}
-                active={appointments.active}
-                onClick={(appointment, date, timeSlot) => MakeAppointment(appointment, date, timeSlot)}
-              />
-          </ul>
-        </div>
-      )}
-    </div>
+     </div>
   );
 }
 

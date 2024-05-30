@@ -884,10 +884,11 @@ function AdminPanel() {
             <button className="close-button" onClick={() => setIsReportAddPopupOpen(false)}>X</button>
             <div className="popup-content">
               <h3>Rapor Ekle</h3>
-              <form onSubmit={AddReport}>
+              <form onSubmit={AddReport} className='raporeklemeformu'>
                 <textarea
-                  placeholder='Raporu Tipini Giriniz'
+                  placeholder='Raporun Tipini Giriniz'
                   className='input-box'
+                  id='textareaidsi'
                   required
                   value={reportType}
                   onChange={(e) => setReportType(e.target.value)}

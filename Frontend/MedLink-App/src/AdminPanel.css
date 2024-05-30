@@ -269,3 +269,15 @@ ul {
     top: 70px;
     left: 15px;
   }
+
+  .raporeklemeformu input{
+    color: white;
+  }
+
+textarea{
+  color: white;
+}
+
+#textareaidsi{
+  margin-bottom: 20px;
+}

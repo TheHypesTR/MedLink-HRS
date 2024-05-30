@@ -9,8 +9,6 @@ function CheckAppointment() {
     const [appointments, setAppointments] = useState([]);
     const [selectedAppointment, setSelectedAppointment] = useState("");
     const [selectedRating, setSelectedRating] = useState(0);
-    const [ratingPopup, setRatingPopup] = useState(false);
-    const [isRated, setIsRated] = useState(false);
 
   // Sayfa Açıldığında Kullanıcnın Randevularını Listeleyen API.
   useEffect(() => {
@@ -47,7 +45,6 @@ function CheckAppointment() {
   // Kullanıcının Aktif Randevularını Silme API'si.
   const DeleteAppointment = async (appointment) => {
     const formattedDate = new Date(appointment.date).toISOString().split('T')[0];
-    console.log(formattedDate);
     try {
         await fetch(`http://localhost:${config.PORT}/doctor/${appointment.doctorID}/appointment/${formattedDate}/deleteAppointment`, {
             method: "DELETE",
@@ -80,30 +77,30 @@ function CheckAppointment() {
   // Doktor Derecelendirme API'si.
   const RateDoctor = async (appointment, rating) => {
     try {
-        await fetch(`http://localhost:${config.PORT}/doctor/${appointment.doctorID}/rate`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              rating: rating, 
-            }),
-        })
+      console.log(appointment);
+      await fetch(`http://localhost:${config.PORT}/doctor/${appointment.doctorID}/appointment/${appointment._id}/rate`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          rating: rating,
+        }),
+      })
         .then((response) => response.json())
         .then((data) => {
-            if(data.ERROR) {
-                alert(data.ERROR);
-            }
-            if(data.STATUS) {
-                alert(data.STATUS);
-                setIsRated(true);
-            }
+          if (data.ERROR) {
+            alert(data.ERROR);
+          }
+          if (data.STATUS) {
+            alert(data.STATUS);
+          }
         });
-        
+
     } catch (err) {
-        console.log(err);
-      }
+      console.log(err);
+    }
   };
 
   // Doktor Derecelendirme Fonksiyonu.
@@ -112,10 +109,10 @@ function CheckAppointment() {
         alert("Lütfen bir değer seçin.");
         return;
     }
-    setRatingPopup(false);
     RateDoctor(selectedAppointment, selectedRating);
     setSelectedAppointment("");
     setSelectedRating(0);
+    showAppointments();
 };
 
   // Tarih Formatını Düzenleyen Fonksiyon.
@@ -142,7 +139,7 @@ function CheckAppointment() {
                 <p className="ornekyazi2">Saat: {appointment.time}</p>
                 <hr />
                 <button className="randevudeletebutton" onClick={() => DeleteAppointment(appointment)}>İptal Et</button>
-                <button className={`rating-button ${isRated ? 'deactivated' : ''}`} onClick={() => setSelectedAppointment(appointment)}>Değerlendir</button>
+                <button className={`rating-button ${appointment.rated ? 'deactivated' : ''}`} onClick={() => setSelectedAppointment(appointment)}>Değerlendir</button>
             </div>
         ))}
         {selectedAppointment && (

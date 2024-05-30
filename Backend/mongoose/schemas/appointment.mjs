@@ -26,6 +26,10 @@ const AppointmentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Array,
         default: [false, false, false, false, false, false, false, false, false, false, false, false],
     },
+    rated: {
+        type: mongoose.Schema.Types.Array,
+        default: [false, false, false, false, false, false, false, false, false, false, false, false],
+    },
 }, { versionKey: false, timestamps: { currentTime: () => new Date(Date.now() + 1000 * 60 * 60 * 3) } });
 
 AppointmentSchema.pre("save", function(next) {

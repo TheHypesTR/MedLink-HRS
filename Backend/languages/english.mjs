@@ -39,6 +39,7 @@ const english = {
     appointmentNotDeletingForUser: "No Appointment Information to be Deleted Found!!",
     appointmentAlreadyExists: "Appointment Already Exists!!",
     appointmentAlreadyTaken: "Another User Has an Appointment on the Same Date!!",
+    appointmentAlreadyRated: "Appointment Already Rated!!",
     appointmentDuplicate: "No other appointment can be made with the same doctor on the same date!!",
     appointmentTimeReq: "Appointment Time (Array) is Required!!",
 

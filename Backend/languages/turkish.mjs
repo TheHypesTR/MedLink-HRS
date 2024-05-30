@@ -39,6 +39,7 @@ const turkish = {
     appointmentNotDeletingForUser: "Kullanıcının Randevu Bilgileri Bulunamadı!!",
     appointmentAlreadyExists: "Randevu Tarihi Halihazırda Mevcut!!",
     appointmentAlreadyTaken: "Aynı Tarihte Başka Bir Kullanıcının Randevusu Var!!",
+    appointmentAlreadyRated: "Randevu Zaten Derecelendirilmiş!!",
     appointmentDuplicate: "Aynı Tarihte Aynı Doktordan Başka Randevu Alınamaz!!",
     appointmentTimeReq: "Randevu Tarihi İçin Zaman Bilgileri Gerekli!!",
 

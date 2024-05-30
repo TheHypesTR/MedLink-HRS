@@ -218,12 +218,14 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
         let userAppointments = appointments.map(appointment => {
             const doctor = doctorMap[appointment.doctorID];
             return {
+                _id: appointment._id,
                 doctorID: appointment.doctorID,
                 doctor: doctor ? doctor.speciality + " " + doctor.name : "Doktor",
                 polyclinic: doctor ? doctor.polyclinic : "Poliklinik",
                 date: appointment.date,
                 time: appointment.time[appointment.active.indexOf(user.TCno)],
-                timeSlot: appointment.active.indexOf(user.TCno)
+                timeSlot: appointment.active.indexOf(user.TCno),
+                rated: appointment.rated[appointment.active.indexOf(user.TCno)],
             };
         });
         if (!userAppointments || userAppointments.length === 0) return response.status(404).json({ ERROR: language.appointmentNotAvailable });
@@ -237,19 +239,29 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
 });
 
 // Randevu Alınan Doktoru Derecelendiren API.
-router.post("/doctor/:doctorID/rate", UserLoginCheck, async (request, response) => {
+router.post("/doctor/:doctorID/appointment/:appointmentID/rate", UserLoginCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
-        const doctorID = request.params.doctorID;
+        const user = request.user;
+        const { doctorID, appointmentID } = request.params;
         const doctor = await Doctor.findOne({ _id: doctorID });
         if(!doctor) return response.status(400).json({ ERROR: language.doctorNotFound });
         
         const rating = request.body.rating;
-        if(rating < 1 || rating > 5) return response.status(400).json({ ERROR: language.invalidRating });
+        console.log(rating)
+        if (rating < 1 || rating > 5) return response.status(400).json({ ERROR: language.invalidRating });
 
-        doctor.rating += rating;
+        const appointment = await Appointment.findOne({ _id: appointmentID, doctorID: doctorID});
+        console.log(appointment)
+        if(!appointment) return response.status(400).json({ ERROR: language.appointmentNotFound });
+        if (appointment.rated[appointment.active.indexOf(user.TCno)]) return response.status(400).json({ ERROR: language.appointmentAlreadyRated });
+
+        doctor.rating += parseFloat(rating);
         doctor.rateCount += 1;
         await doctor.save();
+
+        appointment.rated[appointment.active.indexOf(user.TCno)] = true;
+        await appointment.save();
         return response.status(200).json({ STATUS: language.doctorRated });
 
     } catch (err) {

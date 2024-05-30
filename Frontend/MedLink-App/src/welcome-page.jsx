@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import config from "../config.mjs";
 import "./welcome-page.css";
 import DefaultCard from "./assets/logo.png";
+import Faruk1Resim from './assets/Faruk1.jpg';
 
 function WelcomePage() {
   const [polyclinics, setPolyclinics] = useState([]);
@@ -143,26 +144,26 @@ return (
             )}
             <section className="hastaneyonetim">
             <h2 className="title2">Uzman Kadromuzla Beraber</h2>
-            <h1 className="subtitle2">Yöneticilerimiz</h1> 
+            <h1 className="subtitle2">Yöneticimiz</h1> 
                 <div className="yonetim-container">   
                     <div className="yonetim-content">
                             <div className="yonetim-card">
-                                <img className="yonetim-card-background" src={DefaultCard} alt="resima1" />
+                                <img className="yonetim-card-background" src={Faruk1Resim} alt="resima1" />
                                 <div className="yonetim-name-background-parent">
-                        <div className="yonetim-name-background" />
-                            <div className="yonetim-name-wrapper">
-                                <div className="yonetim-name">
-                                    Yönetim İsim
+                                    <div className="yonetim-name-background" />
+                                        <div className="yonetim-name-wrapper">
+                                            <div className="yonetim-name">
+                                                Başhekim Ömer Faruk Yaşar
+                                                </div>
+                                                </div>
+                                                <div className="yonetim-parent">
+                                                <b className="yonetim">
+                                                Hastane yönetimi ve düzeninden sorumlu kişi
+                                                </b>
+                                            <div className="frame-wrapper1">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="yonetim-parent">
-                                <b className="yonetim">
-                                    Yönetim Açıklaması
-                                </b>
-                                <div className="frame-wrapper1">
-                            </div>
-                        </div>
-                    </div>
                             </div>
                     </div>
                 </div>

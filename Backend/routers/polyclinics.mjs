@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Polyclinic } from "../mongoose/schemas/polyclinics.mjs";
 import { Doctor } from "../mongoose/schemas/doctors.mjs";
 import { Appointment } from "../mongoose/schemas/appointment.mjs";
+import { Report } from "../mongoose/schemas/reports.mjs";
 import { PolyclinicFinder, DoctorFinder, AppointmentFinder, LoadLanguage, UserLoginCheck } from "../utils/middlewares.mjs";
 import turkish from "../languages/turkish.mjs";
 import english from "../languages/english.mjs";
@@ -147,6 +148,15 @@ router.post("/doctor/:doctorID/appointment/:appointmentDate/makeAppointment", Us
 
         const user = request.user;
         if(!user) return response.status(400).json({ ERROR: language.userNotLoggedIn });
+
+        const appointmentDay = new Date(appointmentDate);
+        const overlappingReport = await Report.findOne({
+            doctorID: doctorID,
+            startDay: { $lte: appointmentDay },
+            endDay: { $gte: appointmentDay }
+        });
+
+        if (overlappingReport) return response.status(400).json({ ERROR: language.doctorOnLeave });
 
         const timeIndex = appointment.time[timeSlot];
         if (!timeIndex) return response.status(400).json({ ERROR: language.invalidTimeSlot });

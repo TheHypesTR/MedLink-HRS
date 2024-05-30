@@ -18,6 +18,7 @@ const english = {
     doctorNotAdding: "Doctor Not Adding!!",
     doctorNotUpdating: "Doctor Not Updating!!",
     doctorNotDeleting: "Doctor Not Deleting!!",
+    doctorOnLeave: "Doctor on Leave!!",
     doctorNotListing: "Doctors Not Listing!!",
     doctorAlreadyExists: "Doctor Already Exists!!",
     

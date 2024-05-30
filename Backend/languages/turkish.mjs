@@ -18,6 +18,7 @@ const turkish = {
     doctorNotAdding: "Doktor Eklenemedi!!",
     doctorNotUpdating: "Doktor Bilgileri Güncellenemedi!!",
     doctorNotDeleting: "Doktor Silinemedi!!",
+    doctorOnLeave: "Doktor İzinli!!",
     doctorNotListing: "Doktor Bilgileri Yüklenemedi!!",
     doctorAlreadyExists: "Doktor Halihazırda Mevcut!!",
     

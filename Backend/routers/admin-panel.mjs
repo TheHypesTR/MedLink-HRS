@@ -265,7 +265,7 @@ router.get("/polyclinic/:polyclinicID/doctor/:doctorID/report/:reportID", UserLo
     }
 });
 
-// ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorun İzin Raporunu Güncelleştirme API'si.
+// ID'si Belirtilen Poliklinikteki ID'si Belirtilen Doktorua İzin Raporu Ekleme API'si.
 router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserLoginCheck, UserPermCheck, async (request, response) => {
     const language = LoadLanguage(request);
     try {
@@ -279,7 +279,7 @@ router.post("/admin/polyclinic/:polyclinicID/doctor/:doctorID/giveReport", UserL
         if(endDay) data.endDay = endDay;
         if(Object.keys(data).length === 0) return response.status(400).json({ ERROR: language.dataNotFound });
         if(startDay > endDay) return response.status(400).json({ ERROR: language.invalidReportDuration });
-        if(startDay < Date.now()) return response.status(400).json({ ERROR: language.invalidReportDuration });
+        if(new Date(startDay) < Date.now()) return response.status(400).json({ ERROR: language.invalidReportDuration });
 
         const overlappingReports = await Report.find({ doctorID: doctor._id, $or: [
                 { startDay: { $lte: endDay }, endDay: { $gte: startDay } },

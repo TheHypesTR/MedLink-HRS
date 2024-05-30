@@ -18,11 +18,13 @@ const english = {
     doctorNotAdding: "Doctor Not Adding!!",
     doctorNotUpdating: "Doctor Not Updating!!",
     doctorNotDeleting: "Doctor Not Deleting!!",
+    ratingNotAdded: "Doctor Not Rated!!",
     doctorOnLeave: "Doctor on Leave!!",
     doctorNotListing: "Doctors Not Listing!!",
     doctorAlreadyExists: "Doctor Already Exists!!",
     
     // PARTITION OF DOCTOR INFO
+    doctorRated: "Doctor Rated Successfully!!",
     doctorAdded: "Doctor Added Successfully!!",
     doctorUpdated: "Doctor Edited Successfully!!",
     doctorDeleted: "Doctor Deleted Successfully!!",
@@ -62,6 +64,7 @@ const english = {
     invalidTC: "Invalid 'T.C. NO'!!",
     invalidDate: "Invalid Date!!",
     invalidLang: "Invalid Language!!",
+    invalidRating: "Invalid Rating!!",
     invalidTimeSlot: "Invalid Time Slot!!",
     invalidPermission: "Only Admins Can Enter!!",
     invalidPolyclinicID: "Invalid Polyclinic-ID!!",

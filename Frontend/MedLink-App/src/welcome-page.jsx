@@ -10,6 +10,7 @@ function WelcomePage() {
   const [doctors, setDoctors] = useState([]);
   const [isShowDoctorsPopup, setIsShowDoctorsPopup] = useState(false);
 
+  // Sayfa Açıldığında Kullanıcı Bilgilerini ve Poliklinikleri Çeken API.
   useEffect(() => {
     CheckUser();
     ShowPolyclinics();
@@ -87,6 +88,7 @@ const ShowDoctors = (polyclinic) => {
     }
 };
 
+// Seçilen Poliklinikteki Doktorları Gösterir.
 const selectPolyclinic = (polyclinic) => {
     setSelectedPolyclinic(polyclinic);
     ShowDoctors(polyclinic);

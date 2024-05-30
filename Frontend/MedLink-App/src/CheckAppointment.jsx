@@ -7,6 +7,10 @@ import "./CheckAppointment.css"
 function CheckAppointment() {
     const navigate = useNavigate();
     const [appointments, setAppointments] = useState([]);
+    const [selectedAppointment, setSelectedAppointment] = useState("");
+    const [selectedRating, setSelectedRating] = useState(0);
+    const [ratingPopup, setRatingPopup] = useState(false);
+    const [isRated, setIsRated] = useState(false);
 
   // Sayfa Açıldığında Kullanıcnın Randevularını Listeleyen API.
   useEffect(() => {
@@ -73,6 +77,47 @@ function CheckAppointment() {
     }
   };
 
+  // Doktor Derecelendirme API'si.
+  const RateDoctor = async (appointment, rating) => {
+    try {
+        await fetch(`http://localhost:${config.PORT}/doctor/${appointment.doctorID}/rate`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              rating: rating, 
+            }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.ERROR) {
+                alert(data.ERROR);
+            }
+            if(data.STATUS) {
+                alert(data.STATUS);
+                setIsRated(true);
+            }
+        });
+        
+    } catch (err) {
+        console.log(err);
+      }
+  };
+
+  // Doktor Derecelendirme Fonksiyonu.
+  const RateDoctorNow = async () => {
+    if (!selectedRating) {
+        alert("Lütfen bir değer seçin.");
+        return;
+    }
+    setRatingPopup(false);
+    RateDoctor(selectedAppointment, selectedRating);
+    setSelectedAppointment("");
+    setSelectedRating(0);
+};
+
   // Tarih Formatını Düzenleyen Fonksiyon.
   const RemoveTime = (str) => {
     if (!str)
@@ -96,9 +141,27 @@ function CheckAppointment() {
                 <hr />
                 <p className="ornekyazi2">Saat: {appointment.time}</p>
                 <hr />
-                <button className="randevudeletebutton" onClick={() => DeleteAppointment(appointment)}>Randevuyu İptal Et</button>
+                <button className="randevudeletebutton" onClick={() => DeleteAppointment(appointment)}>İptal Et</button>
+                <button className={`rating-button ${isRated ? 'deactivated' : ''}`} onClick={() => setSelectedAppointment(appointment)}>Değerlendir</button>
             </div>
         ))}
+        {selectedAppointment && (
+                <div className="popup">
+                    <div className="popup-inner">
+                        <h2>Değerlendirme</h2>
+                        <p>{selectedAppointment.polyclinic}</p>
+                        <p>{selectedAppointment.doctor}</p>
+                        <p>{RemoveTime(selectedAppointment.date)}</p>
+                        <p>{selectedAppointment.time}</p>
+                        <div>
+                          {[1, 2, 3, 4, 5].map((value) => (
+                            <button key={value} onClick={() => setSelectedRating(value)}>{value}</button>
+                          ))}
+                        </div>
+                        <button onClick={RateDoctorNow}>Değerlendir</button>
+                    </div>
+                </div>
+            )}
     </div>
     );
 }

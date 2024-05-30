@@ -143,7 +143,7 @@ router.post("/doctor/:doctorID/appointment/:appointmentDate/makeAppointment", Us
     const language = LoadLanguage(request);
     try {
         const { doctorID, appointmentDate } = request.params;
-        const { timeSlot } = request.body;
+        const timeSlot = request.body.timeSlot;
         const appointment = await AppointmentFinder(doctorID, appointmentDate, request);
 
         const user = request.user;
@@ -153,7 +153,7 @@ router.post("/doctor/:doctorID/appointment/:appointmentDate/makeAppointment", Us
         const overlappingReport = await Report.findOne({
             doctorID: doctorID,
             startDay: { $lte: appointmentDay },
-            endDay: { $gte: appointmentDay }
+            endDay: { $gte: appointmentDay },
         });
 
         if (overlappingReport) return response.status(400).json({ ERROR: language.doctorOnLeave });
@@ -180,7 +180,7 @@ router.delete("/doctor/:doctorID/appointment/:appointmentDate/deleteAppointment"
     const language = LoadLanguage(request);
     try {
         const { doctorID, appointmentDate } = request.params;
-        const { timeSlot } = request.body;
+        const timeSlot = request.body.timeSlot;
         const appointment = await AppointmentFinder(doctorID, appointmentDate, request);
         const user = request.user;
         if(!user) return response.status(400).json({ ERROR: language.userNotLoggedIn });
@@ -232,6 +232,29 @@ router.get("/user/appointments", UserLoginCheck, async (request, response) => {
     } catch (err) {
         const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
         console.log(language.appointmentNotListing, ERROR);
+        return response.status(400).json({ ERROR: err.message });
+    }
+});
+
+// Randevu Alınan Doktoru Derecelendiren API.
+router.post("/doctor/:doctorID/rate", UserLoginCheck, async (request, response) => {
+    const language = LoadLanguage(request);
+    try {
+        const doctorID = request.params.doctorID;
+        const doctor = await Doctor.findOne({ _id: doctorID });
+        if(!doctor) return response.status(400).json({ ERROR: language.doctorNotFound });
+        
+        const rating = request.body.rating;
+        if(rating < 1 || rating > 5) return response.status(400).json({ ERROR: language.invalidRating });
+
+        doctor.rating += rating;
+        doctor.rateCount += 1;
+        await doctor.save();
+        return response.status(200).json({ STATUS: language.doctorRated });
+
+    } catch (err) {
+        const ERROR = { ERROR: err.message, UserID: request.session.passport?.user, Date: new Date(Date.now() + 1000 * 60 * 60 * 3) };
+        console.log(language.ratingNotAdded, ERROR);
         return response.status(400).json({ ERROR: err.message });
     }
 });

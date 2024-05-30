@@ -23,6 +23,14 @@ const DoctorSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         default: "./src/assets/default-card.jpg",
     },
+    rating: {
+        type: mongoose.Schema.Types.Number,
+        default: 0,
+    },
+    rateCount: {
+        type: mongoose.Schema.Types.Number,
+        default: 0,
+    },
 }, { versionKey: false, timestamps: { currentTime: () => new Date(Date.now() + 1000 * 60 * 60 * 3) } });
 
 export const Doctor = mongoose.model("Doctors", DoctorSchema);

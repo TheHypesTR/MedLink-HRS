@@ -43,6 +43,7 @@ function Doctors() {
                     <img className="doctor-card-background" src={doctor.image} alt="profile picture" />
                     <div className="doctor-name-background-parent">
                         <div className="doctor-name-background" />
+                                <div className="doctors-rating">{doctor.rateCount > 0 ? (doctor.rating / doctor.rateCount).toFixed(2) : "Derecelendirme Yok"}</div>
                             <div className="doctors-name-wrapper">
                                 <div className="doctors-name">{`${doctor.speciality} ${doctor.name}`}</div>
                             </div>

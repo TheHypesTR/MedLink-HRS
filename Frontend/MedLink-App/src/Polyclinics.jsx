@@ -9,6 +9,7 @@ function Polyclinics() {
     const [selectedPolyclinic, setSelectedPolyclinic] = useState("");
     const [doctors, setDoctors] = useState([]);
     
+    // Sayfa Açıldığında Poliklinikleri Çeken API.
     useEffect(() => {
         ShowPolyclinics();
     }, []);
@@ -66,12 +67,14 @@ function Polyclinics() {
         }
     };
 
+    // Seçilen Poliklinikteki Doktorları Gösterir.
     const selectPolyclinic = (polyclinic) => {
         setSelectedPolyclinic(polyclinic);
         setPolyclinics([]);
         ShowDoctors(polyclinic);
       };
 
+      // Polikliniklere Geri Döner.
       const returnPolyclinics = () => {
         setSelectedPolyclinic("");
         setDoctors([]);

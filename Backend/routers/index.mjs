@@ -1,7 +1,7 @@
 import { Router } from "express";
 import usersRouter from "./users.mjs";
 import adminPanelRouter from "./admin-panel.mjs";
-import polyclinicsRouter from "./polyclinics.mjs";
+import polyclinicsRouter from "./user-panel.mjs";
 import turkish from "../languages/turkish.mjs";
 
 const router = Router();

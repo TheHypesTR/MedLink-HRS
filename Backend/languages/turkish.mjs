@@ -18,11 +18,13 @@ const turkish = {
     doctorNotAdding: "Doktor Eklenemedi!!",
     doctorNotUpdating: "Doktor Bilgileri Güncellenemedi!!",
     doctorNotDeleting: "Doktor Silinemedi!!",
+    ratingNotAdded: "Doktor Derecelendirilemedi!!",
     doctorOnLeave: "Doktor İzinli!!",
     doctorNotListing: "Doktor Bilgileri Yüklenemedi!!",
     doctorAlreadyExists: "Doktor Halihazırda Mevcut!!",
     
     // PARTITION OF DOCTOR INFO
+    doctorRated: "Doctor Derecelendirme Başarılı!!",
     doctorAdded: "Doktor Ekleme İşlemi Başarılı!!",
     doctorUpdated: "Doktor Düzenleme İşlemi Başarılı!!",
     doctorDeleted: "Doktor Silme İşlemi Başarılı!!",
@@ -62,6 +64,7 @@ const turkish = {
     invalidTC: "Geçersiz 'T.C. NO'!!",
     invalidDate: "Geçersiz Tarih!!",
     invalidLang: "Geçerli Bir Dil Seçiniz!!",
+    invalidRating: "Geçersiz Derecelendirme!!",
     invalidTimeSlot: "Geçersiz Randevu Saati!!",
     invalidPermission: "Sadece Yetkililer Girebilir!!",
     invalidPolyclinicID: "Geçersiz Poliklinik-ID!!",

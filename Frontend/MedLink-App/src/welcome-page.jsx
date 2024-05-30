@@ -6,6 +6,9 @@ import DefaultCard from "./assets/logo.png";
 
 function WelcomePage() {
   const [polyclinics, setPolyclinics] = useState([]);
+  const [selectedPolyclinic, setSelectedPolyclinic] = useState("");
+  const [doctors, setDoctors] = useState([]);
+  const [isShowDoctorsPopup, setIsShowDoctorsPopup] = useState(false);
 
   useEffect(() => {
     CheckUser();
@@ -58,6 +61,38 @@ function WelcomePage() {
 
 };
 
+// Database'den Seçili Poliklinikteki Doktorları Çeken APİ.
+const ShowDoctors = (polyclinic) => {
+    try {
+        fetch(`http://localhost:${config.PORT}/polyclinic/${polyclinic._id}/doctor`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            if(data.ERROR) {
+                alert(data.ERROR);
+                setDoctors([]);
+            }
+            if(data)
+                setDoctors(data);
+        })
+    
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+const selectPolyclinic = (polyclinic) => {
+    setSelectedPolyclinic(polyclinic);
+    ShowDoctors(polyclinic);
+    setIsShowDoctorsPopup(true);
+  };
+
 // Poliklinikleri Alfabetik Sıraya Göre Sıralama Yapar.
 const sortedPolyclinics = polyclinics.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -80,13 +115,30 @@ return (
                 <h1 className="subtitle">Alanlarımız</h1>
                 <div className="grid1">
                     {sortedPolyclinics.map((polyclinic, index) => (
-                        <div className="grid-item" key={index}>
+                        <div className="grid-item" key={index} onClick={() => selectPolyclinic(polyclinic)}>
                             <img src="./src/assets/heart.png" alt="resim"/>
                             <p>{polyclinic.name}</p>
                         </div>
                     ))}
                 </div>
             </div>
+            {isShowDoctorsPopup && (
+              <div className="modal">
+                <div className="modal-content">
+                  <span className="close" onClick={() => setIsShowDoctorsPopup(false)}>
+                    &times;
+                  </span>
+                  <h2>{selectedPolyclinic.name} Doktorları</h2>
+                  <div className="doctor-grid">
+                    {doctors.map((doctor, index) => (
+                      <div className="doctor-card" key={index}>
+                        <p>{doctor.speciality + " " + doctor.name}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
             <section className="hastaneyonetim">
             <h2 className="title2">Uzman Kadromuzla Beraber</h2>
             <h1 className="subtitle2">Yöneticilerimiz</h1> 

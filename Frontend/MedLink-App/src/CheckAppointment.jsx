@@ -139,11 +139,16 @@ function CheckAppointment() {
                 <p className="ornekyazi2">Saat: {appointment.time}</p>
                 <hr />
                 <button className="randevudeletebutton" onClick={() => DeleteAppointment(appointment)}>İptal Et</button>
-                <button className={`rating-button ${appointment.rated ? 'deactivated' : ''}`} onClick={() => setSelectedAppointment(appointment)}>Değerlendir</button>
+                <button className={`rating-button ${appointment.rated ? 'deActive' : 'active'}`} onClick={() => setSelectedAppointment(appointment)}>Değerlendir</button>
             </div>
         ))}
         {selectedAppointment && (
-                <div className="popup">
+              <div>
+                <div className="overlay3"></div>
+                <div className="popup2">
+                <span className="close4" onClick={() => setSelectedAppointment(false)}>
+                    &times;
+                  </span>
                     <div className="popup-inner">
                         <h2>Değerlendirme</h2>
                         <p>{selectedAppointment.polyclinic}</p>
@@ -152,11 +157,12 @@ function CheckAppointment() {
                         <p>{selectedAppointment.time}</p>
                         <div>
                           {[1, 2, 3, 4, 5].map((value) => (
-                            <button key={value} onClick={() => setSelectedRating(value)}>{value}</button>
+                            <button className="degerlendirmebutonu" key={value} onClick={() => setSelectedRating(value)}>{value}</button>
                           ))}
                         </div>
-                        <button onClick={RateDoctorNow}>Değerlendir</button>
+                        <button className="degerlendirmebutonu" onClick={RateDoctorNow}>Değerlendir</button>
                     </div>
+                </div>
                 </div>
             )}
     </div>

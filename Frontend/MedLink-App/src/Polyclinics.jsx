@@ -105,8 +105,9 @@ function Polyclinics() {
         </div>
         
         {selectedPolyclinic && (
-            <div className="doctors-container">
-                <button id='poliklinikDonus' onClick={returnPolyclinics}>Poliklinikleri Göster</button>
+            <div>
+            <button id='poliklinikDonus' onClick={returnPolyclinics}>Poliklinikleri Göster</button>
+                <div className="doctors-container">
                 {doctors.map((doctor, index) => (
                     <div className="doctors-card" key={index}>
                         <img className="doctor-card-background" src={doctor.image || DefaultCard} alt="profile picture" />
@@ -122,6 +123,7 @@ function Polyclinics() {
                         </div>
                     </div>
                 ))}
+            </div>
             </div>
         )}
     </div>

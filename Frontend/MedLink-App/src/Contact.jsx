@@ -13,11 +13,11 @@ function Contact(){
                 </h2>
                 <br />
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum natus dolorem neque assumenda sunt, adipisci voluptatibus aliquid expedita ratione eius officiis. Soluta, quasi quidem vitae quam autem rerum temporibus, aperiam totam, quod necessitatibus maiores omnis sequi commodi! Doloremque dolorum officiis voluptate optio fugit ex quasi nobis repudiandae, illo cumque quos iure itaque. Recusandae, necessitatibus. Nobis ipsum repellendus accusantium laudantium cupiditate.
+                    Hastanemiz Konya'nın Karapınar ilçesinde bulunmakta. Adnan Menderes Hali karşısında, Toptancılar Çarşısı'nın yanında bulunan hastanemiz yerleşim yerlerine yürüme mesafesindedir. Birkaç obruk ve sokaktan sonra rahatlıkla ulaşabilirsiniz.
                 </p>
                 <br />
                 <p>
-                    İletişim Adresimiz: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio labore iste quod.
+                    İletişim Adresimiz: Musalla Bağları, Gürz Sokak, No: 1, 420/60, Selçuklu/Konya
                 </p>
                 <br />
                 <p>

@@ -4,6 +4,7 @@ import config from "../config.mjs";
 import "./welcome-page.css";
 import DefaultCard from "./assets/logo.png";
 import Faruk1Resim from './assets/Faruk1.jpg';
+import Esat from "./assets/Esat.jpg";
 import Irem from './assets/Irem.jpg';
 
 function WelcomePage() {
@@ -189,7 +190,7 @@ return (
                     </div>
                 <div className="yonetim-content">
                             <div className="yonetim-card">
-                                <img className="yonetim-card-background" src={Faruk1Resim} alt="resima1" />
+                                <img className="yonetim-card-background" src={Esat} alt="resima1" />
                                 <div className="yonetim-name-background-parent">
                                     <div className="yonetim-name-background" />
                                         <div className="yonetim-name-wrapper">

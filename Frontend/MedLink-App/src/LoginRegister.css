@@ -199,7 +199,7 @@ form .kayit-ol {
     height: 35px;
     margin-top: 46px;
     margin-left: 10px;
-    z-index: 1000;
+    z-index: 999;
 }
 
 .formbox-login{

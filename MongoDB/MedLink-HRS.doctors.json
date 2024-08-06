@@ -1,0 +1,370 @@
+[{
+  "_id": {
+    "$oid": "6651fbfcf4e098e4c70257bf"
+  },
+  "polyclinicID": {
+    "$oid": "664b69a00d3e100ab104f722"
+  },
+  "polyclinic": "Çocuk Hastalıkları Polikliniği",
+  "name": "Mehmet Ali Ramazanoğulları",
+  "speciality": "Prof. Dr.",
+  "createdAt": {
+    "$date": "2024-05-25T17:55:56.816Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-15T10:25:43.947Z"
+  },
+  "image": "./src/assets/Memedali.jpg",
+  "rateCount": 1,
+  "rating": 3
+},
+{
+  "_id": {
+    "$oid": "6655b1b3da192a1582154b60"
+  },
+  "polyclinicID": {
+    "$oid": "6655b02eda192a1582154b12"
+  },
+  "polyclinic": "Kulak Burun Boğaz Pol",
+  "name": "Tolga Çınar",
+  "speciality": "Doç. Dr.",
+  "createdAt": {
+    "$date": "2024-05-28T13:28:03.668Z"
+  },
+  "updatedAt": {
+    "$date": "2024-08-06T12:51:54.505Z"
+  },
+  "image": "./src/assets/Tolga.jpg",
+  "rateCount": 3,
+  "rating": 8
+},
+{
+  "_id": {
+    "$oid": "6655b1c7da192a1582154b77"
+  },
+  "polyclinicID": {
+    "$oid": "6655b044da192a1582154b18"
+  },
+  "polyclinic": "Nefroloji Polikliniği",
+  "name": "Muhammet Mete Yılmaz",
+  "speciality": "Doç. Dr.",
+  "createdAt": {
+    "$date": "2024-05-28T13:28:23.755Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T09:17:59.009Z"
+  },
+  "image": "./src/assets/Mete.jpg",
+  "rateCount": 1,
+  "rating": 3
+},
+{
+  "_id": {
+    "$oid": "6655b1dbda192a1582154b86"
+  },
+  "polyclinicID": {
+    "$oid": "6655b05cda192a1582154b1e"
+  },
+  "polyclinic": "Dahiliye Polikliniği",
+  "name": "Furkan Taşer",
+  "speciality": "Doç. Dr.",
+  "createdAt": {
+    "$date": "2024-05-28T13:28:43.535Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-19T15:58:52.248Z"
+  },
+  "rateCount": 3,
+  "rating": 11,
+  " image": "./src/assets/default-card.jpg"
+},
+{
+  "_id": {
+    "$oid": "6655b1efda192a1582154b95"
+  },
+  "polyclinicID": {
+    "$oid": "6655b07ada192a1582154b24"
+  },
+  "polyclinic": "Nöroloji Polikliniği",
+  "name": "Yusuf Berk Kahraman",
+  "speciality": "Prof. Doç. Dr.",
+  "createdAt": {
+    "$date": "2024-05-28T13:29:03.240Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-28T13:29:03.240Z"
+  },
+  "image": "./src/assets/Berk.jpg"
+},
+{
+  "_id": {
+    "$oid": "6655b208da192a1582154bac"
+  },
+  "polyclinicID": {
+    "$oid": "6655b096da192a1582154b2a"
+  },
+  "polyclinic": "Üroloji Polikliniği",
+  "name": "Ahmet Kaba",
+  "speciality": "Uzm. Dr.",
+  "createdAt": {
+    "$date": "2024-05-28T13:29:28.265Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-31T22:32:32.368Z"
+  },
+  "image": "./src/assets/Ahmet.jpg",
+  "rateCount": 1,
+  "rating": 1
+},
+{
+  "_id": {
+    "$oid": "6655b217da192a1582154bbb"
+  },
+  "polyclinicID": {
+    "$oid": "6655b0abda192a1582154b30"
+  },
+  "polyclinic": "Ruh Sağlığı ve Hastalıkları",
+  "name": "Ömer Faruk Yaşar",
+  "speciality": "Prof. Dr.",
+  "createdAt": {
+    "$date": "2024-05-28T13:29:43.510Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-28T17:27:14.026Z"
+  },
+  "image": "./src/assets/Faruk3.jpg"
+},
+{
+  "_id": {
+    "$oid": "6655b236da192a1582154bce"
+  },
+  "polyclinicID": {
+    "$oid": "6655b0d8da192a1582154b36"
+  },
+  "polyclinic": "Endokrinoloji Polikliniği",
+  "name": "Ayşe İrem Erkan",
+  "speciality": "Prof. Dr.",
+  "createdAt": {
+    "$date": "2024-05-28T13:30:14.449Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-28T13:30:14.449Z"
+  },
+  "image": "./src/assets/Irem.jpg"
+},
+{
+  "_id": {
+    "$oid": "6655b251da192a1582154be5"
+  },
+  "polyclinicID": {
+    "$oid": "6655b107da192a1582154b3c"
+  },
+  "polyclinic": "Onkoloji Polikliniği",
+  "name": "Zehra Kırdağ",
+  "speciality": "Uzm. Dr.",
+  "createdAt": {
+    "$date": "2024-05-28T13:30:41.038Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T10:35:00.004Z"
+  },
+  "image": "./src/assets/Zehra.jpg",
+  "rateCount": 1,
+  "rating": 5
+},
+{
+  "_id": {
+    "$oid": "6655b262da192a1582154bfc"
+  },
+  "polyclinicID": {
+    "$oid": "6655b133da192a1582154b42"
+  },
+  "polyclinic": "Gastroenteroloji Polikliniği",
+  "name": "Yağmur Sönmez",
+  "speciality": "Doç. Dr.",
+  "createdAt": {
+    "$date": "2024-05-28T13:30:58.038Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-29T15:22:47.038Z"
+  },
+  "image": "./src/assets/Yagmur.jpg"
+},
+{
+  "_id": {
+    "$oid": "6655b29ada192a1582154c34"
+  },
+  "polyclinicID": {
+    "$oid": "6655b15fda192a1582154b48"
+  },
+  "polyclinic": "Kardiyoloji Polikliniği",
+  "name": "Zeynep Eke",
+  "speciality": "Prof. Dr.",
+  "createdAt": {
+    "$date": "2024-05-28T13:31:54.645Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-28T13:31:54.645Z"
+  },
+  "image": "./src/assets/Zeynep.jpg"
+},
+{
+  "_id": {
+    "$oid": "6655c4f1d5b4511b78361ff6"
+  },
+  "polyclinicID": {
+    "$oid": "6655b02eda192a1582154b12"
+  },
+  "polyclinic": "Kulak Burun Boğaz Pol",
+  "name": "Yeşim Dokuz",
+  "speciality": "Prof. Dr.",
+  "image": "./src/assets/default-card.jpg",
+  "createdAt": {
+    "$date": "2024-05-28T14:50:09.243Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T09:12:43.932Z"
+  },
+  "rateCount": 3,
+  "rating": 14
+},
+{
+  "_id": {
+    "$oid": "6655e8882eee36bc739e4bf7"
+  },
+  "polyclinicID": {
+    "$oid": "6655b0abda192a1582154b30"
+  },
+  "polyclinic": "Ruh Sağlığı ve Hastalıkları",
+  "name": "Ayşe Erdoğmuş",
+  "speciality": "Prof. Dr.",
+  "image": "./src/assets/default-card.jpg",
+  "createdAt": {
+    "$date": "2024-05-28T17:22:00.888Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T07:54:26.823Z"
+  },
+  "rateCount": 1,
+  "rating": 5
+},
+{
+  "_id": {
+    "$oid": "66581f20e526782d838c60fc"
+  },
+  "polyclinicID": {
+    "$oid": "6655b07ada192a1582154b24"
+  },
+  "polyclinic": "Nöroloji Polikliniği",
+  "name": "Talha Saydam",
+  "speciality": "Doç. Dr.",
+  "image": "./src/assets/default-card.jpg",
+  "rating": 0,
+  "rateCount": 0,
+  "createdAt": {
+    "$date": "2024-05-30T09:39:28.813Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T09:39:28.813Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66581f9be526782d838c6141"
+  },
+  "polyclinicID": {
+    "$oid": "66581f80e526782d838c6135"
+  },
+  "polyclinic": "Ortopedi Polikliniği",
+  "name": "Gazi Kuzuluk",
+  "speciality": "Uzm. Dr.",
+  "image": "./src/assets/Gazi.jpg",
+  "rating": 5,
+  "rateCount": 1,
+  "createdAt": {
+    "$date": "2024-05-30T09:41:31.838Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-31T22:33:01.029Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66582009e526782d838c617e"
+  },
+  "polyclinicID": {
+    "$oid": "6655b15fda192a1582154b48"
+  },
+  "polyclinic": "Kardiyoloji Polikliniği",
+  "name": "Melih Gökay Gökbulut",
+  "speciality": "Doç. Dr.",
+  "image": "./src/assets/Melih.jpg",
+  "rating": 0,
+  "rateCount": 0,
+  "createdAt": {
+    "$date": "2024-05-30T09:43:21.628Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T09:43:21.628Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66582103e526782d838c61a7"
+  },
+  "polyclinicID": {
+    "$oid": "664b69a00d3e100ab104f722"
+  },
+  "polyclinic": "Çocuk Hastalıkları Polikliniği",
+  "name": "Aleyna Özbay",
+  "speciality": "Doç. Dr.",
+  "image": "./src/assets/Aleyna.jpg",
+  "rating": 0,
+  "rateCount": 0,
+  "createdAt": {
+    "$date": "2024-05-30T09:47:31.655Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T09:47:31.655Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66582173e526782d838c61d4"
+  },
+  "polyclinicID": {
+    "$oid": "66582166e526782d838c61c8"
+  },
+  "polyclinic": "Genel Cerrahi",
+  "name": "Samet Karaoğlu",
+  "speciality": "Prof. Dr.",
+  "image": "./src/assets/default-card.jpg",
+  "rating": 0,
+  "rateCount": 0,
+  "createdAt": {
+    "$date": "2024-05-30T09:49:23.591Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T09:49:23.591Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "665821dfe526782d838c621d"
+  },
+  "polyclinicID": {
+    "$oid": "66582166e526782d838c61c8"
+  },
+  "polyclinic": "Genel Cerrahi",
+  "name": "İsmail Özel",
+  "speciality": "Prof. Dr.",
+  "image": "./src/assets/IsmailOzel.jpg",
+  "rating": 5,
+  "rateCount": 1,
+  "createdAt": {
+    "$date": "2024-05-30T09:51:11.976Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T09:52:29.718Z"
+  }
+}]

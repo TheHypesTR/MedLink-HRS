@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "66b1fcac118eae2ed88850cd"
+  },
+  "TCno": 20253470610,
+  "name": "Admin Hesap",
+  "email": "adminhesap@gmail.com",
+  "password": "$2b$10$BV2Piv5CVWb6B4MzN.coa.Sb8Cz/L0MCydJf.prOm1lEXZ5N8fmyi",
+  "role": "Admin",
+  "createdAt": {
+    "$date": "2024-08-06T13:36:28.299Z"
+  },
+  "updatedAt": {
+    "$date": "2024-08-06T13:36:28.299Z"
+  }
+}]

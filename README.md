@@ -6,9 +6,9 @@ Sevgili Arkadaşlarım,
 Üç kişilik ekibimizle geliştirdiğimiz "MedLink Hastane Randevu Sistemi" projemizi sizlerle paylaşmaktan büyük heyecan duyuyoruz! MERN Stack teknolojisi ile inşa ettiğimiz bu projenin detaylarını ve özelliklerini sizlere tanıtmak isterim.
 
 Ekibimiz:
-Backend: Esat Dündar
-Frontend: Ömer Faruk Yaşar
-UI/UX Design: Ayşe İrem Erkan
+- Backend: Esat Dündar
+- Frontend: Ömer Faruk Yaşar
+- UI/UX Design: Ayşe İrem Erkan
 
 MedLink'in Öne Çıkan Özellikleri:
 - 🔒 Güvenli Hesap Oluşturma: Gerçek T.C. kimlik numaraları ile random hesap oluşturmanın önüne geçtik.
@@ -32,6 +32,9 @@ Adminler İçin:
 Projemizi geliştirirken Waterfall modelini kullandık ve tüm adımları titizlikle takip ettik.
 
 ----------------------------------------
+
+<h2 align="center">MedLink - Hospital Appointment System</h2>
+<p align="center">
 
 Dear Friends,
 

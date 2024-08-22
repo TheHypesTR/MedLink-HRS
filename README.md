@@ -65,3 +65,61 @@ For Admins:
 - 🔍 Appointment Management: View and cancel user appointments.
 
 We used the Waterfall model during development, carefully following each step.
+
+----------------------------------------
+
+<h2 align="center">Setup</h2>
+<p align="center">
+
+1. Clone This Repository
+    ```sh
+    git clone https://github.com/TheHypesTR/MedLink-HRS.git
+    ```
+    
+2. Install Backend NPM Modules
+    - Open New Console And Type This Code
+      ```sh
+      cd Backend
+      ```
+    - Now You Are Currently In `Medlink-HRS/Backend` Subfolder
+    - After Type This Code
+      ```sh
+      npm i
+      ```
+    
+3. Install Frontend NPM Modules
+    - Open New Console And Type This Code
+      ```sh
+      cd Frontend
+      ```
+    - After Type This Code
+      ```sh
+      cd MedLink-App
+      ```
+    - Now You Are Currently In `Medlink-HRS/Frontend/MedLink-App` Subfolder
+    - After Type This Code
+      ```sh
+      npm i
+      ```
+
+4. Create Your `config.mjs` File With `config - Example.mjs` In The `Medlink-HRS/Frontend/MedLink-App` And `Medlink-HRS/Backend` Subfolders
+
+5. Start Backend (Server) In `Medlink-HRS/Backend` Subfolder
+    ```sh
+    npm run dev
+    ```
+
+6. Stop Backend Server And Import `MongoDB` Collections To Your "MongoDB Colletions"
+   ```sh
+   Ctrl + C
+   ```
+   
+7. After Start Backend (Server) In `Medlink-HRS/Backend` Subfolder
+   ```sh
+   npm run dev
+   ```
+
+9. Start Frotend (Client) In `Medlink-HRS/Frontend/MedLink-App` Subfolder
+   ```sh
+   npm run dev
+   ```
